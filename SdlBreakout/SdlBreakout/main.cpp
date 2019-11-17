@@ -4,6 +4,7 @@
 #include <vector>
 #include "block.h"
 #include "ball.h"
+#include "paddle.h"
 #include "main.h"
 
 const int SCREEN_WIDTH = 640;
@@ -33,6 +34,7 @@ SDL_Texture* gTexture = NULL;
 // Sprites
 SDL_Texture* gBlockTexture = NULL;
 SDL_Texture* gBallTexture = NULL;
+SDL_Texture* gPaddleTexture = NULL;
 
 SDL_Texture* loadTexture(std::string path)
 {
@@ -100,6 +102,13 @@ bool loadMedia()
 	}
 
 	gBallTexture = loadTexture("Images\\ball.png");
+	if (gBallTexture == NULL)
+	{
+		printf("Failed to load PNG image!\n");
+		success = false;
+	}
+
+	gPaddleTexture = loadTexture("Images\\paddle.png");
 	if (gBallTexture == NULL)
 	{
 		printf("Failed to load PNG image!\n");
@@ -181,6 +190,10 @@ int main(int argc, char* args[])
 	}
 
 	std::vector<GameObject*> gameObjects;
+
+	gameObjects.emplace_back(new Paddle());
+	gameObjects.back()->position.x = 320;
+	gameObjects.back()->position.y = 440;
 
 	gameObjects.emplace_back(new Block());
 	gameObjects.back()->position.x = 320;
