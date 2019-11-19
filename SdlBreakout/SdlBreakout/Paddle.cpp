@@ -1,10 +1,10 @@
 #include "Paddle.h"
-#include "main.h"
+#include "game.h"
 
 
 Paddle::Paddle()
 {
-	sprite = gPaddleTexture;
+	sprite = Game::GetInstance()->gPaddleTexture;
 	moveSpeed = 100;
 }
 

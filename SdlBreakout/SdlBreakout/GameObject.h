@@ -6,6 +6,7 @@ class GameObject
 {
 public:
 	Vector2 position;
+	Vector2 size;
 
 	SDL_Texture* getSprite();
 	void setSprite(SDL_Texture* value);

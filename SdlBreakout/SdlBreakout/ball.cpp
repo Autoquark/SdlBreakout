@@ -1,12 +1,14 @@
 #include "ball.h"
-#include "main.h"
+#include "game.h"
 
 
 Ball::Ball()
 {
-	sprite = gBallTexture;
+	sprite = Game::GetInstance()->gBallTexture;
 	velocity.x = -10;
 	velocity.y = -30;
+	size.x = 16;
+	size.y = 16;
 }
 
 
@@ -28,9 +30,9 @@ void Ball::Update(float timeElapsed)
 			bestProportion = position.x / -remainingVelocity.x;
 			best = 1;
 		}
-		if (nextPosition.x > SCREEN_WIDTH)
+		if (nextPosition.x > Game::GetInstance()->SCREEN_WIDTH)
 		{
-			auto proportion = (SCREEN_WIDTH - position.x) / remainingVelocity.x;
+			auto proportion = (Game::GetInstance()->SCREEN_WIDTH - position.x) / remainingVelocity.x;
 			if (proportion < bestProportion)
 			{
 				bestProportion = proportion;
@@ -46,9 +48,9 @@ void Ball::Update(float timeElapsed)
 				best = 3;
 			}
 		}
-		if (nextPosition.y > SCREEN_HEIGHT)
+		if (nextPosition.y > Game::GetInstance()->SCREEN_HEIGHT)
 		{
-			auto proportion = (SCREEN_HEIGHT - position.y) / remainingVelocity.y;
+			auto proportion = (Game::GetInstance()->SCREEN_HEIGHT - position.y) / remainingVelocity.y;
 			if (proportion < bestProportion)
 			{
 				bestProportion = proportion;
