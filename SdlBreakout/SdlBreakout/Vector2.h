@@ -15,6 +15,12 @@ public:
 		return lhs;
 	}
 
+	friend Vector2 operator*(float lhs, Vector2 rhs)
+	{
+		rhs *= lhs;
+		return rhs;
+	}
+
 	Vector2& operator+=(const Vector2& rhs) // compound assignment (does not need to be a member,
 	{                           // but often is, to modify the private members)
 	  /* addition of rhs to *this takes place here */
