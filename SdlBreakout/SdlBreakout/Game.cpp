@@ -9,11 +9,6 @@
 #include "block.h"
 #include "GameObject.h"
 
-Game::Game()
-{
-}
-
-
 Game::~Game()
 {
 }

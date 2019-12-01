@@ -6,6 +6,9 @@
 class Game
 {
 public:
+	void operator=(Game const&) = delete;
+	Game(Game const&) = delete;
+
 	static Game* GetInstance();
 
 	const int SCREEN_WIDTH = 640;
@@ -23,10 +26,10 @@ public:
 
 	int Start();
 
-	Game();
-	~Game();
-
 private:
+
+	Game() = default;
+	~Game();
 
 	std::vector<GameObject*> gameObjects;
 
