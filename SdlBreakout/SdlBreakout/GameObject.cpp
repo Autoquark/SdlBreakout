@@ -1,12 +1,12 @@
 #include "GameObject.h"
 #include "game.h"
 
-SDL_Texture * GameObject::getSprite()
+Texture* GameObject::getSprite()
 {
 	return sprite;
 }
 
-void GameObject::setSprite(SDL_Texture * value)
+void GameObject::setSprite(Texture * value)
 {
 	sprite = value;
 }
@@ -16,15 +16,15 @@ void GameObject::Update(float timeElapsed)
 	SDL_Rect destinationRect;
 	destinationRect.x = position.x;
 	destinationRect.y = position.y;
-	destinationRect.h = size.y;
-	destinationRect.w = size.x;
+	destinationRect.h = sprite->GetSize().x;
+	destinationRect.w = sprite->GetSize().y;
 
-	SDL_RenderCopy(Game::GetInstance()->gRenderer, sprite, NULL, &destinationRect);
-	//SDL_BlitSurface(gBlockTexture, NULL, gScreenSurface, &destinationRect);
+	SDL_RenderCopy(Game::GetInstance()->gRenderer, sprite->GetSdlTexture(), NULL, &destinationRect);
 }
 
-GameObject::GameObject()
+GameObject::GameObject(Vector2 size)
 {
+	this->size = size;
 }
 
 

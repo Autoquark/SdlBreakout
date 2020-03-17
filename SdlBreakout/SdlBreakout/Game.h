@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <vector>
 #include "GameObject.h"
+#include "Texture.h"
 
 class Game
 {
@@ -17,9 +18,9 @@ public:
 	const int TARGET_FPS = 60;
 
 	// Sprites
-	SDL_Texture* gBlockTexture = NULL;
-	SDL_Texture* gBallTexture = NULL;
-	SDL_Texture* gPaddleTexture = NULL;
+	Texture* gBlockTexture = NULL;
+	Texture* gBallTexture = NULL;
+	Texture* gPaddleTexture = NULL;
 
 	//The window renderer
 	SDL_Renderer* gRenderer = NULL;
@@ -44,7 +45,7 @@ private:
 
 	bool init();
 	bool loadMedia();
-	SDL_Texture* loadTexture(std::string path);
+	Texture* loadTexture(std::string path);
 	SDL_Surface* loadSurface(std::string path);
 	void close();
 };

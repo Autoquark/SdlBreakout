@@ -2,13 +2,11 @@
 #include "game.h"
 
 
-Ball::Ball()
+Ball::Ball() : GameObject(Vector2 { 16, 16 })
 {
 	sprite = Game::GetInstance()->gBallTexture;
 	velocity.x = -10;
 	velocity.y = -30;
-	size.x = 16;
-	size.y = 16;
 }
 
 

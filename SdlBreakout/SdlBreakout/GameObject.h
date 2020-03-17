@@ -1,22 +1,23 @@
 #pragma once
 #include <SDL_image.h>
 #include "Vector2.h"
+#include "Texture.h"
 
 class GameObject
 {
 public:
 	Vector2 position;
 
-	SDL_Texture* getSprite();
-	void setSprite(SDL_Texture* value);
+	Texture* getSprite();
+	void setSprite(Texture* value);
 
 	virtual void Update(float timeElapsed);
 
-	GameObject();
+	GameObject(Vector2 size);
 	~GameObject();
 
 protected:
 	Vector2 size;
-	SDL_Texture* sprite;
+	Texture* sprite;
 };
 

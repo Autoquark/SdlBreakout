@@ -1,11 +1,12 @@
 #include "Paddle.h"
 #include "game.h"
+#include <iostream>
+#include <algorithm>
 
-
-Paddle::Paddle()
+Paddle::Paddle() : GameObject(Vector2 {128, 32})
 {
 	sprite = Game::GetInstance()->gPaddleTexture;
-	moveSpeed = 100;
+	moveSpeed = 1000;
 }
 
 
@@ -26,5 +27,9 @@ void Paddle::Update(float timeElapsed)
 		position.x += moveSpeed * timeElapsed;
 	}
 
+	position.x = std::clamp(position.x, (float)0.0, (float)Game::GetInstance()->SCREEN_WIDTH);
+
 	GameObject::Update(timeElapsed);
+
+	std::cout << position.x << "," << position.y << '\n';
 }

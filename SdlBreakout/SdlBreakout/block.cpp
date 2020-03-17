@@ -1,11 +1,9 @@
 #include "block.h"
 #include "Game.h"
 
-Block::Block()
+Block::Block() : GameObject(Vector2{ 32, 16 })
 {
 	sprite = Game::GetInstance()->gBlockTexture;
-	size.x = 32;
-	size.y = 16;
 }
 
 

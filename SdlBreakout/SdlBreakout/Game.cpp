@@ -8,6 +8,7 @@
 #include "ball.h"
 #include "block.h"
 #include "GameObject.h"
+#include "Texture.h"
 
 Game::~Game()
 {
@@ -159,7 +160,7 @@ bool Game::init()
 	return true;
 }
 
-SDL_Texture* Game::loadTexture(std::string path)
+Texture* Game::loadTexture(std::string path)
 {
 	//Load image at specified path
 	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
@@ -170,18 +171,20 @@ SDL_Texture* Game::loadTexture(std::string path)
 	}
 
 	//Create texture from surface pixels
-	SDL_Texture* newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface);
-
-	//Get rid of old loaded surface
-	SDL_FreeSurface(loadedSurface);
+	SDL_Texture* newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface);	
 
 	if (newTexture == NULL)
 	{
 		printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
+		SDL_FreeSurface(loadedSurface);
 		return NULL;
 	}
 
-	return newTexture;
+	SDL_FreeSurface(loadedSurface);
+
+	auto texture = new Texture(newTexture, Vector2{ (float)loadedSurface->w, (float)loadedSurface->h });
+
+	return texture;
 }
 
 SDL_Surface* Game::loadSurface(std::string path)
@@ -214,8 +217,8 @@ SDL_Surface* Game::loadSurface(std::string path)
 void Game::close()
 {
 	//Free loaded image
-	SDL_DestroyTexture(gBlockTexture);
-	SDL_DestroyTexture(gBallTexture);
+	SDL_DestroyTexture(gBlockTexture->GetSdlTexture());
+	SDL_DestroyTexture(gBallTexture->GetSdlTexture());
 
 	//Destroy window
 	SDL_DestroyRenderer(gRenderer);
