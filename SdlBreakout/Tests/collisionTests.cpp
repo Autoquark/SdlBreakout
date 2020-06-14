@@ -1,7 +1,10 @@
-#include <string>
 #include "stdafx.h"
+
+#include <string>
+#include <optional>
+#include "Vector2.h"
 #include "CppUnitTest.h"
-#include "../SdlBreakout.Lib/Collision.h"
+#include "Collision.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std::string_literals;
@@ -19,7 +22,26 @@ namespace Microsoft
 				value.append(L",");
 				value.append(std::to_wstring(t.y));
 				value.append(L")");
+
 				return value;
+			}
+
+			template<> inline std::wstring ToString<Contact>(const Contact& t)
+			{
+				std::wstring value = L"(point: ";
+				value.append(ToString(t.point));
+				value.append(L", centroid: ");
+				value.append(ToString(t.centroid));
+				value.append(L", normal: ");
+				value.append(ToString(t.normal));
+				value.append(L")");
+				return value;
+			}
+
+
+			template<typename T> inline std::wstring ToString(const std::optional<T>& t)
+			{
+				return t.has_value() ? ToString(t.value()) : L"null";
 			}
 		}
 	}
@@ -34,8 +56,7 @@ namespace Tests
 		Vector2 line2Start;
 		Vector2 line2End;
 
-		bool expectCollision;
-		Vector2 expectedResult;
+		std::optional<Contact> expectedResult;
 	};
 
 	TEST_CLASS(CollisionTests)
@@ -54,8 +75,7 @@ namespace Tests
 			testCases[i].line2Start = { 2.0, 0.0 };
 			testCases[i].line2End = { 0.0, 2.0 };
 
-			testCases[i].expectCollision = true;
-			testCases[i].expectedResult = { 1.0, 1.0 };
+			testCases[i].expectedResult = Contact(Vector2{ -1, -1 }, Vector2 { 1.0, 1.0 }, Vector2{ 1.0, 1.0 });
 
 			// Non-crossing diagonal lines
 			i++;
@@ -65,7 +85,7 @@ namespace Tests
 			testCases[i].line2Start = { 3.0, 2.0 };
 			testCases[i].line2End = { 5.0, 0.0 };
 
-			testCases[i].expectCollision = false;
+			testCases[i].expectedResult = std::nullopt;
 
 			// Non-overlapping vertical lines
 			i++;
@@ -75,7 +95,7 @@ namespace Tests
 			testCases[i].line2Start = { 3.0, 1.0 };
 			testCases[i].line2End = { 3.0, 3.0 };
 
-			testCases[i].expectCollision = false;
+			testCases[i].expectedResult = std::nullopt;
 
 			// Overlapping vertical lines
 			i++;
@@ -85,8 +105,7 @@ namespace Tests
 			testCases[i].line2Start = { 2.0, 1.0 };
 			testCases[i].line2End = { 2.0, 3.0 };
 
-			testCases[i].expectCollision = true;
-			testCases[i].expectedResult = { 2.0, 1.0 };
+			testCases[i].expectedResult = Contact(Vector2{ 0, 0 }, Vector2 { 2.0, 1.0 }, Vector2{ 2.0, 1.0 });
 
 			for (auto testCase : testCases)
 			{
@@ -112,22 +131,35 @@ namespace Tests
 								std::swap(line1Start, line1End);
 							}
 
-							Vector2 result;
-							auto hit = Collision::LineLineIntersect(line1Start, line1End, line2Start, line2End, result);
-							std::string message = "Expected " + (testCase.expectCollision ? ""s : "no "s) + "collision between line from "s  + line1Start.ToString() + " to " + line1End.ToString()
+							auto hit = Collision::PointLineCast(line1Start, line1End, line2Start, line2End);
+							std::string message = "Expected " + (testCase.expectedResult.has_value() ? ""s : "no "s) + "collision between line from "s  + line1Start.ToString() + " to " + line1End.ToString()
 								+ " and line from " + line2Start.ToString() + " to " + line2End.ToString();
 							//Assert::AreEqual(hit, testCase.expectCollision);
-							if (hit != testCase.expectCollision)
+
+							auto x = testCase.expectedResult.value() == hit.value();
+
+							if (!testCase.expectedResult.has_value())
+							{
+								Assert::IsFalse(hit.has_value());
+							}
+							else
+							{
+								Assert::IsTrue(hit.has_value());
+								auto &expected = testCase.expectedResult.value();
+								auto &actual = hit.value();
+								Assert::AreEqual(expected.point, actual.point);
+								Assert::AreEqual(expected.centroid, actual.centroid);
+
+								// Don't check the normal if the line & point are swapped as it's not trivially calculable from the normal in the original case
+								if (!swapLines)
+								{
+									Assert::AreEqual(swapLine1Ends ? -expected.normal : expected.normal, actual.normal);
+								}
+
+							}
+							if (testCase.expectedResult != hit)
 							{
 								__asm nop
-							}
-							if (testCase.expectCollision)
-							{
-								//Assert::AreEqual(testCase.expectedResult, result);
-								if (testCase.expectedResult != result)
-								{
-									__asm nop
-								}
 							}
 						}
 					}

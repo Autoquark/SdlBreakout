@@ -93,7 +93,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(VCInstallDir)UnitTest\include;..\SdlBreakout.Library;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UseFullPaths>true</UseFullPaths>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -167,7 +167,7 @@
     <ClCompile Include="collisionTests.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SdlBreakout.Lib\SdlBreakout.Lib.vcxproj">
+    <ProjectReference Include="..\SdlBreakout.Library\SdlBreakout.Library.vcxproj">
       <Project>{48a4f790-2ab2-4662-895a-d56cf2da7744}</Project>
     </ProjectReference>
   </ItemGroup>

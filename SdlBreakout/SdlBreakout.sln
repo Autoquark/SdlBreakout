@@ -7,7 +7,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SdlBreakout", "SdlBreakout\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tests", "Tests\Tests.vcxproj", "{41E08B07-14FA-407B-A316-7DA68F82FE81}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SdlBreakout.Lib", "SdlBreakout.Lib\SdlBreakout.Lib.vcxproj", "{48A4F790-2AB2-4662-895A-D56CF2DA7744}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SdlBreakout.Library", "SdlBreakout.Library\SdlBreakout.Library.vcxproj", "{48A4F790-2AB2-4662-895A-D56CF2DA7744}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
