@@ -1,4 +1,7 @@
+#define _USE_MATH_DEFINES
+
 #include <string>
+#include <math.h>
 
 using namespace std::string_literals;
 
@@ -6,6 +9,15 @@ using namespace std::string_literals;
 struct Vector2
 {
 public:
+
+	Vector2() = default;
+
+	Vector2(float x, float y)
+	{
+		this->x = x;
+		this->y = y;
+	}
+
 	friend bool operator==(const Vector2& lhs, const Vector2& rhs)
 	{
 		return lhs.x == rhs.x && lhs.y == rhs.y;
@@ -84,11 +96,30 @@ public:
 		return x * other.x + y * other.y;
 	}
 
+	float Magnitude()
+	{
+		return sqrtf(x * x + y * y);
+	}
+
+	float DistanceTo(const Vector2& other)
+	{
+		return (*this - other).Magnitude();
+	}
+
+	void Normalise()
+	{
+		auto magnitude = Magnitude();
+		x /= magnitude;
+		y /= magnitude;
+	}
+
 	void Rotate(float degreesClockwise)
 	{
 		auto temp = x;
-		x = std::cos(-degreesClockwise) * x - std::sin(-degreesClockwise) * y;
-		y = std::sin(-degreesClockwise) * temp - std::cos(-degreesClockwise) * y;
+		auto inRadians = degreesClockwise * (M_PI / 180);
+
+		x = std::cos(-inRadians) * x - std::sin(-inRadians) * y;
+		y = std::sin(-inRadians) * temp - std::cos(-inRadians) * y;
 	}
 
 	float x;

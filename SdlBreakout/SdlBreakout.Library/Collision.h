@@ -3,6 +3,7 @@
 #include <optional>
 #include "Contact.h"
 #include "Vector2.h"
+#include "RectF.h"
 
 class Collision
 {
@@ -17,8 +18,8 @@ public:
 	//static std::optional<Contact> 
 
 	// Finds the first point of intersection between a line and a rectangle
-	static std::optional<Contact> PointRectangleCast(const Vector2& lineStart, const Vector2& lineEnd, const SDL_Rect& rect);
+	static std::optional<Contact> PointRectangleCast(const Vector2& lineStart, const Vector2& lineEnd, const RectF & rect);
 
 	// Finds the first point of contact between a moving and stationary rectangle
-	static std::optional<Contact> RectangleRectangleCast(const SDL_Rect& movingRect, const SDL_Rect& stationaryRect, const Vector2& movement);
+	static std::optional<Contact> RectangleRectangleCast(const RectF& movingRect, const SDL_Rect& stationaryRect, const Vector2& movement);
 };

@@ -2,50 +2,14 @@
 
 #include <string>
 #include <optional>
+#include <vector>
 #include "Vector2.h"
 #include "CppUnitTest.h"
 #include "Collision.h"
+#include "ToString.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std::string_literals;
-
-namespace Microsoft
-{
-	namespace VisualStudio
-	{
-		namespace CppUnitTestFramework
-		{
-			template<> inline std::wstring ToString<Vector2>(const Vector2& t)
-			{
-				std::wstring value = L"(";
-				value.append(std::to_wstring(t.x));
-				value.append(L",");
-				value.append(std::to_wstring(t.y));
-				value.append(L")");
-
-				return value;
-			}
-
-			template<> inline std::wstring ToString<Contact>(const Contact& t)
-			{
-				std::wstring value = L"(point: ";
-				value.append(ToString(t.point));
-				value.append(L", centroid: ");
-				value.append(ToString(t.centroid));
-				value.append(L", normal: ");
-				value.append(ToString(t.normal));
-				value.append(L")");
-				return value;
-			}
-
-
-			template<typename T> inline std::wstring ToString(const std::optional<T>& t)
-			{
-				return t.has_value() ? ToString(t.value()) : L"null";
-			}
-		}
-	}
-}
 
 namespace Tests
 {	
@@ -59,53 +23,58 @@ namespace Tests
 		std::optional<Contact> expectedResult;
 	};
 
-	TEST_CLASS(CollisionTests)
+	TEST_CLASS(PointLineCastTests)
 	{
 	public:
 		
 		TEST_METHOD(TestMethod1)
 		{
-			TestCase testCases[4];
+			std::vector<TestCase> testCases;
+			TestCase testCase;
 
-			auto i = 0;
 			// Crossing diagonal lines
-			testCases[i].line1Start = { 0.0, 0.0 };
-			testCases[i].line1End = { 2.0, 2.0 };
+			testCase.line1Start = { 0.0, 0.0 };
+			testCase.line1End = { 2.0, 2.0 };
 
-			testCases[i].line2Start = { 2.0, 0.0 };
-			testCases[i].line2End = { 0.0, 2.0 };
+			testCase.line2Start = { 2.0, 0.0 };
+			testCase.line2End = { 0.0, 2.0 };
 
-			testCases[i].expectedResult = Contact(Vector2{ -1, -1 }, Vector2 { 1.0, 1.0 }, Vector2{ 1.0, 1.0 });
+			auto normal = Vector2{ -1, -1 };
+			normal.Normalise();
+			testCase.expectedResult = Contact(normal, Vector2{ 1.0, 1.0 }, Vector2{ 1.0, 1.0 });
+			testCases.emplace_back(testCase);
 
 			// Non-crossing diagonal lines
-			i++;
-			testCases[i].line1Start = { 0.0, 0.0 };
-			testCases[i].line1End = { 2.0, 2.0 };
+			testCase = TestCase();
+			testCase.line1Start = { 0.0, 0.0 };
+			testCase.line1End = { 2.0, 2.0 };
 
-			testCases[i].line2Start = { 3.0, 2.0 };
-			testCases[i].line2End = { 5.0, 0.0 };
+			testCase.line2Start = { 3.0, 2.0 };
+			testCase.line2End = { 5.0, 0.0 };
 
-			testCases[i].expectedResult = std::nullopt;
+			testCase.expectedResult = std::nullopt;
+			testCases.emplace_back(testCase);
 
 			// Non-overlapping vertical lines
-			i++;
-			testCases[i].line1Start = { 2.0, 0.0 };
-			testCases[i].line1End = { 2.0, 2.0 };
+			testCase.line1Start = { 2.0, 0.0 };
+			testCase.line1End = { 2.0, 2.0 };
 
-			testCases[i].line2Start = { 3.0, 1.0 };
-			testCases[i].line2End = { 3.0, 3.0 };
+			testCase.line2Start = { 3.0, 1.0 };
+			testCase.line2End = { 3.0, 3.0 };
 
-			testCases[i].expectedResult = std::nullopt;
+			testCase.expectedResult = std::nullopt;
+			testCases.emplace_back(testCase);
 
 			// Overlapping vertical lines
-			i++;
+			// Don't know what if anything in particular is a useful return value here
+			/*i++;
 			testCases[i].line1Start = { 2.0, 0.0 };
 			testCases[i].line1End = { 2.0, 2.0 };
 
 			testCases[i].line2Start = { 2.0, 1.0 };
 			testCases[i].line2End = { 2.0, 3.0 };
 
-			testCases[i].expectedResult = Contact(Vector2{ 0, 0 }, Vector2 { 2.0, 1.0 }, Vector2{ 2.0, 1.0 });
+			testCases[i].expectedResult = Contact(Vector2{ 0, 0 }, Vector2 { 2.0, 1.0 }, Vector2{ 2.0, 1.0 });*/
 
 			for (auto testCase : testCases)
 			{
@@ -128,15 +97,12 @@ namespace Tests
 
 							if (swapLine2Ends)
 							{
-								std::swap(line1Start, line1End);
+								std::swap(line2Start, line2End);
 							}
 
 							auto hit = Collision::PointLineCast(line1Start, line1End, line2Start, line2End);
 							std::string message = "Expected " + (testCase.expectedResult.has_value() ? ""s : "no "s) + "collision between line from "s  + line1Start.ToString() + " to " + line1End.ToString()
 								+ " and line from " + line2Start.ToString() + " to " + line2End.ToString();
-							//Assert::AreEqual(hit, testCase.expectCollision);
-
-							auto x = testCase.expectedResult.value() == hit.value();
 
 							if (!testCase.expectedResult.has_value())
 							{
@@ -164,13 +130,8 @@ namespace Tests
 						}
 					}
 				}
-				
 			}
-			// TODO: Your test code here
 		};
-
-		
-
 	};
 
 }

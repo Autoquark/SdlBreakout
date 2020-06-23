@@ -1,9 +1,12 @@
 #include "stdafx.h"
-#include "Collision.h"
-#include "Line.h"
 #include <optional>
 #include <algorithm>
+#include <vector>
+#include <limits>
+#include "Collision.h"
+#include "Line.h"
 #include "Rectangle.h"
+#include "RectF.h"
 
 bool Collision::RectangleRectangleOverlap(const SDL_Rect& rect1, const SDL_Rect& rect2)
 {
@@ -42,10 +45,10 @@ bool Collision::RectangleRectangleOverlap(const SDL_Rect& rect1, const SDL_Rect&
 }
 
 //Returns the first contact between a point and a line, if any, when the point travels along the given line
-std::optional<Contact> Collision::PointLineCast(const Vector2& pointStartPosition, const Vector2& pointEndPosition, const Vector2& line2Point1, const Vector2& line2Point2)
+std::optional<Contact> Collision::PointLineCast(const Vector2& pointStartPosition, const Vector2& pointEndPosition, const Vector2& linePoint1, const Vector2& linePoint2)
 {
 	auto line1 = GeneralFormLine(pointStartPosition, pointEndPosition);
-	auto line2 = GeneralFormLine(line2Point1, line2Point2);
+	auto line2 = GeneralFormLine(linePoint1, linePoint2);
 
 	auto denominator = line2.xCoefficient * line1.yCoefficient - line1.xCoefficient * line2.yCoefficient;
 	
@@ -73,35 +76,60 @@ std::optional<Contact> Collision::PointLineCast(const Vector2& pointStartPositio
 
 	auto y = (-line1.xCoefficient * x - line1.constant) / line1.yCoefficient;
 
-	//auto y = (line1.xCoefficient * line2.constant - line1.constant * line2.xCoefficient) / (line1.yCoefficient * line2.xCoefficient - line1.xCoefficient - line2.yCoefficient);
-	//auto x = (-line1.yCoefficient * y - line1.constant) / line1.xCoefficient;
-
 	if (x < line1.startX || x < line2.startX || x > line1.endX || x > line2.endX)
 	{
 		return std::nullopt;
 	}
 
 	Vector2 point = { x, y };
-	//auto sideOfLine = (line2Point2.x - line2Point1.x) * (point.y - line2Point1.y) - (line2Point2.y - line2Point1.y) * (point.y - line2Point1.x); 
 
-	auto normal = line2Point2 - line2Point1;
+	auto normal = linePoint2 - linePoint1;
 	normal.Rotate(90);
+	normal = normal * normal.DotProduct(pointEndPosition - pointStartPosition);
+	normal.Normalise();
 
-	return Contact(normal * normal.DotProduct(pointEndPosition - pointStartPosition), point, point);
+	return Contact(-normal, point, point);
 }
 
-std::optional<Contact> Collision::PointRectangleCast(const Vector2 & lineStart, const Vector2 & lineEnd, const SDL_Rect & rect)
+std::optional<Contact> Collision::PointRectangleCast(const Vector2 & pointStartPosition, const Vector2 & pointEndPosition, const RectF & rect)
 {
 	// Check if line starts and ends inside rectangle
-	if (Contains(rect, lineStart) && Contains(rect, lineEnd))
+	if (rect.Contains(pointStartPosition) && rect.Contains(pointEndPosition))
 	{
-		return Contact(Vector2{}, lineStart, lineStart);
+		return Contact(Vector2(), pointStartPosition, pointStartPosition);
 	}
 
-	return std::nullopt;
+	std::vector<std::optional<Contact>> contacts = {
+		PointLineCast(pointStartPosition, pointEndPosition, rect.TopLeft(), rect.TopRight()),
+		PointLineCast(pointStartPosition, pointEndPosition, rect.TopRight(), rect.BottomRight()),
+		PointLineCast(pointStartPosition, pointEndPosition, rect.BottomRight(), rect.BottomLeft()),
+		PointLineCast(pointStartPosition, pointEndPosition, rect.BottomLeft(), rect.TopLeft()),
+	};
+
+	//std::remove_if(contacts.begin(), contacts.end(), [](std::optional<Contact> c) { return c.has_value(); });
+
+	// Find the first contact in the point's path
+	auto bestDistance = (std::numeric_limits<float>::max)();
+	auto bestContact = std::optional<Contact>();
+	for (auto contact : contacts)
+	{
+		if (!contact.has_value())
+		{
+			continue;
+		}
+
+		auto distance = contact.value().centroid.DistanceTo(pointStartPosition);
+		if (!bestContact.has_value() || distance < bestDistance)
+		{
+			bestDistance = distance;
+			bestContact = contact.value();
+		}
+	}
+
+	return bestContact;
 }
 
-std::optional<Contact> Collision::RectangleRectangleCast(const SDL_Rect & movingRect, const SDL_Rect & stationaryRect, const Vector2& movement)
+std::optional<Contact> Collision::RectangleRectangleCast(const RectF & movingRect, const SDL_Rect & stationaryRect, const Vector2& movement)
 {
 	return std::nullopt;
 }
