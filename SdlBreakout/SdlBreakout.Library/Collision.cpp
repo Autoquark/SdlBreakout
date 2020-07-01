@@ -56,8 +56,8 @@ std::optional<Contact> Collision::PointLineCast(const Vector2& pointStartPositio
 	// Special case: two segments of the same line
 	if (denominator == 0)
 	{
-		auto largestMin = max(line1.endX, line2.endX);
-		auto smallestMax = min(line1.startX, line2.startX);
+		auto largestMin = max(line1.maxX, line2.maxX);
+		auto smallestMax = min(line1.minX, line2.minX);
 
 		// The segments do not overlap
 		if (largestMin > smallestMax)
@@ -76,7 +76,8 @@ std::optional<Contact> Collision::PointLineCast(const Vector2& pointStartPositio
 
 	auto y = (-line1.xCoefficient * x - line1.constant) / line1.yCoefficient;
 
-	if (x < line1.startX || x < line2.startX || x > line1.endX || x > line2.endX)
+	// Need to check both x and y to handle vertical lines
+	if (x < line1.minX || x < line2.minX || x > line1.maxX || x > line2.maxX || y < line1.minY || y < line2.minY || y > line1.maxY || y > line2.maxY)
 	{
 		return std::nullopt;
 	}

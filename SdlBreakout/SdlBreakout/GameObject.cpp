@@ -14,8 +14,8 @@ void GameObject::setSprite(Texture * value)
 void GameObject::Update(float timeElapsed)
 {
 	SDL_Rect destinationRect;
-	destinationRect.x = position.x;
-	destinationRect.y = position.y;
+	destinationRect.x = (int)position.x;
+	destinationRect.y = (int)position.y;
 	destinationRect.h = sprite->GetSize().x;
 	destinationRect.w = sprite->GetSize().y;
 

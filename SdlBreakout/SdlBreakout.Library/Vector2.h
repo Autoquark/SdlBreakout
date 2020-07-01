@@ -12,10 +12,8 @@ public:
 
 	Vector2() = default;
 
-	Vector2(float x, float y)
+	Vector2(float x, float y) : x(x), y(y)
 	{
-		this->x = x;
-		this->y = y;
 	}
 
 	friend bool operator==(const Vector2& lhs, const Vector2& rhs)
@@ -111,6 +109,13 @@ public:
 		auto magnitude = Magnitude();
 		x /= magnitude;
 		y /= magnitude;
+	}
+
+	Vector2 Normalised()
+	{
+		auto clone = Vector2(*this);
+		clone.Normalise();
+		return clone;
 	}
 
 	void Rotate(float degreesClockwise)

@@ -3,135 +3,166 @@
 #include <string>
 #include <optional>
 #include <vector>
+#include <locale>
+#include <codecvt>
+#include <iostream>
 #include "Vector2.h"
 #include "CppUnitTest.h"
 #include "Collision.h"
 #include "ToString.h"
+#include "Contact.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std::string_literals;
 
 namespace Tests
 {	
-	struct TestCase
-	{
-		Vector2 line1Start;
-		Vector2 line1End;
-		Vector2 line2Start;
-		Vector2 line2End;
-
-		std::optional<Contact> expectedResult;
-	};
-
 	TEST_CLASS(PointLineCastTests)
 	{
+		struct TestCase
+		{
+			/*TestCase() : name(L""), pointStart(), pointEnd(1, 1), lineStart(), lineEnd(), expectedResult()
+			{
+				std::cout << "test";
+			}*/
+
+			std::wstring name;
+			// = L"untitled";
+			Vector2 pointStart;
+			Vector2 pointEnd;
+			Vector2 lineStart;
+			Vector2 lineEnd;
+
+			std::optional<Contact> expectedResult;
+		};
+
 	public:
 		
-		TEST_METHOD(TestMethod1)
+		TEST_METHOD(PointLineCast)
 		{
 			std::vector<TestCase> testCases;
-			TestCase testCase;
+			TestCase testCase;// = TestCase();
 
-			// Crossing diagonal lines
-			testCase.line1Start = { 0.0, 0.0 };
-			testCase.line1End = { 2.0, 2.0 };
+			testCase.name = L"Crossing diagonal lines";
+			testCase.pointStart = { 0.0, 0.0 };
+			testCase.pointEnd = { 2.0, 2.0 };
 
-			testCase.line2Start = { 2.0, 0.0 };
-			testCase.line2End = { 0.0, 2.0 };
+			testCase.lineStart = { 2.0, 0.0 };
+			testCase.lineEnd = { 0.0, 2.0 };
 
-			auto normal = Vector2{ -1, -1 };
-			normal.Normalise();
-			testCase.expectedResult = Contact(normal, Vector2{ 1.0, 1.0 }, Vector2{ 1.0, 1.0 });
+			testCase.expectedResult = Contact(Vector2(-1, -1).Normalised(), Vector2{ 1.0, 1.0 });
 			testCases.emplace_back(testCase);
 
 			// Non-crossing diagonal lines
 			testCase = TestCase();
-			testCase.line1Start = { 0.0, 0.0 };
-			testCase.line1End = { 2.0, 2.0 };
+			testCase.pointStart = { 0.0, 0.0 };
+			testCase.pointEnd = { 2.0, 2.0 };
 
-			testCase.line2Start = { 3.0, 2.0 };
-			testCase.line2End = { 5.0, 0.0 };
+			testCase.lineStart = { 3.0, 2.0 };
+			testCase.lineEnd = { 5.0, 0.0 };
 
 			testCase.expectedResult = std::nullopt;
 			testCases.emplace_back(testCase);
 
 			// Non-overlapping vertical lines
-			testCase.line1Start = { 2.0, 0.0 };
-			testCase.line1End = { 2.0, 2.0 };
+			testCase = TestCase();
+			testCase.pointStart = { 2.0, 0.0 };
+			testCase.pointEnd = { 2.0, 2.0 };
 
-			testCase.line2Start = { 3.0, 1.0 };
-			testCase.line2End = { 3.0, 3.0 };
+			testCase.lineStart = { 3.0, 1.0 };
+			testCase.lineEnd = { 3.0, 3.0 };
 
 			testCase.expectedResult = std::nullopt;
+			testCases.emplace_back(testCase);
+
+			// Passing beneath vertical line
+			testCase = TestCase();
+			testCase.pointStart = Vector2(-2, 0);
+			testCase.pointEnd = Vector2(2, 4);
+
+			testCase.lineStart = Vector2(0, 0);
+			testCase.lineEnd = Vector2(3, -3);
+
+			testCase.expectedResult = std::nullopt;
+			testCases.emplace_back(testCase);
+
+			// Hitting vertical line
+			testCase = TestCase();
+			testCase.pointStart = Vector2(-2, 2);
+			testCase.pointEnd = Vector2(2, 2);
+
+			testCase.lineStart = Vector2(0, 0);
+			testCase.lineEnd = Vector2(0, 3);
+
+			testCase.expectedResult = Contact(Vector2(-1, 0).Normalised(), Vector2(0, 2));
 			testCases.emplace_back(testCase);
 
 			// Overlapping vertical lines
 			// Don't know what if anything in particular is a useful return value here
 			/*i++;
-			testCases[i].line1Start = { 2.0, 0.0 };
-			testCases[i].line1End = { 2.0, 2.0 };
+			testCases[i].pointStart = { 2.0, 0.0 };
+			testCases[i].pointEnd = { 2.0, 2.0 };
 
-			testCases[i].line2Start = { 2.0, 1.0 };
-			testCases[i].line2End = { 2.0, 3.0 };
+			testCases[i].lineStart = { 2.0, 1.0 };
+			testCases[i].lineEnd = { 2.0, 3.0 };
 
-			testCases[i].expectedResult = Contact(Vector2{ 0, 0 }, Vector2 { 2.0, 1.0 }, Vector2{ 2.0, 1.0 });*/
+			testCases[i].expectedResult = Contact(Vector2{ 0, 0 }, Vector2 { 2.0, 1.0 });*/
 
 			for (auto testCase : testCases)
 			{
-				for (auto swapLines : { false, true})
+				for (auto swapPointAndLine : { false, true})
 				{
-					for (auto swapLine1Ends : { false, true })
+					for (auto swapPointEnds : { false, true })
 					{
-						for (auto swapLine2Ends : { false, true })
+						for (auto swapLineEnds : { false, true })
 						{
-							auto line1Start = swapLines ? testCase.line2Start : testCase.line1Start;
-							auto line1End = swapLines ? testCase.line2End : testCase.line1End;
+							auto pointStart = swapPointAndLine ? testCase.lineStart : testCase.pointStart;
+							auto pointEnd = swapPointAndLine ? testCase.lineEnd : testCase.pointEnd;
 
-							auto line2Start = swapLines ? testCase.line1Start : testCase.line2Start;
-							auto line2End = swapLines ? testCase.line1End : testCase.line2End;
+							auto lineStart = swapPointAndLine ? testCase.pointStart : testCase.lineStart;
+							auto lineEnd = swapPointAndLine ? testCase.pointEnd : testCase.lineEnd;
 
-							if (swapLine1Ends)
+							if (swapPointEnds)
 							{
-								std::swap(line1Start, line1End);
+								std::swap(pointStart, pointEnd);
 							}
 
-							if (swapLine2Ends)
+							if (swapLineEnds)
 							{
-								std::swap(line2Start, line2End);
+								std::swap(lineStart, lineEnd);
 							}
 
-							auto hit = Collision::PointLineCast(line1Start, line1End, line2Start, line2End);
-							std::string message = "Expected " + (testCase.expectedResult.has_value() ? ""s : "no "s) + "collision between line from "s  + line1Start.ToString() + " to " + line1End.ToString()
-								+ " and line from " + line2Start.ToString() + " to " + line2End.ToString();
+							std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+
+							auto hit = Collision::PointLineCast(pointStart, pointEnd, lineStart, lineEnd);
+							std::wstring message = L"Case "s + testCase.name + L" Failed. Expected "s + (testCase.expectedResult.has_value() ? L""s : L"no "s) + L"collision between line from "s
+								+ converter.from_bytes(pointStart.ToString()) + L" to "s + converter.from_bytes(pointEnd.ToString())
+								+ L" and line from "s + converter.from_bytes(lineStart.ToString()) + L" to "s + converter.from_bytes(lineEnd.ToString());
 
 							if (!testCase.expectedResult.has_value())
 							{
-								Assert::IsFalse(hit.has_value());
+								Assert::IsFalse(hit.has_value(), message.c_str());
 							}
 							else
 							{
-								Assert::IsTrue(hit.has_value());
+								Assert::IsTrue(hit.has_value(), message.c_str());
 								auto &expected = testCase.expectedResult.value();
 								auto &actual = hit.value();
-								Assert::AreEqual(expected.point, actual.point);
-								Assert::AreEqual(expected.centroid, actual.centroid);
+								Assert::AreEqual(expected.point, actual.point, message.c_str());
+								Assert::AreEqual(expected.centroid, actual.centroid, message.c_str());
 
 								// Don't check the normal if the line & point are swapped as it's not trivially calculable from the normal in the original case
-								if (!swapLines)
+								if (!swapPointAndLine)
 								{
-									Assert::AreEqual(swapLine1Ends ? -expected.normal : expected.normal, actual.normal);
+									Assert::AreEqual(swapPointEnds ? -expected.normal : expected.normal, actual.normal, message.c_str());
 								}
 
-							}
-							if (testCase.expectedResult != hit)
-							{
-								__asm nop
 							}
 						}
 					}
 				}
 			}
-		};
+		}
 	};
 
 }

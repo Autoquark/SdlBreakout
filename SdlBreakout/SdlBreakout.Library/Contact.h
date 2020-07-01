@@ -24,6 +24,7 @@ public:
 	}
 
 	Contact(const Vector2& normal, const Vector2& point, const Vector2& centroid);
+	Contact(const Vector2& normal, const Vector2& point);
 	~Contact();
 };
 

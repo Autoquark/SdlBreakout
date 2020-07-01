@@ -12,8 +12,10 @@ public:
 		{
 			std::swap(point1, point2);
 		}
-		startX = point1.x;
-		endX = point2.x;
+		minX = point1.x;
+		maxX = point2.x;
+		minY = min(point1.y, point2.y);
+		maxY = max(point1.y, point2.y);
 
 		xCoefficient = point2.x - point1.x;
 		yCoefficient = point1.y - point2.y;
@@ -21,8 +23,10 @@ public:
 		constant = (point1.x - point2.x) * point1.y + (point2.y - point1.y) * point1.x;
 	}
 
-	float startX;
-	float endX;
+	float minX;
+	float maxX;
+	float minY;
+	float maxY;
 	float xCoefficient;
 	float yCoefficient;
 	float constant;
