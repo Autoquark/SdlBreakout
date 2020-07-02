@@ -17,10 +17,20 @@ public:
 		minY = min(point1.y, point2.y);
 		maxY = max(point1.y, point2.y);
 
-		xCoefficient = point2.x - point1.x;
-		yCoefficient = point1.y - point2.y;
+		xCoefficient = point1.y - point2.y;
+		yCoefficient = point2.x - point1.x;
 		//constant = point1.x * point2.y - point2.x * point1.y;
 		constant = (point1.x - point2.x) * point1.y + (point2.y - point1.y) * point1.x;
+	}
+
+	float XFromY(float y)
+	{
+		return (-yCoefficient * y - constant) / xCoefficient;
+	}
+
+	float YFromX(float x)
+	{
+		return (-xCoefficient * x - constant) / yCoefficient;
 	}
 
 	float minX;

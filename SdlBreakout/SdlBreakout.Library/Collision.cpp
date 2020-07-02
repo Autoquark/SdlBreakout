@@ -4,7 +4,7 @@
 #include <vector>
 #include <limits>
 #include "Collision.h"
-#include "Line.h"
+#include "GeneralFormLine.h"
 #include "Rectangle.h"
 #include "RectF.h"
 
@@ -47,17 +47,18 @@ bool Collision::RectangleRectangleOverlap(const SDL_Rect& rect1, const SDL_Rect&
 //Returns the first contact between a point and a line, if any, when the point travels along the given line
 std::optional<Contact> Collision::PointLineCast(const Vector2& pointStartPosition, const Vector2& pointEndPosition, const Vector2& linePoint1, const Vector2& linePoint2)
 {
-	auto line1 = GeneralFormLine(pointStartPosition, pointEndPosition);
-	auto line2 = GeneralFormLine(linePoint1, linePoint2);
+	auto pointTrajectory = GeneralFormLine(pointStartPosition, pointEndPosition);
+	auto line = GeneralFormLine(linePoint1, linePoint2);
 
-	auto denominator = line2.xCoefficient * line1.yCoefficient - line1.xCoefficient * line2.yCoefficient;
+	auto denominator = line.xCoefficient * pointTrajectory.yCoefficient - pointTrajectory.xCoefficient * line.yCoefficient;
 	
 	float x;
 	// Special case: two segments of the same line
 	if (denominator == 0)
 	{
-		auto largestMin = max(line1.maxX, line2.maxX);
-		auto smallestMax = min(line1.minX, line2.minX);
+		// TODO: wrong?
+		auto largestMin = max(pointTrajectory.maxX, line.maxX);
+		auto smallestMax = min(pointTrajectory.minX, line.minX);
 
 		// The segments do not overlap
 		if (largestMin > smallestMax)
@@ -70,14 +71,14 @@ std::optional<Contact> Collision::PointLineCast(const Vector2& pointStartPositio
 	}
 	else
 	{
-		x = (line1.constant * line2.yCoefficient - line2.constant * line1.yCoefficient)
+		x = (pointTrajectory.constant * line.yCoefficient - line.constant * pointTrajectory.yCoefficient)
 			/ denominator;
 	}
 
-	auto y = (-line1.xCoefficient * x - line1.constant) / line1.yCoefficient;
+	auto y = (pointTrajectory.yCoefficient == 0) ? line.YFromX(x) : pointTrajectory.YFromX(x);
 
 	// Need to check both x and y to handle vertical lines
-	if (x < line1.minX || x < line2.minX || x > line1.maxX || x > line2.maxX || y < line1.minY || y < line2.minY || y > line1.maxY || y > line2.maxY)
+	if (x < pointTrajectory.minX || x < line.minX || x > pointTrajectory.maxX || x > line.maxX || y < pointTrajectory.minY || y < line.minY || y > pointTrajectory.maxY || y > line.maxY)
 	{
 		return std::nullopt;
 	}

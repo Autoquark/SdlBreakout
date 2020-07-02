@@ -127,6 +127,13 @@ public:
 		y = std::sin(-inRadians) * temp - std::cos(-inRadians) * y;
 	}
 
+	Vector2 Rotated(float degreesClockwise)
+	{
+		auto clone = Vector2(*this);
+		clone.Rotate(degreesClockwise);
+		return clone;
+	}
+
 	float x;
 	float y;
 };
