@@ -23,14 +23,26 @@ public:
 		constant = (point1.x - point2.x) * point1.y + (point2.y - point1.y) * point1.x;
 	}
 
-	float XFromY(float y)
+	bool TryXFromY(float y, float& x)
 	{
-		return (-yCoefficient * y - constant) / xCoefficient;
+		// If this is a horizontal line
+		if (xCoefficient == 0)
+		{
+			return false;
+		}
+		x = (-yCoefficient * y - constant) / xCoefficient;
+		return true;
 	}
 
-	float YFromX(float x)
+	bool TryYFromX(float x, float& y)
 	{
-		return (-xCoefficient * x - constant) / yCoefficient;
+		// If this is a vertical line
+		if (yCoefficient == 0)
+		{
+			return false;
+		}
+		y = (-xCoefficient * x - constant) / yCoefficient;
+		return true;
 	}
 
 	float minX;

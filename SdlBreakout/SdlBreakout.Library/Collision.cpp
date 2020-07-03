@@ -75,7 +75,11 @@ std::optional<Contact> Collision::PointLineCast(const Vector2& pointStartPositio
 			/ denominator;
 	}
 
-	auto y = (pointTrajectory.yCoefficient == 0) ? line.YFromX(x) : pointTrajectory.YFromX(x);
+	float y;
+	if (!line.TryYFromX(x, y))
+	{
+		pointTrajectory.TryYFromX(x, y);
+	}
 
 	// Need to check both x and y to handle vertical lines
 	if (x < pointTrajectory.minX || x < line.minX || x > pointTrajectory.maxX || x > line.maxX || y < pointTrajectory.minY || y < line.minY || y > pointTrajectory.maxY || y > line.maxY)
