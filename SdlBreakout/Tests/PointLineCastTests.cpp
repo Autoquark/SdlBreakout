@@ -185,6 +185,34 @@ namespace Tests
 			RunTestCase(testCase);
 		}
 
+		TEST_METHOD(ParallelHorizontalLines)
+		{
+			TestCase testCase;
+			testCase.pointStart = Vector2(0, 0);
+			testCase.pointEnd = Vector2(3, 0);
+
+			testCase.lineStart = Vector2(0, 1);
+			testCase.lineEnd = Vector2(3, 1);
+
+			testCase.expectedResult = std::nullopt;
+
+			RunTestCase(testCase);
+		}
+
+		TEST_METHOD(ParallelVerticalLines)
+		{
+			TestCase testCase;
+			testCase.pointStart = Vector2(0, 0);
+			testCase.pointEnd = Vector2(0, 3);
+
+			testCase.lineStart = Vector2(1, 0);
+			testCase.lineEnd = Vector2(1, 3);
+
+			testCase.expectedResult = std::nullopt;
+
+			RunTestCase(testCase);
+		}
+
 		// Overlapping vertical lines
 		// Don't know what if anything in particular is a useful return value here
 		/*i++;

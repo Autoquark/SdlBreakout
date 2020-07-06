@@ -1,5 +1,6 @@
 #include "Vector2.h"
 #include <algorithm>
+#include <assert.h>
 
 #pragma once
 // Represents a line defined by an equation in the form ax + by + c = 0
@@ -21,6 +22,9 @@ public:
 		yCoefficient = point2.x - point1.x;
 		//constant = point1.x * point2.y - point2.x * point1.y;
 		constant = (point1.x - point2.x) * point1.y + (point2.y - point1.y) * point1.x;
+
+		assert(xCoefficient * point1.x + yCoefficient * point1.y + constant == 0);
+		assert(xCoefficient * point2.x + yCoefficient * point2.y + constant == 0);
 	}
 
 	bool TryXFromY(float y, float& x)
