@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ball.h"
 #include "game.h"
 

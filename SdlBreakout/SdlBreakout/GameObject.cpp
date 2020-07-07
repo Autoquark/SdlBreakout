@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "GameObject.h"
 #include "game.h"
 
@@ -16,8 +17,8 @@ void GameObject::Update(float timeElapsed)
 	SDL_Rect destinationRect;
 	destinationRect.x = (int)position.x;
 	destinationRect.y = (int)position.y;
-	destinationRect.h = sprite->GetSize().x;
-	destinationRect.w = sprite->GetSize().y;
+	destinationRect.h = (int)sprite->GetSize().x;
+	destinationRect.w = (int)sprite->GetSize().y;
 
 	SDL_RenderCopy(Game::GetInstance()->gRenderer, sprite->GetSdlTexture(), NULL, &destinationRect);
 }

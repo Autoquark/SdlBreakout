@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "block.h"
 #include "Game.h"
 

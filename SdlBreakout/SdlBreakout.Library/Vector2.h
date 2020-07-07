@@ -1,11 +1,11 @@
+#pragma once
 #define _USE_MATH_DEFINES
 
-#include <string>
 #include <math.h>
+#include <string>
 
 using namespace std::string_literals;
 
-#pragma once
 struct Vector2
 {
 public:
@@ -123,8 +123,8 @@ public:
 		auto temp = x;
 		auto inRadians = degreesClockwise * (M_PI / 180);
 
-		x = std::cos(-inRadians) * x - std::sin(-inRadians) * y;
-		y = std::sin(-inRadians) * temp - std::cos(-inRadians) * y;
+		x = (float)(std::cos(-inRadians) * x - std::sin(-inRadians) * y);
+		y = (float)(std::sin(-inRadians) * temp - std::cos(-inRadians) * y);
 	}
 
 	Vector2 Rotated(float degreesClockwise)

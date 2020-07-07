@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <algorithm>
 #include <SDL_image.h>
 #include <stdio.h>

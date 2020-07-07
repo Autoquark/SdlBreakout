@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Paddle.h"
 #include "game.h"
 #include <iostream>

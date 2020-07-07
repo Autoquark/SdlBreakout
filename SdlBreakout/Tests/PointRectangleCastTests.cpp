@@ -14,7 +14,7 @@ namespace Tests
 {
 	TEST_CLASS(PointRectangleCastTests)
 	{
-		const float Tolerance = 1e-16;
+		const float Tolerance = 1e-16f;
 
 		struct TestCase
 		{
@@ -41,7 +41,6 @@ namespace Tests
 				Assert::AreEqual(expected.point, actual.point);
 				Assert::AreEqual(expected.centroid, actual.centroid);
 
-				//TODO: Tolerance
 				AreEqual(expected.normal, actual.normal, Tolerance);
 			}
 		}
@@ -65,7 +64,7 @@ namespace Tests
 			testCase.pointEnd = Vector2(1, 5);
 			testCase.rectangle = RectF(0, 2, 2, 4);
 
-			testCase.expectedResult = Contact(Vector2(-1, 0), Vector2(0, 4 + 2.0 / 3));
+			testCase.expectedResult = Contact(Vector2(-1, 0), Vector2(0, 4 + 2.0f / 3));
 
 			RunTestCase(testCase);
 		}

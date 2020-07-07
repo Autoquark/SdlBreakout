@@ -19,7 +19,7 @@ namespace Tests
 {	
 	TEST_CLASS(PointLineCastTests)
 	{
-		const float Tolerance = 1e-16;
+		const float Tolerance = 1e-16f;
 
 		struct TestCase
 		{

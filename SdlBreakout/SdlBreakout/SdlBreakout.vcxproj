@@ -81,6 +81,8 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>..\SdlBreakout.Library;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -132,6 +134,7 @@
     <ClCompile Include="Paddle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\SdlBreakout.Library\stdafx.h" />
     <ClInclude Include="ball.h" />
     <ClInclude Include="block.h" />
     <ClInclude Include="Game.h" />
