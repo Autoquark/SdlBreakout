@@ -10,6 +10,8 @@
 #define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
 
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+// Exclude min and max macros which conflict with those in <algorithm>
+#define NOMINMAX
 // Windows Header Files
 #include <windows.h>
 

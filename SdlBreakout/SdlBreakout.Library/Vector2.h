@@ -10,6 +10,11 @@ struct Vector2
 {
 public:
 
+	static float DistanceBetween(const Vector2& first, const Vector2& second)
+	{
+		return (second - first).Magnitude();
+	}
+
 	Vector2() = default;
 
 	Vector2(float x, float y) : x(x), y(y)
@@ -99,11 +104,6 @@ public:
 		return sqrtf(x * x + y * y);
 	}
 
-	float DistanceTo(const Vector2& other)
-	{
-		return (*this - other).Magnitude();
-	}
-
 	void Normalise()
 	{
 		auto magnitude = Magnitude();
@@ -115,6 +115,18 @@ public:
 	{
 		auto clone = Vector2(*this);
 		clone.Normalise();
+		return clone;
+	}
+
+	void Reflect(Vector2 normal)
+	{
+		*this -= 2 * (this->DotProduct(normal)) * normal;
+	}
+
+	Vector2 Reflected(Vector2 normal)
+	{
+		auto clone = Vector2(*this);
+		clone.Reflect(normal);
 		return clone;
 	}
 

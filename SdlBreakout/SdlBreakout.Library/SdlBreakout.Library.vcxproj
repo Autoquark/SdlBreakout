@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Collision.h" />
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="Contact.h" />
     <ClInclude Include="GeneralFormLine.h" />
     <ClInclude Include="Rectangle.h" />

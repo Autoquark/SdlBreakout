@@ -3,6 +3,7 @@
 #include <vector>
 #include "GameObject.h"
 #include "Texture.h"
+#include "RectF.h"
 
 class Game
 {
@@ -14,6 +15,7 @@ public:
 
 	const int SCREEN_WIDTH = 640;
 	const int SCREEN_HEIGHT = 480;
+	const RectF screenRect = RectF(0.0f, 0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
 
 	const int TARGET_FPS = 60;
 

@@ -10,6 +10,8 @@ public:
 	Vector2 point;
 	// The position of the collision shape when the collision occurred
 	Vector2 centroid;
+	// Value indicating which side of the stationary line was hit. For a collision against a shape, a true value always indicates an external collision and a false value an internal one
+	bool side;
 	
 	friend bool operator==(const Contact& lhs, const Contact& rhs)
 	{
@@ -23,8 +25,8 @@ public:
 		return !(lhs == rhs);
 	}
 
-	Contact(const Vector2& normal, const Vector2& point, const Vector2& centroid);
-	Contact(const Vector2& normal, const Vector2& point);
+	Contact(const Vector2& normal, const Vector2& point, bool side, const Vector2& centroid);
+	Contact(const Vector2& normal, const Vector2& point, bool side);
 	~Contact();
 };
 

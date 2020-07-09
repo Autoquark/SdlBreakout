@@ -55,7 +55,7 @@ public:
 		return point.x >= x
 			&& point.x <= x + width
 			&& point.y >= y
-			&& point.x <= y + height;
+			&& point.y <= y + height;
 	}
 
 	float x, y, width, height;

@@ -1,6 +1,7 @@
 #include "Vector2.h"
 #include <algorithm>
 #include <assert.h>
+#include "Constants.h"
 
 #pragma once
 // Represents a line defined by an equation in the form ax + by + c = 0
@@ -15,16 +16,23 @@ public:
 		}
 		minX = point1.x;
 		maxX = point2.x;
-		minY = min(point1.y, point2.y);
-		maxY = max(point1.y, point2.y);
+		minY = std::min(point1.y, point2.y);
+		maxY = std::max(point1.y, point2.y);
 
 		xCoefficient = point1.y - point2.y;
 		yCoefficient = point2.x - point1.x;
-		//constant = point1.x * point2.y - point2.x * point1.y;
 		constant = (point1.x - point2.x) * point1.y + (point2.y - point1.y) * point1.x;
 
-		assert(xCoefficient * point1.x + yCoefficient * point1.y + constant == 0);
-		assert(xCoefficient * point2.x + yCoefficient * point2.y + constant == 0);
+		/*auto divisor = std::max(xCoefficient, std::max(yCoefficient, constant));
+		if (divisor != 0)
+		{
+			xCoefficient /= divisor;
+			yCoefficient /= divisor;
+			constant /= divisor;
+		}*/
+
+		assert(xCoefficient * point1.x + yCoefficient * point1.y + constant < Constants::FloatEqualityTolerance);
+		assert(xCoefficient * point2.x + yCoefficient * point2.y + constant < Constants::FloatEqualityTolerance);
 	}
 
 	bool TryXFromY(float y, float& x)

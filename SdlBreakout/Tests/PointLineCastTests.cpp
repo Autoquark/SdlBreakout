@@ -11,6 +11,7 @@
 #include "Collision.h"
 #include "ToString.h"
 #include "Contact.h"
+#include "Constants.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std::string_literals;
@@ -19,8 +20,6 @@ namespace Tests
 {	
 	TEST_CLASS(PointLineCastTests)
 	{
-		const float Tolerance = 1e-16f;
-
 		struct TestCase
 		{
 			/*TestCase() : name(L""), pointStart(), pointEnd(1, 1), lineStart(), lineEnd(), expectedResult()
@@ -80,13 +79,14 @@ namespace Tests
 							auto &actual = hit.value();
 							Assert::AreEqual(expected.point, actual.point, message.c_str());
 							Assert::AreEqual(expected.centroid, actual.centroid, message.c_str());
+							Assert::AreEqual((swapLineEnds ^ swapPointEnds ^ swapPointAndLine) ? !expected.side : expected.side, actual.side, message.c_str());
 
 							// Don't check the normal if the line & point are swapped as it's not trivially calculable from the normal in the original case
 							if (!swapPointAndLine)
 							{
 								auto expectedNormal = swapPointEnds ? -expected.normal : expected.normal;
-								Assert::AreEqual(expectedNormal.x, actual.normal.x, Tolerance, message.c_str());
-								Assert::AreEqual(expectedNormal.y, actual.normal.y, Tolerance, message.c_str());
+								Assert::AreEqual(expectedNormal.x, actual.normal.x, Constants::FloatEqualityTolerance, message.c_str());
+								Assert::AreEqual(expectedNormal.y, actual.normal.y, Constants::FloatEqualityTolerance, message.c_str());
 							}
 
 						}
@@ -108,7 +108,7 @@ namespace Tests
 			testCase.lineStart = { 2.0, 0.0 };
 			testCase.lineEnd = { 0.0, 2.0 };
 
-			testCase.expectedResult = Contact(Vector2(-1, -1).Normalised(), Vector2{ 1.0, 1.0 });
+			testCase.expectedResult = Contact(Vector2(-1, -1).Normalised(), Vector2(1.0, 1.0), true);
 
 			RunTestCase(testCase);
 		}
@@ -166,7 +166,7 @@ namespace Tests
 			testCase.lineStart = Vector2(0, 0);
 			testCase.lineEnd = Vector2(0, 3);
 
-			testCase.expectedResult = Contact(Vector2(-1, 0).Normalised(), Vector2(0, 2));
+			testCase.expectedResult = Contact(Vector2(-1, 0).Normalised(), Vector2(0, 2), true);
 
 			RunTestCase(testCase);
 		}
@@ -180,7 +180,7 @@ namespace Tests
 			testCase.lineStart = Vector2(1, 0);
 			testCase.lineEnd = Vector2(0, 2);
 
-			testCase.expectedResult = Contact(Vector2(-1, -0.5).Normalised(), Vector2(0.5, 1));
+			testCase.expectedResult = Contact(Vector2(-1, -0.5).Normalised(), Vector2(0.5, 1), true);
 
 			RunTestCase(testCase);
 		}

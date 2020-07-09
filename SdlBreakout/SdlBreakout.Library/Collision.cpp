@@ -56,9 +56,10 @@ std::optional<Contact> Collision::PointLineCast(const Vector2& pointStartPositio
 	// Special case: two segments of the same line
 	if (denominator == 0)
 	{
+		return std::nullopt;
 		// TODO: wrong?
-		auto largestMin = max(pointTrajectory.maxX, line.maxX);
-		auto smallestMax = min(pointTrajectory.minX, line.minX);
+		/*auto largestMin = std::max(pointTrajectory.maxX, line.maxX);
+		auto smallestMax = std::min(pointTrajectory.minX, line.minX);
 
 		// The segments do not overlap
 		if (largestMin > smallestMax)
@@ -67,7 +68,7 @@ std::optional<Contact> Collision::PointLineCast(const Vector2& pointStartPositio
 		}
 
 		// The overlapping range is from largestMin to smallestMax, use the smallest X value in the range
-		x = largestMin;
+		x = largestMin;*/
 	}
 	else
 	{
@@ -91,20 +92,22 @@ std::optional<Contact> Collision::PointLineCast(const Vector2& pointStartPositio
 
 	auto normal = linePoint2 - linePoint1;
 	normal.Rotate(90);
-	normal = normal * normal.DotProduct(pointEndPosition - pointStartPosition);
+	auto dotProduct = normal.DotProduct(pointEndPosition - pointStartPosition);
+	normal = normal * dotProduct;
 	normal.Normalise();
 
-	return Contact(-normal, point, point);
+	return Contact(-normal, point, dotProduct > 0);
 }
 
-std::optional<Contact> Collision::PointRectangleCast(const Vector2 & pointStartPosition, const Vector2 & pointEndPosition, const RectF & rect)
+std::optional<Contact> Collision::PointRectangleCast(const Vector2 & pointStartPosition, const Vector2 & pointEndPosition, const RectF & rect, InternalityFilter internalityFilter)
 {
 	// Check if line starts and ends inside rectangle
 	if (rect.Contains(pointStartPosition) && rect.Contains(pointEndPosition))
 	{
-		return Contact(Vector2(), pointStartPosition, pointStartPosition);
+		return std::nullopt;
 	}
 
+	// Defining the vectors in a clockwise cycle ensures that the meaning of the contact side value remains consistent
 	std::vector<std::optional<Contact>> contacts = {
 		PointLineCast(pointStartPosition, pointEndPosition, rect.TopLeft(), rect.TopRight()),
 		PointLineCast(pointStartPosition, pointEndPosition, rect.TopRight(), rect.BottomRight()),
@@ -119,12 +122,14 @@ std::optional<Contact> Collision::PointRectangleCast(const Vector2 & pointStartP
 	auto bestContact = std::optional<Contact>();
 	for (auto contact : contacts)
 	{
-		if (!contact.has_value())
+		if (!contact.has_value()
+			|| internalityFilter == InternalityFilter::Internal && !contact.value().side
+			|| internalityFilter == InternalityFilter::External && contact.value().side)
 		{
 			continue;
 		}
 
-		auto distance = contact.value().centroid.DistanceTo(pointStartPosition);
+		auto distance = Vector2::DistanceBetween(contact.value().centroid, pointStartPosition);
 		if (!bestContact.has_value() || distance < bestDistance)
 		{
 			bestDistance = distance;
