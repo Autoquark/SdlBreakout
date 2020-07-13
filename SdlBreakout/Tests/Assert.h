@@ -5,8 +5,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-void AreEqual(Vector2 first, Vector2 second, float tolerance, const wchar_t* message = nullptr)
+namespace Tests
 {
-	Assert::AreEqual(first.x, second.x, tolerance, message);
-	Assert::AreEqual(first.y, second.y, tolerance, message);
+	void AreEqual(Vector2 expected, Vector2 actual, float tolerance, const wchar_t* message = nullptr);
 }

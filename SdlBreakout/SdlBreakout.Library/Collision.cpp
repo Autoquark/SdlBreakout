@@ -8,40 +8,27 @@
 #include "Rectangle.h"
 #include "RectF.h"
 
-bool Collision::RectangleRectangleOverlap(const SDL_Rect& rect1, const SDL_Rect& rect2)
+std::optional<Contact> Collision::FindClosestCollision(std::vector<std::optional<Contact>> contacts, const InternalityFilter internalityFilter)
 {
-	int right1, right2;
-	int bottom1, bottom2;
+	contacts.erase(std::remove_if(contacts.begin(), contacts.end(), [](auto x) { return !x.has_value(); }), contacts.end());
 
-	//Calculate the sides of rect A
-	right1 = rect1.x + rect1.w;
-	bottom1 = rect1.y + rect1.h;
+	std::vector<Contact> actualContacts;
+	std::transform(contacts.begin(), contacts.end(), std::back_inserter(actualContacts), [](auto x) { return x.value(); });
+	actualContacts.erase(
+		std::remove_if(
+			actualContacts.begin(),
+			actualContacts.end(),
+			[&](auto x) { return (x.side && internalityFilter == InternalityFilter::Internal) || (!x.side && internalityFilter == InternalityFilter::External); }),
+		actualContacts.end());
 
-	//Calculate the sides of rect B
-	right2 = rect2.x + rect2.w;
-	bottom2 = rect2.y + rect2.h;
+	auto resultIterator = std::min_element(actualContacts.begin(), actualContacts.end(), [](auto first, auto second) { return first.distance < second.distance; });
 
-	if (bottom1 <= rect2.y)
+	if (resultIterator != actualContacts.end())
 	{
-		return false;
+		return *resultIterator;
 	}
 
-	if (rect1.y >= bottom2)
-	{
-		return false;
-	}
-
-	if (right1 <= rect2.x)
-	{
-		return false;
-	}
-
-	if (rect1.x >= right2)
-	{
-		return false;
-	}
-
-	return true;
+	return std::nullopt;
 }
 
 //Returns the first contact between a point and a line, if any, when the point travels along the given line
@@ -57,18 +44,6 @@ std::optional<Contact> Collision::PointLineCast(const Vector2& pointStartPositio
 	if (denominator == 0)
 	{
 		return std::nullopt;
-		// TODO: wrong?
-		/*auto largestMin = std::max(pointTrajectory.maxX, line.maxX);
-		auto smallestMax = std::min(pointTrajectory.minX, line.minX);
-
-		// The segments do not overlap
-		if (largestMin > smallestMax)
-		{
-			return std::nullopt;
-		}
-
-		// The overlapping range is from largestMin to smallestMax, use the smallest X value in the range
-		x = largestMin;*/
 	}
 	else
 	{
@@ -96,10 +71,11 @@ std::optional<Contact> Collision::PointLineCast(const Vector2& pointStartPositio
 	normal = normal * dotProduct;
 	normal.Normalise();
 
-	return Contact(-normal, point, dotProduct > 0);
+	auto temp = Vector2::DistanceBetween(point, pointStartPosition);
+	return Contact(-normal, point, dotProduct < 0, Vector2::DistanceBetween(point, pointStartPosition));
 }
 
-std::optional<Contact> Collision::PointRectangleCast(const Vector2 & pointStartPosition, const Vector2 & pointEndPosition, const RectF & rect, InternalityFilter internalityFilter)
+std::optional<Contact> Collision::PointRectangleCast(const Vector2 & pointStartPosition, const Vector2 & pointEndPosition, const RectF & rect, const InternalityFilter internalityFilter)
 {
 	// Check if line starts and ends inside rectangle
 	if (rect.Contains(pointStartPosition) && rect.Contains(pointEndPosition))
@@ -115,32 +91,26 @@ std::optional<Contact> Collision::PointRectangleCast(const Vector2 & pointStartP
 		PointLineCast(pointStartPosition, pointEndPosition, rect.BottomLeft(), rect.TopLeft()),
 	};
 
-	//std::remove_if(contacts.begin(), contacts.end(), [](std::optional<Contact> c) { return c.has_value(); });
-
-	// Find the first contact in the point's path
-	auto bestDistance = (std::numeric_limits<float>::max)();
-	auto bestContact = std::optional<Contact>();
-	for (auto contact : contacts)
-	{
-		if (!contact.has_value()
-			|| internalityFilter == InternalityFilter::Internal && !contact.value().side
-			|| internalityFilter == InternalityFilter::External && contact.value().side)
-		{
-			continue;
-		}
-
-		auto distance = Vector2::DistanceBetween(contact.value().centroid, pointStartPosition);
-		if (!bestContact.has_value() || distance < bestDistance)
-		{
-			bestDistance = distance;
-			bestContact = contact.value();
-		}
-	}
-
-	return bestContact;
+	return FindClosestCollision(contacts, internalityFilter);
 }
 
-std::optional<Contact> Collision::RectangleRectangleCast(const RectF & movingRect, const SDL_Rect & stationaryRect, const Vector2& movement)
+std::optional<Contact> Collision::RectangleRectangleCast(const RectF & movingRect, const RectF & stationaryRect, const Vector2& movement, const InternalityFilter internalityFilter)
 {
-	return std::nullopt;
+	//TODO: Moving rectangle inside stationary rectangle, need to shrink stationary rectangle
+	// Maybe test against grown and shrunk stationary rectangle, using InternalityFilter and/or distance calculation to choose correct result?
+	auto centre = movingRect.Centre();
+	auto optional = PointRectangleCast(
+		centre,
+		centre + movement,
+		RectF::FromCentre(stationaryRect.Centre(), stationaryRect.width + movingRect.width, stationaryRect.height + movingRect.height),
+		Collision::InternalityFilter::External);
+	if (!optional.has_value())
+	{
+		return std::nullopt;
+	}
+
+	auto collision = optional.value();
+	auto lineCollision = PointRectangleCast(collision.centroid, stationaryRect.Centre(), stationaryRect).value();
+
+	return Contact(collision.normal, lineCollision.point, collision.side, Vector2::DistanceBetween(collision.point, centre), collision.point);
 }

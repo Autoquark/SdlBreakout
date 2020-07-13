@@ -41,6 +41,8 @@ namespace Tests
 				auto& actual = hit.value();
 				Assert::AreEqual(expected.point, actual.point);
 				Assert::AreEqual(expected.centroid, actual.centroid);
+				Assert::AreEqual(expected.side, actual.side);
+				Assert::AreEqual(expected.distance, actual.distance);
 
 				AreEqual(expected.normal, actual.normal, Constants::FloatEqualityTolerance);
 			}
@@ -67,7 +69,22 @@ namespace Tests
 			testCase.rectangle = RectF(0, 2, 2, 4);
 			testCase.internalityFilter = Collision::InternalityFilter::Both;
 
-			testCase.expectedResult = Contact(Vector2(-1, 0), Vector2(0, 4 + 2.0f / 3), true);
+			auto expectedPoint = Vector2(0, 4 + 2.0f / 3);
+			testCase.expectedResult = Contact(Vector2(-1, 0), expectedPoint, true, Vector2::DistanceBetween(testCase.pointStart, expectedPoint));
+
+			RunTestCase(testCase);
+		}
+
+		TEST_METHOD(HitLeftSide2)
+		{
+			TestCase testCase;
+			testCase.pointStart = Vector2(0.5, 4.5);
+			testCase.pointEnd = Vector2(2, 3);
+			testCase.rectangle = RectF(1, 1, 2, 4);
+			testCase.internalityFilter = Collision::InternalityFilter::Both;
+
+			auto expectedPoint = Vector2(1, 4);
+			testCase.expectedResult = Contact(Vector2(-1, 0), expectedPoint, true, Vector2::DistanceBetween(testCase.pointStart, expectedPoint));
 
 			RunTestCase(testCase);
 		}
@@ -80,7 +97,8 @@ namespace Tests
 			testCase.rectangle = RectF(0, 0, 4, 2);
 			testCase.internalityFilter = Collision::InternalityFilter::Both;
 
-			testCase.expectedResult = Contact(Vector2(0, 1).Normalised(), Vector2(3, 2), true);
+			auto expectedPoint = Vector2(3, 2);
+			testCase.expectedResult = Contact(Vector2(0, 1).Normalised(), expectedPoint, true, Vector2::DistanceBetween(testCase.pointStart, expectedPoint));
 
 			RunTestCase(testCase);
 		}
@@ -93,7 +111,8 @@ namespace Tests
 			testCase.rectangle = RectF(0, 0, 4, 2);
 			testCase.internalityFilter = Collision::InternalityFilter::Internal;
 
-			testCase.expectedResult = Contact(Vector2(-1, 0).Normalised(), Vector2(4, 1), true);
+			auto expectedPoint = Vector2(4, 1);
+			testCase.expectedResult = Contact(Vector2(-1, 0).Normalised(), expectedPoint, false, Vector2::DistanceBetween(testCase.pointStart, expectedPoint));
 
 			RunTestCase(testCase);
 		}

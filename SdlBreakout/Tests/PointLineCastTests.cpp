@@ -12,6 +12,7 @@
 #include "ToString.h"
 #include "Contact.h"
 #include "Constants.h"
+#include "Assert.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std::string_literals;
@@ -22,13 +23,6 @@ namespace Tests
 	{
 		struct TestCase
 		{
-			/*TestCase() : name(L""), pointStart(), pointEnd(1, 1), lineStart(), lineEnd(), expectedResult()
-			{
-				std::cout << "test";
-			}*/
-
-			std::wstring name;
-			// = L"untitled";
 			Vector2 pointStart;
 			Vector2 pointEnd;
 			Vector2 lineStart;
@@ -64,7 +58,7 @@ namespace Tests
 						std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 
 						auto hit = Collision::PointLineCast(pointStart, pointEnd, lineStart, lineEnd);
-						std::wstring message = L"Case "s + testCase.name + L" Failed. Expected "s + (testCase.expectedResult.has_value() ? L""s : L"no "s) + L"collision between line from "s
+						std::wstring message = L" Test failed. Expected "s + (testCase.expectedResult.has_value() ? L""s : L"no "s) + L"collision between line from "s
 							+ converter.from_bytes(pointStart.ToString()) + L" to "s + converter.from_bytes(pointEnd.ToString())
 							+ L" and line from "s + converter.from_bytes(lineStart.ToString()) + L" to "s + converter.from_bytes(lineEnd.ToString());
 
@@ -85,8 +79,9 @@ namespace Tests
 							if (!swapPointAndLine)
 							{
 								auto expectedNormal = swapPointEnds ? -expected.normal : expected.normal;
-								Assert::AreEqual(expectedNormal.x, actual.normal.x, Constants::FloatEqualityTolerance, message.c_str());
-								Assert::AreEqual(expectedNormal.y, actual.normal.y, Constants::FloatEqualityTolerance, message.c_str());
+								AreEqual(expectedNormal, actual.normal, Constants::FloatEqualityTolerance, message.c_str());
+								//Assert::AreEqual(expectedNormal.x, actual.normal.x, Constants::FloatEqualityTolerance, message.c_str());
+								//Assert::AreEqual(expectedNormal.y, actual.normal.y, Constants::FloatEqualityTolerance, message.c_str());
 							}
 
 						}
@@ -99,16 +94,16 @@ namespace Tests
 		
 		TEST_METHOD(CrossingDiagonalLines)
 		{
-			TestCase testCase;// = TestCase();
+			TestCase testCase;
 
-			testCase.name = L"Crossing diagonal lines";
 			testCase.pointStart = { 0.0, 0.0 };
 			testCase.pointEnd = { 2.0, 2.0 };
 
 			testCase.lineStart = { 2.0, 0.0 };
 			testCase.lineEnd = { 0.0, 2.0 };
 
-			testCase.expectedResult = Contact(Vector2(-1, -1).Normalised(), Vector2(1.0, 1.0), true);
+			auto expectedPoint = Vector2(1.0, 1.0);
+			testCase.expectedResult = Contact(Vector2(-1, -1).Normalised(), expectedPoint, false, Vector2::DistanceBetween(testCase.pointStart, expectedPoint));
 
 			RunTestCase(testCase);
 		}
@@ -117,7 +112,6 @@ namespace Tests
 		{
 			// Non-crossing diagonal lines
 			TestCase testCase;
-			testCase.name = L"Non-crossing diagonal lines";
 			testCase.pointStart = { 0.0, 0.0 };
 			testCase.pointEnd = { 2.0, 2.0 };
 
@@ -166,7 +160,8 @@ namespace Tests
 			testCase.lineStart = Vector2(0, 0);
 			testCase.lineEnd = Vector2(0, 3);
 
-			testCase.expectedResult = Contact(Vector2(-1, 0).Normalised(), Vector2(0, 2), true);
+			auto expectedPoint = Vector2(0, 2);
+			testCase.expectedResult = Contact(Vector2(-1, 0).Normalised(), expectedPoint, false, Vector2::DistanceBetween(testCase.pointStart, expectedPoint));
 
 			RunTestCase(testCase);
 		}
@@ -180,7 +175,8 @@ namespace Tests
 			testCase.lineStart = Vector2(1, 0);
 			testCase.lineEnd = Vector2(0, 2);
 
-			testCase.expectedResult = Contact(Vector2(-1, -0.5).Normalised(), Vector2(0.5, 1), true);
+			auto expectedPoint = Vector2(0.5, 1);
+			testCase.expectedResult = Contact(Vector2(-1, -0.5).Normalised(), expectedPoint, false, Vector2::DistanceBetween(testCase.pointStart, expectedPoint));
 
 			RunTestCase(testCase);
 		}
