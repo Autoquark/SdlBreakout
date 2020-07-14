@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "Texture.h"
 #include "RectF.h"
+#include "Paddle.h"
 
 class Game
 {
@@ -24,8 +25,11 @@ public:
 	Texture* gBallTexture = NULL;
 	Texture* gPaddleTexture = NULL;
 
-	//The window renderer
+	// The window renderer
 	SDL_Renderer* gRenderer = NULL;
+
+	// Special game objects
+	Paddle* paddle = NULL;
 
 	int Start();
 

@@ -15,6 +15,10 @@ public:
 	{
 	}
 
+	RectF(Vector2 position, Vector2 size) : RectF(position.x, position.y, size.x, size.y)
+	{
+	}
+
 	float Top() const
 	{
 		return y;

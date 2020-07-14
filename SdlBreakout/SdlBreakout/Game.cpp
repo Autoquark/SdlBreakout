@@ -35,15 +35,17 @@ int Game::Start()
 		return -1;
 	}
 
-	gameObjects.emplace_back(new Paddle());
+
+	paddle = new Paddle();
+	gameObjects.push_back(paddle);
 	gameObjects.back()->position.x = 320;
 	gameObjects.back()->position.y = 440;
 
-	gameObjects.emplace_back(new Block());
+	gameObjects.push_back(new Block());
 	gameObjects.back()->position.x = 320;
 	gameObjects.back()->position.y = 240;
 
-	gameObjects.emplace_back(new Ball());
+	gameObjects.push_back(new Ball());
 	gameObjects.back()->position.x = 320;
 	gameObjects.back()->position.y = 300;
 

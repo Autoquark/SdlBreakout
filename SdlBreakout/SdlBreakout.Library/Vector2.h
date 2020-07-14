@@ -57,6 +57,25 @@ public:
 		return rhs;
 	}
 
+	Vector2& operator /= (float rhs)
+	{
+		this->x /= rhs;
+		this->y /= rhs;
+		return *this;
+	}
+
+	friend Vector2 operator/(Vector2 lhs, float rhs)
+	{
+		lhs /= rhs;
+		return lhs;
+	}
+
+	friend Vector2 operator/(float lhs, Vector2 rhs)
+	{
+		rhs /= lhs;
+		return rhs;
+	}
+
 	Vector2& operator+=(const Vector2& rhs) // compound assignment (does not need to be a member,
 	{                           // but often is, to modify the private members)
 	  /* addition of rhs to *this takes place here */

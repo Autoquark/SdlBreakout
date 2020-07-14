@@ -11,6 +11,11 @@ public:
 	Texture* getSprite();
 	void setSprite(Texture* value);
 
+	Vector2 GetSize()
+	{
+		return size;
+	}
+
 	virtual void Update(float timeElapsed);
 
 	GameObject(Vector2 size);

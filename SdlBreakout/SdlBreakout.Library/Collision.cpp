@@ -8,27 +8,35 @@
 #include "Rectangle.h"
 #include "RectF.h"
 
-std::optional<Contact> Collision::FindClosestCollision(std::vector<std::optional<Contact>> contacts, const InternalityFilter internalityFilter)
+int Collision::FindClosestCollisionIndex(std::vector<std::optional<Contact>>& contacts, const InternalityFilter& internalityFilter)
 {
-	contacts.erase(std::remove_if(contacts.begin(), contacts.end(), [](auto x) { return !x.has_value(); }), contacts.end());
-
-	std::vector<Contact> actualContacts;
-	std::transform(contacts.begin(), contacts.end(), std::back_inserter(actualContacts), [](auto x) { return x.value(); });
-	actualContacts.erase(
-		std::remove_if(
-			actualContacts.begin(),
-			actualContacts.end(),
-			[&](auto x) { return (x.side && internalityFilter == InternalityFilter::Internal) || (!x.side && internalityFilter == InternalityFilter::External); }),
-		actualContacts.end());
-
-	auto resultIterator = std::min_element(actualContacts.begin(), actualContacts.end(), [](auto first, auto second) { return first.distance < second.distance; });
-
-	if (resultIterator != actualContacts.end())
+	int bestIndex = -1;
+	for (unsigned int i = 0; i < contacts.size(); i++)
 	{
-		return *resultIterator;
+		auto nullable = contacts[i];
+		if (!nullable.has_value())
+		{
+			continue;
+		}
+		auto contact = *nullable;
+		if ((contact.side && internalityFilter == InternalityFilter::Internal) || (!contact.side && internalityFilter == InternalityFilter::External))
+		{
+			continue;
+		}
+		
+		if (bestIndex == -1 || (contact.distance < contacts[bestIndex]->distance))
+		{
+			bestIndex = i;
+		}
 	}
 
-	return std::nullopt;
+	return bestIndex;
+}
+
+std::optional<Contact> Collision::FindClosestCollision(std::vector<std::optional<Contact>>& contacts, const InternalityFilter& internalityFilter)
+{
+	auto index = FindClosestCollisionIndex(contacts, internalityFilter);
+	return index == -1 ? std::nullopt : contacts[index];
 }
 
 //Returns the first nullableContact between a point and a line, if any, when the point travels along the given line
@@ -71,7 +79,6 @@ std::optional<Contact> Collision::PointLineCast(const Vector2& pointStartPositio
 	normal = normal * dotProduct;
 	normal.Normalise();
 
-	auto temp = Vector2::DistanceBetween(point, pointStartPosition);
 	return Contact(-normal, point, dotProduct < 0, Vector2::DistanceBetween(point, pointStartPosition), linePoint1, linePoint2);
 }
 
@@ -90,6 +97,8 @@ std::optional<Contact> Collision::PointRectangleCast(const Vector2 & pointStartP
 		PointLineCast(pointStartPosition, pointEndPosition, rect.BottomRight(), rect.BottomLeft()),
 		PointLineCast(pointStartPosition, pointEndPosition, rect.BottomLeft(), rect.TopLeft()),
 	};
+
+	auto x = contacts.begin();
 
 	return FindClosestCollision(contacts, internalityFilter);
 }

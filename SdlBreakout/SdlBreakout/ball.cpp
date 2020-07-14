@@ -21,21 +21,29 @@ Ball::~Ball()
 void Ball::Update(float timeElapsed)
 {
 	auto game = Game::GetInstance();
-	auto rect = game->screenRect;
 	auto remainingVelocity = velocity * timeElapsed;
 	while (true)
 	{
-		auto nextPosition = position + remainingVelocity;
-		auto collision = Collision::PointRectangleCast(position, nextPosition, game->screenRect, Collision::InternalityFilter::Internal);
-		if(!collision.has_value())
+		auto paddle = game->paddle;
+		auto screenEdgeCollision = Collision::RectangleRectangleCast(RectF(position, size), game->screenRect, remainingVelocity, Collision::InternalityFilter::Internal);
+		auto paddleCollision = Collision::RectangleRectangleCast(RectF(position, size), RectF(paddle->position, paddle->GetSize()), remainingVelocity, Collision::InternalityFilter::External);
+
+		std::vector<std::optional<Contact>> contacts = {
+			screenEdgeCollision,
+			paddleCollision
+		};
+
+		auto index = Collision::FindClosestCollisionIndex(contacts);
+		if(index == -1)
 		{
-			position = nextPosition;
+			position += remainingVelocity;
 			break;
 		}
-		remainingVelocity *= Vector2::DistanceBetween(position, nextPosition) / velocity.Magnitude();
-		position = (*collision).centroid;
-		remainingVelocity.Reflect((*collision).normal);
-		velocity.Reflect((*collision).normal);
+		auto collision = *contacts[index];
+		remainingVelocity *= 1 - (collision.distance / remainingVelocity.Magnitude());
+		position = collision.centroid - (sprite->GetSize() / 2.0f);
+		remainingVelocity.Reflect(collision.normal);
+		velocity.Reflect(collision.normal);
 	}
 
 	GameObject::Update(timeElapsed);

@@ -8,7 +8,7 @@ public:
 	Vector2 normal;
 	// The point at which the objects touch
 	Vector2 point;
-	// The position of the collision shape when the collision occurred
+	// The position of the centre of the shape when the collision occurred
 	Vector2 centroid;
 	// The start point of the line which was collided with
 	Vector2 collidedLineStart;

@@ -18,7 +18,8 @@ public:
 
 	Collision() = delete;
 
-	static std::optional<Contact> FindClosestCollision(std::vector<std::optional<Contact>> contacts, const InternalityFilter internalityFilter = InternalityFilter::Both);
+	static std::optional<Contact> FindClosestCollision(std::vector<std::optional<Contact>>& contacts, const InternalityFilter& internalityFilter = InternalityFilter::Both);
+	static int FindClosestCollisionIndex(std::vector<std::optional<Contact>>& contacts, const InternalityFilter& internalityFilter = InternalityFilter::Both);
 
 	// Finds the point of intersection between two lines. If the lines overlap, finds the point of intersection with the smallest X value
 	static std::optional<Contact> PointLineCast(const Vector2& pointStartPosition, const Vector2& pointEndPosition, const Vector2& line2Point1, const Vector2& line2Point2);
