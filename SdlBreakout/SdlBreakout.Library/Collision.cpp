@@ -31,7 +31,7 @@ std::optional<Contact> Collision::FindClosestCollision(std::vector<std::optional
 	return std::nullopt;
 }
 
-//Returns the first contact between a point and a line, if any, when the point travels along the given line
+//Returns the first nullableContact between a point and a line, if any, when the point travels along the given line
 std::optional<Contact> Collision::PointLineCast(const Vector2& pointStartPosition, const Vector2& pointEndPosition, const Vector2& linePoint1, const Vector2& linePoint2)
 {
 	auto pointTrajectory = GeneralFormLine(pointStartPosition, pointEndPosition);
@@ -72,7 +72,7 @@ std::optional<Contact> Collision::PointLineCast(const Vector2& pointStartPositio
 	normal.Normalise();
 
 	auto temp = Vector2::DistanceBetween(point, pointStartPosition);
-	return Contact(-normal, point, dotProduct < 0, Vector2::DistanceBetween(point, pointStartPosition));
+	return Contact(-normal, point, dotProduct < 0, Vector2::DistanceBetween(point, pointStartPosition), linePoint1, linePoint2);
 }
 
 std::optional<Contact> Collision::PointRectangleCast(const Vector2 & pointStartPosition, const Vector2 & pointEndPosition, const RectF & rect, const InternalityFilter internalityFilter)
@@ -83,7 +83,7 @@ std::optional<Contact> Collision::PointRectangleCast(const Vector2 & pointStartP
 		return std::nullopt;
 	}
 
-	// Defining the vectors in a clockwise cycle ensures that the meaning of the contact side value remains consistent
+	// Defining the vectors in a clockwise cycle ensures that the meaning of the nullableContact side value remains consistent
 	std::vector<std::optional<Contact>> contacts = {
 		PointLineCast(pointStartPosition, pointEndPosition, rect.TopLeft(), rect.TopRight()),
 		PointLineCast(pointStartPosition, pointEndPosition, rect.TopRight(), rect.BottomRight()),
@@ -98,19 +98,64 @@ std::optional<Contact> Collision::RectangleRectangleCast(const RectF & movingRec
 {
 	//TODO: Moving rectangle inside stationary rectangle, need to shrink stationary rectangle
 	// Maybe test against grown and shrunk stationary rectangle, using InternalityFilter and/or distance calculation to choose correct result?
-	auto centre = movingRect.Centre();
-	auto optional = PointRectangleCast(
-		centre,
-		centre + movement,
-		RectF::FromCentre(stationaryRect.Centre(), stationaryRect.width + movingRect.width, stationaryRect.height + movingRect.height),
-		Collision::InternalityFilter::External);
-	if (!optional.has_value())
+	auto movingCentre = movingRect.Centre();
+
+	std::vector<std::optional<Contact>> contacts;
+
+	if (internalityFilter != InternalityFilter::Internal)
+	{
+		contacts.push_back(
+			PointRectangleCast(movingCentre,
+				movingCentre + movement,
+				RectF::FromCentre(stationaryRect.Centre(), stationaryRect.width + movingRect.width, stationaryRect.height + movingRect.height),
+				InternalityFilter::External));
+	}
+	if (internalityFilter != InternalityFilter::External)
+	{
+		contacts.push_back(
+			PointRectangleCast(movingCentre,
+				movingCentre + movement,
+				RectF::FromCentre(stationaryRect.Centre(), stationaryRect.width - movingRect.width, stationaryRect.height - movingRect.height),
+				InternalityFilter::Internal));
+	}
+
+	auto nullableContact = FindClosestCollision(contacts, internalityFilter);
+
+	if (!nullableContact.has_value())
 	{
 		return std::nullopt;
 	}
 
-	auto collision = optional.value();
-	auto lineCollision = PointRectangleCast(collision.centroid, stationaryRect.Centre(), stationaryRect).value();
+	auto contact = nullableContact.value();
+	Vector2 point;
+	auto distance = Vector2::DistanceBetween(contact.point, movingCentre);
+	if (contact.side)
+	{
+		// For an external collision, cast a point from the position of the moving rect at collision to the centre of the stationary rect
+		point = PointRectangleCast(contact.centroid, stationaryRect.Centre(), stationaryRect).value().point;
+	}
+	else
+	{
+		// For an internal collision return the centre of the side of the moving rect which collided
+		auto stationaryCentre = stationaryRect.Centre();
+		// Either top or right
+		if (contact.collidedLineStart.y < stationaryCentre.y)
+		{
+			point = contact.collidedLineEnd.y < stationaryCentre.y ? Vector2(movingCentre.x, movingRect.Top()) : Vector2(movingRect.Right(), movingCentre.y);
+		}
+		// Either bottom or left
+		else
+		{
+			point = contact.collidedLineEnd.y > stationaryCentre.y ? Vector2(movingCentre.x, movingRect.Bottom()) : Vector2(movingRect.Left(), movingCentre.y);
+		}
+		point += distance * movement.Normalised();
+	}
 
-	return Contact(collision.normal, lineCollision.point, collision.side, Vector2::DistanceBetween(collision.point, centre), collision.point);
+	return Contact(contact.normal,
+		point,
+		contact.side,
+		distance,
+		contact.collidedLineStart,
+		contact.collidedLineEnd,
+		contact.point);
 }

@@ -3,6 +3,7 @@
 
 #include <math.h>
 #include <string>
+#include <algorithm>
 
 using namespace std::string_literals;
 
@@ -13,6 +14,12 @@ public:
 	static float DistanceBetween(const Vector2& first, const Vector2& second)
 	{
 		return (second - first).Magnitude();
+	}
+
+	static Vector2 LinearInterpolate(Vector2 first, Vector2 second, float proportion)
+	{
+		proportion = std::clamp(proportion, 0.0f, 1.0f);
+		return first + proportion * (second - first);
 	}
 
 	Vector2() = default;
@@ -89,17 +96,17 @@ public:
 		return lhs;
 	}
 
-	std::string ToString()
+	std::string ToString() const
 	{
 		return "(" + std::to_string(x) + "," + std::to_string(y) + ")";
 	}
 
-	float DotProduct(Vector2 other)
+	float DotProduct(Vector2 other) const
 	{
 		return x * other.x + y * other.y;
 	}
 
-	float Magnitude()
+	float Magnitude() const
 	{
 		return sqrtf(x * x + y * y);
 	}
@@ -111,7 +118,7 @@ public:
 		y /= magnitude;
 	}
 
-	Vector2 Normalised()
+	Vector2 Normalised() const
 	{
 		auto clone = Vector2(*this);
 		clone.Normalise();
@@ -123,7 +130,7 @@ public:
 		*this -= 2 * (this->DotProduct(normal)) * normal;
 	}
 
-	Vector2 Reflected(Vector2 normal)
+	Vector2 Reflected(Vector2 normal) const
 	{
 		auto clone = Vector2(*this);
 		clone.Reflect(normal);
@@ -139,7 +146,7 @@ public:
 		y = (float)(std::sin(-inRadians) * temp - std::cos(-inRadians) * y);
 	}
 
-	Vector2 Rotated(float degreesClockwise)
+	Vector2 Rotated(float degreesClockwise) const
 	{
 		auto clone = Vector2(*this);
 		clone.Rotate(degreesClockwise);

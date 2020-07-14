@@ -70,7 +70,7 @@ namespace Tests
 			testCase.internalityFilter = Collision::InternalityFilter::Both;
 
 			auto expectedPoint = Vector2(0, 4 + 2.0f / 3);
-			testCase.expectedResult = Contact(Vector2(-1, 0), expectedPoint, true, Vector2::DistanceBetween(testCase.pointStart, expectedPoint));
+			testCase.expectedResult = Contact(Vector2(-1, 0), expectedPoint, true, Vector2::DistanceBetween(testCase.pointStart, expectedPoint), testCase.rectangle.BottomLeft(), testCase.rectangle.TopLeft());
 
 			RunTestCase(testCase);
 		}
@@ -84,7 +84,7 @@ namespace Tests
 			testCase.internalityFilter = Collision::InternalityFilter::Both;
 
 			auto expectedPoint = Vector2(1, 4);
-			testCase.expectedResult = Contact(Vector2(-1, 0), expectedPoint, true, Vector2::DistanceBetween(testCase.pointStart, expectedPoint));
+			testCase.expectedResult = Contact(Vector2(-1, 0), expectedPoint, true, Vector2::DistanceBetween(testCase.pointStart, expectedPoint), testCase.rectangle.BottomLeft(), testCase.rectangle.TopLeft());
 
 			RunTestCase(testCase);
 		}
@@ -98,7 +98,7 @@ namespace Tests
 			testCase.internalityFilter = Collision::InternalityFilter::Both;
 
 			auto expectedPoint = Vector2(3, 2);
-			testCase.expectedResult = Contact(Vector2(0, 1).Normalised(), expectedPoint, true, Vector2::DistanceBetween(testCase.pointStart, expectedPoint));
+			testCase.expectedResult = Contact(Vector2(0, 1).Normalised(), expectedPoint, true, Vector2::DistanceBetween(testCase.pointStart, expectedPoint), testCase.rectangle.BottomRight(), testCase.rectangle.BottomLeft());
 
 			RunTestCase(testCase);
 		}
@@ -112,7 +112,7 @@ namespace Tests
 			testCase.internalityFilter = Collision::InternalityFilter::Internal;
 
 			auto expectedPoint = Vector2(4, 1);
-			testCase.expectedResult = Contact(Vector2(-1, 0).Normalised(), expectedPoint, false, Vector2::DistanceBetween(testCase.pointStart, expectedPoint));
+			testCase.expectedResult = Contact(Vector2(-1, 0).Normalised(), expectedPoint, false, Vector2::DistanceBetween(testCase.pointStart, expectedPoint), testCase.rectangle.TopRight(), testCase.rectangle.BottomRight());
 
 			RunTestCase(testCase);
 		}

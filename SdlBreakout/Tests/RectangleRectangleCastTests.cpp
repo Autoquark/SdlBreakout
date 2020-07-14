@@ -53,7 +53,13 @@ namespace Tests
 			testCase.motion = Vector2(2, 0);
 
 			auto expectedPoint = Vector2(1, 4);
-			testCase.expectedResult = Contact(Vector2(-1, 0), expectedPoint, true, Vector2::DistanceBetween(testCase.movingRectangle.Centre(), expectedPoint), Vector2(0.5, 4.5));
+			testCase.expectedResult = Contact(Vector2(-1, 0),
+				expectedPoint,
+				true,
+				Vector2::DistanceBetween(testCase.movingRectangle.Centre(), expectedPoint), //TODO: Centroid, not point
+				testCase.stationaryRectangle.BottomLeft(),
+				testCase.stationaryRectangle.TopLeft(),
+				Vector2(0.5, 4.5));
 
 			RunTestCase(testCase);
 		}
@@ -66,7 +72,13 @@ namespace Tests
 			testCase.motion = Vector2(2, 0);
 
 			auto expectedPoint = Vector2(2, 0);
-			testCase.expectedResult = Contact(Vector2(-1, 0), expectedPoint, false, Vector2::DistanceBetween(testCase.movingRectangle.Centre(), expectedPoint), Vector2(1, 0));
+			testCase.expectedResult = Contact(Vector2(-1, 0),
+				expectedPoint,
+				false,
+				Vector2::DistanceBetween(testCase.movingRectangle.Centre(), expectedPoint),
+				testCase.stationaryRectangle.TopRight(),
+				testCase.stationaryRectangle.BottomRight(),
+				Vector2(1, 0));
 
 			RunTestCase(testCase);
 		}
