@@ -10,7 +10,7 @@ namespace Microsoft
 	{
 		namespace CppUnitTestFramework
 		{
-			template<> inline std::wstring ToString<Vector2>(const Vector2& t)
+			template<> inline std::wstring ToString<Vector2F>(const Vector2F& t)
 			{
 				std::wstring value = L"(";
 				value.append(std::to_wstring(t.x));

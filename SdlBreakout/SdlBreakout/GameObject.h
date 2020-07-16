@@ -10,7 +10,7 @@ public:
 	Texture* getSprite();
 	void setSprite(Texture* value);
 
-	void SetPosition(Vector2 position)
+	void SetPosition(Vector2F position)
 	{
 		collisionBounds.SetPosition(position);
 	}

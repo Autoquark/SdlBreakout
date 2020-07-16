@@ -23,10 +23,10 @@ namespace Tests
 	{
 		struct TestCase
 		{
-			Vector2 pointStart;
-			Vector2 pointEnd;
-			Vector2 lineStart;
-			Vector2 lineEnd;
+			Vector2F pointStart;
+			Vector2F pointEnd;
+			Vector2F lineStart;
+			Vector2F lineEnd;
 
 			std::optional<Contact> expectedResult;
 		};
@@ -102,11 +102,11 @@ namespace Tests
 			testCase.lineStart = { 2.0, 0.0 };
 			testCase.lineEnd = { 0.0, 2.0 };
 
-			auto expectedPoint = Vector2(1.0, 1.0);
-			testCase.expectedResult = Contact(Vector2(-1, -1).Normalised(),
+			auto expectedPoint = Vector2F(1.0, 1.0);
+			testCase.expectedResult = Contact(Vector2F(-1, -1).Normalised(),
 				expectedPoint,
 				false,
-				Vector2::DistanceBetween(testCase.pointStart, expectedPoint),
+				Vector2F::DistanceBetween(testCase.pointStart, expectedPoint),
 				testCase.lineStart,
 				testCase.lineEnd);
 
@@ -145,11 +145,11 @@ namespace Tests
 		TEST_METHOD(PassingBeneathVerticalLine)
 		{
 			TestCase testCase;
-			testCase.pointStart = Vector2(-2, 0);
-			testCase.pointEnd = Vector2(2, 4);
+			testCase.pointStart = Vector2F(-2, 0);
+			testCase.pointEnd = Vector2F(2, 4);
 
-			testCase.lineStart = Vector2(0, 0);
-			testCase.lineEnd = Vector2(3, -3);
+			testCase.lineStart = Vector2F(0, 0);
+			testCase.lineEnd = Vector2F(3, -3);
 
 			testCase.expectedResult = std::nullopt;
 
@@ -159,14 +159,14 @@ namespace Tests
 		TEST_METHOD(HorizontalTrajectoryHittingVerticalLine)
 		{
 			TestCase testCase;
-			testCase.pointStart = Vector2(-2, 2);
-			testCase.pointEnd = Vector2(2, 2);
+			testCase.pointStart = Vector2F(-2, 2);
+			testCase.pointEnd = Vector2F(2, 2);
 
-			testCase.lineStart = Vector2(0, 0);
-			testCase.lineEnd = Vector2(0, 3);
+			testCase.lineStart = Vector2F(0, 0);
+			testCase.lineEnd = Vector2F(0, 3);
 
-			auto expectedPoint = Vector2(0, 2);
-			testCase.expectedResult = Contact(Vector2(-1, 0).Normalised(), expectedPoint, false, Vector2::DistanceBetween(testCase.pointStart, expectedPoint), testCase.lineStart, testCase.lineEnd);
+			auto expectedPoint = Vector2F(0, 2);
+			testCase.expectedResult = Contact(Vector2F(-1, 0).Normalised(), expectedPoint, false, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint), testCase.lineStart, testCase.lineEnd);
 
 			RunTestCase(testCase);
 		}
@@ -174,14 +174,14 @@ namespace Tests
 		TEST_METHOD(NonDiagonalHit)
 		{
 			TestCase testCase;
-			testCase.pointStart = Vector2(0, 0);
-			testCase.pointEnd = Vector2(1, 2);
+			testCase.pointStart = Vector2F(0, 0);
+			testCase.pointEnd = Vector2F(1, 2);
 
-			testCase.lineStart = Vector2(1, 0);
-			testCase.lineEnd = Vector2(0, 2);
+			testCase.lineStart = Vector2F(1, 0);
+			testCase.lineEnd = Vector2F(0, 2);
 
-			auto expectedPoint = Vector2(0.5, 1);
-			testCase.expectedResult = Contact(Vector2(-1, -0.5).Normalised(), expectedPoint, false, Vector2::DistanceBetween(testCase.pointStart, expectedPoint), testCase.lineStart, testCase.lineEnd);
+			auto expectedPoint = Vector2F(0.5, 1);
+			testCase.expectedResult = Contact(Vector2F(-1, -0.5).Normalised(), expectedPoint, false, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint), testCase.lineStart, testCase.lineEnd);
 
 			RunTestCase(testCase);
 		}
@@ -189,11 +189,11 @@ namespace Tests
 		TEST_METHOD(ParallelHorizontalLines)
 		{
 			TestCase testCase;
-			testCase.pointStart = Vector2(0, 0);
-			testCase.pointEnd = Vector2(3, 0);
+			testCase.pointStart = Vector2F(0, 0);
+			testCase.pointEnd = Vector2F(3, 0);
 
-			testCase.lineStart = Vector2(0, 1);
-			testCase.lineEnd = Vector2(3, 1);
+			testCase.lineStart = Vector2F(0, 1);
+			testCase.lineEnd = Vector2F(3, 1);
 
 			testCase.expectedResult = std::nullopt;
 
@@ -203,11 +203,11 @@ namespace Tests
 		TEST_METHOD(ParallelVerticalLines)
 		{
 			TestCase testCase;
-			testCase.pointStart = Vector2(0, 0);
-			testCase.pointEnd = Vector2(0, 3);
+			testCase.pointStart = Vector2F(0, 0);
+			testCase.pointEnd = Vector2F(0, 3);
 
-			testCase.lineStart = Vector2(1, 0);
-			testCase.lineEnd = Vector2(1, 3);
+			testCase.lineStart = Vector2F(1, 0);
+			testCase.lineEnd = Vector2F(1, 3);
 
 			testCase.expectedResult = std::nullopt;
 
@@ -223,7 +223,7 @@ namespace Tests
 		testCases[i].lineStart = { 2.0, 1.0 };
 		testCases[i].lineEnd = { 2.0, 3.0 };
 
-		testCases[i].expectedResult = Contact(Vector2{ 0, 0 }, Vector2 { 2.0, 1.0 });*/
+		testCases[i].expectedResult = Contact(Vector2F{ 0, 0 }, Vector2F { 2.0, 1.0 });*/
 	};
 
 }

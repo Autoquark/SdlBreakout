@@ -4,7 +4,7 @@
 class RectF
 {
 public:
-	static RectF FromCentre(Vector2 centre, float width, float height)
+	static RectF FromCentre(Vector2F centre, float width, float height)
 	{
 		return RectF(centre.x - width / 2, centre.y - height / 2, width, height);
 	}
@@ -15,7 +15,7 @@ public:
 	{
 	}
 
-	RectF(Vector2 position, Vector2 size) : RectF(position.x, position.y, size.x, size.y)
+	RectF(Vector2F position, Vector2F size) : RectF(position.x, position.y, size.x, size.y)
 	{
 	}
 
@@ -39,29 +39,29 @@ public:
 		return x + width;
 	}
 
-	Vector2 TopLeft() const
+	Vector2F TopLeft() const
 	{
-		return Vector2(x, y);
+		return Vector2F(x, y);
 	}
 
-	Vector2 TopRight() const
+	Vector2F TopRight() const
 	{
-		return Vector2(x + width, y);
+		return Vector2F(x + width, y);
 	}
 
-	Vector2 BottomLeft() const
+	Vector2F BottomLeft() const
 	{
-		return Vector2(x, y + height);
+		return Vector2F(x, y + height);
 	}
 
-	Vector2 BottomRight() const
+	Vector2F BottomRight() const
 	{
-		return Vector2(x + width, y + height);
+		return Vector2F(x + width, y + height);
 	}
 
-	Vector2 Centre() const
+	Vector2F Centre() const
 	{
-		return Vector2(x + width / 2, y + height / 2);
+		return Vector2F(x + width / 2, y + height / 2);
 	}
 
 	void SetPosition(float x, float y)
@@ -69,18 +69,18 @@ public:
 		this->x = x;
 		this->y = y;
 	}
-	void SetPosition(Vector2 position)
+	void SetPosition(Vector2F position)
 	{
 		x = position.x;
 		y = position.y;
 	}
 
-	Vector2 GetSize() const
+	Vector2F GetSize() const
 	{
-		return Vector2(width, height);
+		return Vector2F(width, height);
 	}
 
-	bool Contains(const Vector2& point) const
+	bool Contains(const Vector2F& point) const
 	{
 		return point.x >= x
 			&& point.x <= x + width

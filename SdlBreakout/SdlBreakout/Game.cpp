@@ -21,6 +21,12 @@ Game* Game::GetInstance()
 	return &game;
 }
 
+void Game::Destroy(GameObject * gameObject)
+{
+	gameObjects.erase(std::find(gameObjects.begin(), gameObjects.end(), gameObject));
+	delete gameObject;
+}
+
 int Game::Start()
 {
 	if (!init())
@@ -192,7 +198,7 @@ Texture* Game::loadTexture(std::string path)
 
 	SDL_FreeSurface(loadedSurface);
 
-	auto texture = new Texture(newTexture, Vector2{ (float)loadedSurface->w, (float)loadedSurface->h });
+	auto texture = new Texture(newTexture, Vector2<int>{ loadedSurface->w, loadedSurface->h });
 
 	return texture;
 }

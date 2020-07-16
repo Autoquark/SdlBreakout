@@ -10,6 +10,6 @@ public:
 	void Update(float timeElapsed) override;
 
 private:
-	Vector2 velocity;
+	Vector2F velocity;
 };
 

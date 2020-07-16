@@ -5,15 +5,15 @@ struct Contact
 {
 public:
 	// Normal of the collision
-	Vector2 normal;
+	Vector2F normal;
 	// The point at which the objects touch
-	Vector2 point;
+	Vector2F point;
 	// The position of the centre of the shape when the collision occurred
-	Vector2 centroid;
+	Vector2F centroid;
 	// The start point of the line which was collided with
-	Vector2 collidedLineStart;
+	Vector2F collidedLineStart;
 	// The end point of the line which was collided with
-	Vector2 collidedLineEnd;
+	Vector2F collidedLineEnd;
 	// Value indicating which side of the stationary line was hit. A true value indicates that the moving object originated to the left of the vector defining the line hit.
 	// For a collision against a shape, a true value always indicates an external collision and a false value an internal one
 	bool side;
@@ -32,8 +32,8 @@ public:
 		return !(lhs == rhs);
 	}
 
-	Contact(const Vector2& normal, const Vector2& point, const bool side, const float distance, const Vector2 collidedLineStart, const Vector2 collidedLineEnd, const Vector2& centroid);
-	Contact(const Vector2& normal, const Vector2& point, const bool side, const float distance, const Vector2 collidedLineStart, const Vector2 collidedLineEnd);
+	Contact(const Vector2F& normal, const Vector2F& point, const bool side, const float distance, const Vector2F collidedLineStart, const Vector2F collidedLineEnd, const Vector2F& centroid);
+	Contact(const Vector2F& normal, const Vector2F& point, const bool side, const float distance, const Vector2F collidedLineStart, const Vector2F collidedLineEnd);
 	~Contact();
 };
 

@@ -7,5 +7,5 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace Tests
 {
-	void AreEqual(Vector2 expected, Vector2 actual, float tolerance, const wchar_t* message = nullptr);
+	void AreEqual(Vector2F expected, Vector2F actual, float tolerance, const wchar_t* message = nullptr);
 }

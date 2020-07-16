@@ -17,8 +17,8 @@ namespace Tests
 	{
 		struct TestCase
 		{
-			Vector2 pointStart;
-			Vector2 pointEnd;
+			Vector2F pointStart;
+			Vector2F pointEnd;
 			RectF rectangle;
 			Collision::InternalityFilter internalityFilter;
 
@@ -52,8 +52,8 @@ namespace Tests
 		TEST_METHOD(Miss)
 		{
 			TestCase testCase;
-			testCase.pointStart = Vector2(0, 0);
-			testCase.pointEnd = Vector2(2, 2);
+			testCase.pointStart = Vector2F(0, 0);
+			testCase.pointEnd = Vector2F(2, 2);
 			testCase.rectangle = RectF(1, -2, 2, 2);
 			testCase.internalityFilter = Collision::InternalityFilter::Both;
 
@@ -64,13 +64,13 @@ namespace Tests
 		TEST_METHOD(HitLeftSide)
 		{
 			TestCase testCase;
-			testCase.pointStart = Vector2(-2, 4);
-			testCase.pointEnd = Vector2(1, 5);
+			testCase.pointStart = Vector2F(-2, 4);
+			testCase.pointEnd = Vector2F(1, 5);
 			testCase.rectangle = RectF(0, 2, 2, 4);
 			testCase.internalityFilter = Collision::InternalityFilter::Both;
 
-			auto expectedPoint = Vector2(0, 4 + 2.0f / 3);
-			testCase.expectedResult = Contact(Vector2(-1, 0), expectedPoint, true, Vector2::DistanceBetween(testCase.pointStart, expectedPoint), testCase.rectangle.BottomLeft(), testCase.rectangle.TopLeft());
+			auto expectedPoint = Vector2F(0, 4 + 2.0f / 3);
+			testCase.expectedResult = Contact(Vector2F(-1, 0), expectedPoint, true, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint), testCase.rectangle.BottomLeft(), testCase.rectangle.TopLeft());
 
 			RunTestCase(testCase);
 		}
@@ -78,13 +78,13 @@ namespace Tests
 		TEST_METHOD(HitLeftSide2)
 		{
 			TestCase testCase;
-			testCase.pointStart = Vector2(0.5, 4.5);
-			testCase.pointEnd = Vector2(2, 3);
+			testCase.pointStart = Vector2F(0.5, 4.5);
+			testCase.pointEnd = Vector2F(2, 3);
 			testCase.rectangle = RectF(1, 1, 2, 4);
 			testCase.internalityFilter = Collision::InternalityFilter::Both;
 
-			auto expectedPoint = Vector2(1, 4);
-			testCase.expectedResult = Contact(Vector2(-1, 0), expectedPoint, true, Vector2::DistanceBetween(testCase.pointStart, expectedPoint), testCase.rectangle.BottomLeft(), testCase.rectangle.TopLeft());
+			auto expectedPoint = Vector2F(1, 4);
+			testCase.expectedResult = Contact(Vector2F(-1, 0), expectedPoint, true, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint), testCase.rectangle.BottomLeft(), testCase.rectangle.TopLeft());
 
 			RunTestCase(testCase);
 		}
@@ -92,13 +92,13 @@ namespace Tests
 		TEST_METHOD(HitBottomThenRight)
 		{
 			TestCase testCase;
-			testCase.pointStart = Vector2(2, 3);
-			testCase.pointEnd = Vector2(5, 0);
+			testCase.pointStart = Vector2F(2, 3);
+			testCase.pointEnd = Vector2F(5, 0);
 			testCase.rectangle = RectF(0, 0, 4, 2);
 			testCase.internalityFilter = Collision::InternalityFilter::Both;
 
-			auto expectedPoint = Vector2(3, 2);
-			testCase.expectedResult = Contact(Vector2(0, 1).Normalised(), expectedPoint, true, Vector2::DistanceBetween(testCase.pointStart, expectedPoint), testCase.rectangle.BottomRight(), testCase.rectangle.BottomLeft());
+			auto expectedPoint = Vector2F(3, 2);
+			testCase.expectedResult = Contact(Vector2F(0, 1).Normalised(), expectedPoint, true, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint), testCase.rectangle.BottomRight(), testCase.rectangle.BottomLeft());
 
 			RunTestCase(testCase);
 		}
@@ -106,13 +106,13 @@ namespace Tests
 		TEST_METHOD(HitBottomThenRightFilterInternal)
 		{
 			TestCase testCase;
-			testCase.pointStart = Vector2(2, 3);
-			testCase.pointEnd = Vector2(5, 0);
+			testCase.pointStart = Vector2F(2, 3);
+			testCase.pointEnd = Vector2F(5, 0);
 			testCase.rectangle = RectF(0, 0, 4, 2);
 			testCase.internalityFilter = Collision::InternalityFilter::Internal;
 
-			auto expectedPoint = Vector2(4, 1);
-			testCase.expectedResult = Contact(Vector2(-1, 0).Normalised(), expectedPoint, false, Vector2::DistanceBetween(testCase.pointStart, expectedPoint), testCase.rectangle.TopRight(), testCase.rectangle.BottomRight());
+			auto expectedPoint = Vector2F(4, 1);
+			testCase.expectedResult = Contact(Vector2F(-1, 0).Normalised(), expectedPoint, false, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint), testCase.rectangle.TopRight(), testCase.rectangle.BottomRight());
 
 			RunTestCase(testCase);
 		}

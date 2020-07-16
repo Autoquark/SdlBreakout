@@ -8,7 +8,7 @@
 class GeneralFormLine
 {
 public:
-	GeneralFormLine(Vector2 point1, Vector2 point2)
+	GeneralFormLine(Vector2F point1, Vector2F point2)
 	{
 		if (point1.x > point2.x)
 		{

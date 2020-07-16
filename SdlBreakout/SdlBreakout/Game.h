@@ -26,6 +26,8 @@ public:
 		return blocks;
 	}
 
+	void Destroy(GameObject* gameObject);
+
 	// Sprites
 	Texture* gBlockTexture = NULL;
 	Texture* gBallTexture = NULL;

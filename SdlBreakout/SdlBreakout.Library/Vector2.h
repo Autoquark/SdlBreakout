@@ -1,12 +1,12 @@
 #pragma once
-#define _USE_MATH_DEFINES
 
-#include <math.h>
+#include <cmath>
 #include <string>
 #include <algorithm>
 
 using namespace std::string_literals;
 
+template<class ElementType>
 struct Vector2
 {
 public:
@@ -24,7 +24,7 @@ public:
 
 	Vector2() = default;
 
-	Vector2(float x, float y) : x(x), y(y)
+	Vector2(ElementType x, ElementType y) : x(x), y(y)
 	{
 	}
 
@@ -38,39 +38,39 @@ public:
 		return !(lhs == rhs);
 	}
 
-	Vector2& operator *= (float rhs)
+	Vector2& operator *= (ElementType rhs)
 	{
 		this->x *= rhs;
 		this->y *= rhs;
 		return *this;
 	}
 
-	friend Vector2 operator*(Vector2 lhs, float rhs)
+	friend Vector2 operator*(Vector2 lhs, ElementType rhs)
 	{
 		lhs *= rhs;
 		return lhs;
 	}
 
-	friend Vector2 operator*(float lhs, Vector2 rhs)
+	friend Vector2 operator*(ElementType lhs, Vector2 rhs)
 	{
 		rhs *= lhs;
 		return rhs;
 	}
 
-	Vector2& operator /= (float rhs)
+	Vector2& operator /= (ElementType rhs)
 	{
 		this->x /= rhs;
 		this->y /= rhs;
 		return *this;
 	}
 
-	friend Vector2 operator/(Vector2 lhs, float rhs)
+	friend Vector2 operator/(Vector2 lhs, ElementType rhs)
 	{
 		lhs /= rhs;
 		return lhs;
 	}
 
-	friend Vector2 operator/(float lhs, Vector2 rhs)
+	friend Vector2 operator/(ElementType lhs, Vector2 rhs)
 	{
 		rhs /= lhs;
 		return rhs;
@@ -161,8 +161,8 @@ public:
 		auto temp = x;
 		auto inRadians = degreesClockwise * (M_PI / 180);
 
-		x = (float)(std::cos(-inRadians) * x - std::sin(-inRadians) * y);
-		y = (float)(std::sin(-inRadians) * temp - std::cos(-inRadians) * y);
+		x = (ElementType)(std::cos(-inRadians) * x - std::sin(-inRadians) * y);
+		y = (ElementType)(std::sin(-inRadians) * temp - std::cos(-inRadians) * y);
 	}
 
 	Vector2 Rotated(float degreesClockwise) const
@@ -172,6 +172,8 @@ public:
 		return clone;
 	}
 
-	float x;
-	float y;
+	ElementType x;
+	ElementType y;
 };
+
+typedef Vector2<float> Vector2F;

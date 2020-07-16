@@ -19,7 +19,7 @@ namespace Tests
 		{
 			RectF stationaryRectangle;
 			RectF movingRectangle;
-			Vector2 motion;
+			Vector2F motion;
 
 			std::optional<Contact> expectedResult;
 		};
@@ -50,16 +50,16 @@ namespace Tests
 			TestCase testCase;
 			testCase.stationaryRectangle = RectF(1, 1, 2, 4);
 			testCase.movingRectangle = RectF(-1, 4, 1, 1);
-			testCase.motion = Vector2(2, 0);
+			testCase.motion = Vector2F(2, 0);
 
-			auto expectedPoint = Vector2(1, 4);
-			testCase.expectedResult = Contact(Vector2(-1, 0),
+			auto expectedPoint = Vector2F(1, 4);
+			testCase.expectedResult = Contact(Vector2F(-1, 0),
 				expectedPoint,
 				true,
-				Vector2::DistanceBetween(testCase.movingRectangle.Centre(), expectedPoint), //TODO: Centroid, not point
+				Vector2F::DistanceBetween(testCase.movingRectangle.Centre(), expectedPoint), //TODO: Centroid, not point
 				testCase.stationaryRectangle.BottomLeft(),
 				testCase.stationaryRectangle.TopLeft(),
-				Vector2(0.5, 4.5));
+				Vector2F(0.5, 4.5));
 
 			RunTestCase(testCase);
 		}
@@ -69,16 +69,16 @@ namespace Tests
 			TestCase testCase;
 			testCase.stationaryRectangle = RectF(-2, -2, 4, 4);
 			testCase.movingRectangle = RectF(-1, -1, 2, 2);
-			testCase.motion = Vector2(2, 0);
+			testCase.motion = Vector2F(2, 0);
 
-			auto expectedPoint = Vector2(2, 0);
-			testCase.expectedResult = Contact(Vector2(-1, 0),
+			auto expectedPoint = Vector2F(2, 0);
+			testCase.expectedResult = Contact(Vector2F(-1, 0),
 				expectedPoint,
 				false,
-				Vector2::DistanceBetween(testCase.movingRectangle.Centre(), expectedPoint),
+				Vector2F::DistanceBetween(testCase.movingRectangle.Centre(), expectedPoint),
 				testCase.stationaryRectangle.TopRight(),
 				testCase.stationaryRectangle.BottomRight(),
-				Vector2(1, 0));
+				Vector2F(1, 0));
 
 			RunTestCase(testCase);
 		}
