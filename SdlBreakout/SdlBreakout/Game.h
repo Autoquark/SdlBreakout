@@ -5,6 +5,7 @@
 #include "Texture.h"
 #include "RectF.h"
 #include "Paddle.h"
+#include "block.h"
 
 class Game
 {
@@ -19,6 +20,11 @@ public:
 	const RectF screenRect = RectF(0.0f, 0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
 
 	const int TARGET_FPS = 60;
+
+	const std::vector<Block*>& GetBlocks() const
+	{
+		return blocks;
+	}
 
 	// Sprites
 	Texture* gBlockTexture = NULL;
@@ -39,6 +45,7 @@ private:
 	~Game();
 
 	std::vector<GameObject*> gameObjects;
+	std::vector<Block*> blocks;
 
 	//The window we'll be rendering to
 	SDL_Window* gWindow = NULL;

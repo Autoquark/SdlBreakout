@@ -2,7 +2,7 @@
 #include "block.h"
 #include "Game.h"
 
-Block::Block() : GameObject(Vector2{ 32, 16 })
+Block::Block() : GameObject(RectF{ 0, 0, 32, 16 })
 {
 	sprite = Game::GetInstance()->gBlockTexture;
 }

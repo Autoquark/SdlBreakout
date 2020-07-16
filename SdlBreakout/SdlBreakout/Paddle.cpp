@@ -4,7 +4,7 @@
 #include <iostream>
 #include <algorithm>
 
-Paddle::Paddle() : GameObject(Vector2 {128, 32})
+Paddle::Paddle() : GameObject(RectF { 0, 0, 128, 32})
 {
 	sprite = Game::GetInstance()->gPaddleTexture;
 	moveSpeed = 1000;
@@ -21,16 +21,16 @@ void Paddle::Update(float timeElapsed)
 
 	if (currentKeyStates[SDL_SCANCODE_LEFT])
 	{
-		position.x -= moveSpeed * timeElapsed;
+		collisionBounds.x -= moveSpeed * timeElapsed;
 	}
 	else if (currentKeyStates[SDL_SCANCODE_RIGHT])
 	{
-		position.x += moveSpeed * timeElapsed;
+		collisionBounds.x += moveSpeed * timeElapsed;
 	}
 
-	position.x = std::clamp(position.x, (float)0.0, (float)Game::GetInstance()->SCREEN_WIDTH);
+	collisionBounds.x = std::clamp(collisionBounds.x, (float)0.0, (float)Game::GetInstance()->SCREEN_WIDTH);
 
 	GameObject::Update(timeElapsed);
 
-	std::cout << position.x << "," << position.y << '\n';
+	std::cout << collisionBounds.x << "," << collisionBounds.y << '\n';
 }

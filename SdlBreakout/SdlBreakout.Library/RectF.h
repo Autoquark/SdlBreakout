@@ -64,6 +64,22 @@ public:
 		return Vector2(x + width / 2, y + height / 2);
 	}
 
+	void SetPosition(float x, float y)
+	{
+		this->x = x;
+		this->y = y;
+	}
+	void SetPosition(Vector2 position)
+	{
+		x = position.x;
+		y = position.y;
+	}
+
+	Vector2 GetSize() const
+	{
+		return Vector2(width, height);
+	}
+
 	bool Contains(const Vector2& point) const
 	{
 		return point.x >= x

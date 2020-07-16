@@ -6,11 +6,11 @@
 #include "Vector2.h"
 
 
-Ball::Ball() : GameObject(Vector2 { 16, 16 })
+Ball::Ball() : GameObject(RectF { 0, 0, 16, 16 })
 {
 	sprite = Game::GetInstance()->gBallTexture;
-	velocity.x = -20;
-	velocity.y = -60;
+	velocity.x = -30;
+	velocity.y = -90;
 }
 
 
@@ -25,23 +25,28 @@ void Ball::Update(float timeElapsed)
 	while (true)
 	{
 		auto paddle = game->paddle;
-		auto screenEdgeCollision = Collision::RectangleRectangleCast(RectF(position, size), game->screenRect, remainingVelocity, Collision::InternalityFilter::Internal);
-		auto paddleCollision = Collision::RectangleRectangleCast(RectF(position, size), RectF(paddle->position, paddle->GetSize()), remainingVelocity, Collision::InternalityFilter::External);
+		auto screenEdgeCollision = Collision::RectangleRectangleCast(GetCollisionBounds(), game->screenRect, remainingVelocity, Collision::InternalityFilter::Internal);
+		auto paddleCollision = Collision::RectangleRectangleCast(GetCollisionBounds(), paddle->GetCollisionBounds(), remainingVelocity, Collision::InternalityFilter::External);
 
 		std::vector<std::optional<Contact>> contacts = {
 			screenEdgeCollision,
 			paddleCollision
 		};
 
+		for (auto block : game->GetBlocks())
+		{
+			contacts.push_back(Collision::RectangleRectangleCast(GetCollisionBounds(), block->GetCollisionBounds(), remainingVelocity, Collision::InternalityFilter::External));
+		}
+
 		auto index = Collision::FindClosestCollisionIndex(contacts);
 		if(index == -1)
 		{
-			position += remainingVelocity;
+			collisionBounds.SetPosition(collisionBounds.TopLeft() + remainingVelocity);
 			break;
 		}
 		auto collision = *contacts[index];
 		remainingVelocity *= 1 - (collision.distance / remainingVelocity.Magnitude());
-		position = collision.centroid - (sprite->GetSize() / 2.0f);
+		collisionBounds.SetPosition(collision.centroid - (collisionBounds.GetSize() / 2.0f));
 		remainingVelocity.Reflect(collision.normal);
 		velocity.Reflect(collision.normal);
 	}

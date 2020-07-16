@@ -2,27 +2,34 @@
 #include <SDL_image.h>
 #include "Vector2.h"
 #include "Texture.h"
+#include "RectF.h"
 
 class GameObject
 {
 public:
-	Vector2 position;
-
 	Texture* getSprite();
 	void setSprite(Texture* value);
 
-	Vector2 GetSize()
+	void SetPosition(Vector2 position)
 	{
-		return size;
+		collisionBounds.SetPosition(position);
+	}
+	void SetPosition(float x, float y)
+	{
+		collisionBounds.SetPosition(x, y);
+	}
+	const RectF& GetCollisionBounds() const
+	{
+		return collisionBounds;
 	}
 
 	virtual void Update(float timeElapsed);
 
-	GameObject(Vector2 size);
+	GameObject(RectF collisionBounds);
 	~GameObject();
 
 protected:
-	Vector2 size;
+	RectF collisionBounds;
 	Texture* sprite;
 };
 

@@ -31,8 +31,8 @@ public:
 			constant /= divisor;
 		}*/
 
-		assert(xCoefficient * point1.x + yCoefficient * point1.y + constant < Constants::FloatEqualityTolerance);
-		assert(xCoefficient * point2.x + yCoefficient * point2.y + constant < Constants::FloatEqualityTolerance);
+		//assert(xCoefficient * point1.x + yCoefficient * point1.y + constant < Constants::FloatEqualityTolerance);
+		//assert(xCoefficient * point2.x + yCoefficient * point2.y + constant < Constants::FloatEqualityTolerance);
 	}
 
 	bool TryXFromY(float y, float& x)

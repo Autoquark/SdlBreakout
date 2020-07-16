@@ -35,19 +35,26 @@ int Game::Start()
 		return -1;
 	}
 
+	for (int y = 120; y < 360; y += (int)gBlockTexture->GetSize().y)
+	{
+		for (int x = 240; x < 480; x += (int)gBlockTexture->GetSize().x)
+		{
+			blocks.push_back(new Block());
+			blocks.back()->SetPosition((float)x, (float)y);
+		}
+	}
+
+	for (auto block : blocks)
+	{
+		gameObjects.push_back(block);
+	}
 
 	paddle = new Paddle();
 	gameObjects.push_back(paddle);
-	gameObjects.back()->position.x = 320;
-	gameObjects.back()->position.y = 440;
-
-	gameObjects.push_back(new Block());
-	gameObjects.back()->position.x = 320;
-	gameObjects.back()->position.y = 240;
+	gameObjects.back()->SetPosition(320, 440);
 
 	gameObjects.push_back(new Ball());
-	gameObjects.back()->position.x = 320;
-	gameObjects.back()->position.y = 300;
+	gameObjects.back()->SetPosition(320, 400);
 
 	bool quit = false;
 

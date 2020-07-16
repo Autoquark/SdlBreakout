@@ -15,17 +15,16 @@ void GameObject::setSprite(Texture * value)
 void GameObject::Update(float timeElapsed)
 {
 	SDL_Rect destinationRect;
-	destinationRect.x = (int)position.x;
-	destinationRect.y = (int)position.y;
-	destinationRect.h = (int)sprite->GetSize().x;
-	destinationRect.w = (int)sprite->GetSize().y;
+	destinationRect.x = (int)collisionBounds.x;
+	destinationRect.y = (int)collisionBounds.y;
+	destinationRect.w = (int)sprite->GetSize().x;
+	destinationRect.h = (int)sprite->GetSize().y;
 
 	SDL_RenderCopy(Game::GetInstance()->gRenderer, sprite->GetSdlTexture(), NULL, &destinationRect);
 }
 
-GameObject::GameObject(Vector2 size)
+GameObject::GameObject(RectF collisionBounds) : collisionBounds(collisionBounds)
 {
-	this->size = size;
 }
 
 
