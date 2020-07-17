@@ -4,10 +4,15 @@
 
 Block::Block() : GameObject(RectF{ 0, 0, 32, 16 })
 {
-	sprite = Game::GetInstance()->gBlockTexture;
+	sprite = Game::GetInstance().gBlockTexture;
 }
 
 
 Block::~Block()
 {
+}
+
+void Block::OnBallHit(Ball& ball)
+{
+	Game::GetInstance().Destroy(this);
 }

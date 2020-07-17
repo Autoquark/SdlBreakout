@@ -20,7 +20,7 @@ void GameObject::Update(float timeElapsed)
 	destinationRect.w = (int)sprite->GetSize().x;
 	destinationRect.h = (int)sprite->GetSize().y;
 
-	SDL_RenderCopy(Game::GetInstance()->gRenderer, sprite->GetSdlTexture(), NULL, &destinationRect);
+	SDL_RenderCopy(Game::GetInstance().gRenderer, sprite->GetSdlTexture(), NULL, &destinationRect);
 }
 
 GameObject::GameObject(RectF collisionBounds) : collisionBounds(collisionBounds)

@@ -30,6 +30,6 @@ public:
 
 protected:
 	RectF collisionBounds;
-	Texture* sprite;
+	Texture* sprite = NULL;
 };
 

@@ -6,7 +6,7 @@
 
 Paddle::Paddle() : GameObject(RectF { 0, 0, 128, 32})
 {
-	sprite = Game::GetInstance()->gPaddleTexture;
+	sprite = Game::GetInstance().gPaddleTexture;
 	moveSpeed = 1000;
 }
 
@@ -28,7 +28,7 @@ void Paddle::Update(float timeElapsed)
 		collisionBounds.x += moveSpeed * timeElapsed;
 	}
 
-	collisionBounds.x = std::clamp(collisionBounds.x, (float)0.0, (float)Game::GetInstance()->SCREEN_WIDTH);
+	collisionBounds.x = std::clamp(collisionBounds.x, (float)0.0, (float)Game::GetInstance().SCREEN_WIDTH - collisionBounds.width);
 
 	GameObject::Update(timeElapsed);
 

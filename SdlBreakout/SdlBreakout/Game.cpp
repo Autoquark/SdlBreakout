@@ -15,10 +15,10 @@ Game::~Game()
 {
 }
 
-Game* Game::GetInstance()
+Game& Game::GetInstance()
 {
 	static Game game;
-	return &game;
+	return game;
 }
 
 void Game::Destroy(GameObject * gameObject)

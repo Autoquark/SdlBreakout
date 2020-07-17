@@ -13,7 +13,7 @@ public:
 	void operator=(Game const&) = delete;
 	Game(Game const&) = delete;
 
-	static Game* GetInstance();
+	static Game& GetInstance();
 
 	const int SCREEN_WIDTH = 640;
 	const int SCREEN_HEIGHT = 480;
