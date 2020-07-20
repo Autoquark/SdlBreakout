@@ -52,7 +52,7 @@ void Ball::Update(float timeElapsed)
 
 		auto collision = *contacts[index];
 		remainingVelocity *= 1 - (collision.distance / remainingVelocity.Magnitude());
-		collisionBounds.SetPosition(collision.centroid - (collisionBounds.GetSize() / 2.0f));
+		collisionBounds.SetPosition(collision.centroid - (collisionBounds.size / 2.0f));
 		remainingVelocity.Reflect(collision.normal);
 		velocity.Reflect(collision.normal);
 	}

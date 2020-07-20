@@ -44,5 +44,11 @@
     <ClCompile Include="Assert.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PointCircleCastTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CircleLineCastTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

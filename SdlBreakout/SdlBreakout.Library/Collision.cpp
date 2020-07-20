@@ -8,39 +8,8 @@
 #include "Rectangle.h"
 #include "RectF.h"
 
-int Collision::FindClosestCollisionIndex(std::vector<std::optional<Contact>>& contacts, const InternalityFilter& internalityFilter)
-{
-	int bestIndex = -1;
-	for (unsigned int i = 0; i < contacts.size(); i++)
-	{
-		auto nullable = contacts[i];
-		if (!nullable.has_value())
-		{
-			continue;
-		}
-		auto contact = *nullable;
-		if ((contact.side && internalityFilter == InternalityFilter::Internal) || (!contact.side && internalityFilter == InternalityFilter::External))
-		{
-			continue;
-		}
-		
-		if (bestIndex == -1 || (contact.distance < contacts[bestIndex]->distance))
-		{
-			bestIndex = i;
-		}
-	}
-
-	return bestIndex;
-}
-
-std::optional<Contact> Collision::FindClosestCollision(std::vector<std::optional<Contact>>& contacts, const InternalityFilter& internalityFilter)
-{
-	auto index = FindClosestCollisionIndex(contacts, internalityFilter);
-	return index == -1 ? std::nullopt : contacts[index];
-}
-
 //Returns the first nullableContact between a point and a line, if any, when the point travels along the given line
-std::optional<Contact> Collision::PointLineCast(const Vector2F& pointStartPosition, const Vector2F& pointEndPosition, const Vector2F& linePoint1, const Vector2F& linePoint2)
+std::optional<PolygonContact> Collision::PointLineCast(const Vector2F& pointStartPosition, const Vector2F& pointEndPosition, const Vector2F& linePoint1, const Vector2F& linePoint2)
 {
 	auto pointTrajectory = GeneralFormLine(pointStartPosition, pointEndPosition);
 	auto line = GeneralFormLine(linePoint1, linePoint2);
@@ -79,10 +48,72 @@ std::optional<Contact> Collision::PointLineCast(const Vector2F& pointStartPositi
 	normal = normal * dotProduct;
 	normal.Normalise();
 
-	return Contact(-normal, point, dotProduct < 0, Vector2F::DistanceBetween(point, pointStartPosition), linePoint1, linePoint2);
+	return PolygonContact(-normal, point, dotProduct < 0, Vector2F::DistanceBetween(point, pointStartPosition), linePoint1, linePoint2);
 }
 
-std::optional<Contact> Collision::PointRectangleCast(const Vector2F & pointStartPosition, const Vector2F & pointEndPosition, const RectF & rect, const InternalityFilter internalityFilter)
+std::optional<Contact> Collision::PointCircleCast(const Vector2F& pointStartPosition, const Vector2F& pointEndPosition, const CircleF& circle, InternalityFilter internalityFilter)
+{
+	auto movement = pointEndPosition - pointStartPosition;
+	auto centreToStart = pointStartPosition - circle.centre;
+
+	auto a = movement.DotProduct(movement);
+	auto b = 2 * centreToStart.DotProduct(movement);
+	auto c = centreToStart.DotProduct(centreToStart) - circle.radius * circle.radius;
+
+	float discriminant = b * b - 4 * a * c;
+	if (discriminant < 0)
+	{
+		return std::nullopt;
+	}
+
+	discriminant = std::sqrt(discriminant);
+	float t1 = (-b - discriminant) / (2 * a);
+	float t2 = (-b + discriminant) / (2 * a);
+
+	if (t1 >= 0 && t1 <= 1 && internalityFilter != InternalityFilter::Internal)
+	{
+		// t1 is the intersection, and it's closer than t2
+		// (since t1 uses -b - discriminant)
+		// This must be an external hit
+		auto point = Vector2F::LinearInterpolate(pointStartPosition, pointEndPosition, t1);
+		return Contact((point - circle.centre).Normalised(), point, true, (point - pointStartPosition).Magnitude());
+	}
+	else if (t2 >= 0 && t2 <= 1 && internalityFilter != InternalityFilter::External)
+	{
+		// Internal hit
+		auto point = Vector2F::LinearInterpolate(pointStartPosition, pointEndPosition, t2);
+		return Contact((circle.centre - point).Normalised(), point, false, (point - pointStartPosition).Magnitude());
+	}
+
+	return std::nullopt;
+}
+
+std::optional<Contact> Collision::CircleLineCast(const CircleF& circle, const Vector2F& lineStart, const Vector2F& lineEnd, const Vector2F& movement)
+{
+	// Can currently only handle horizontal or vertical lines
+	if (lineStart.x != lineEnd.x && lineStart.y != lineEnd.y)
+	{
+		throw std::exception();
+	}
+
+	auto circleEndCentre = circle.centre + movement;
+	auto linePerpendicular = (lineEnd - lineStart).Rotated(90)
+		.Normalised();
+	auto rect = RectF::FromCentre(Vector2F::LinearInterpolate(lineStart, lineEnd, 0.5f), Vector2F::DistanceBetween(lineStart, lineEnd), circle.radius);
+	if (lineStart.y == lineEnd.y)
+	{
+		rect.Rotate90();
+	}
+	std::vector<std::optional<Contact>> contacts = {
+		PointRectangleCast(circle.centre, circleEndCentre, rect),
+		PointCircleCast(circle.centre, circleEndCentre, CircleF(lineStart, circle.radius)),
+		PointCircleCast(circle.centre, circleEndCentre, CircleF(lineEnd, circle.radius))
+	};
+
+	return FindClosestCollision(contacts);
+}
+
+std::optional<PolygonContact> Collision::PointRectangleCast(const Vector2F & pointStartPosition, const Vector2F & pointEndPosition, const RectF & rect, const InternalityFilter internalityFilter)
 {
 	// Check if line starts and ends inside rectangle
 	if (rect.Contains(pointStartPosition) && rect.Contains(pointEndPosition))
@@ -90,33 +121,29 @@ std::optional<Contact> Collision::PointRectangleCast(const Vector2F & pointStart
 		return std::nullopt;
 	}
 
-	// Defining the vectors in a clockwise cycle ensures that the meaning of the nullableContact side value remains consistent
-	std::vector<std::optional<Contact>> contacts = {
+	// Defining the vectors in a clockwise cycle ensures that the meaning of the Contact.side value remains consistent
+	std::vector<std::optional<PolygonContact>> contacts = {
 		PointLineCast(pointStartPosition, pointEndPosition, rect.TopLeft(), rect.TopRight()),
 		PointLineCast(pointStartPosition, pointEndPosition, rect.TopRight(), rect.BottomRight()),
 		PointLineCast(pointStartPosition, pointEndPosition, rect.BottomRight(), rect.BottomLeft()),
 		PointLineCast(pointStartPosition, pointEndPosition, rect.BottomLeft(), rect.TopLeft()),
 	};
 
-	auto x = contacts.begin();
-
 	return FindClosestCollision(contacts, internalityFilter);
 }
 
-std::optional<Contact> Collision::RectangleRectangleCast(const RectF & movingRect, const RectF & stationaryRect, const Vector2F& movement, const InternalityFilter internalityFilter)
+std::optional<PolygonContact> Collision::RectangleRectangleCast(const RectF & movingRect, const RectF & stationaryRect, const Vector2F& movement, const InternalityFilter internalityFilter)
 {
-	//TODO: Moving rectangle inside stationary rectangle, need to shrink stationary rectangle
-	// Maybe test against grown and shrunk stationary rectangle, using InternalityFilter and/or distance calculation to choose correct result?
 	auto movingCentre = movingRect.Centre();
 
-	std::vector<std::optional<Contact>> contacts;
+	std::vector<std::optional<PolygonContact>> contacts;
 
 	if (internalityFilter != InternalityFilter::Internal)
 	{
 		contacts.push_back(
 			PointRectangleCast(movingCentre,
 				movingCentre + movement,
-				RectF::FromCentre(stationaryRect.Centre(), stationaryRect.width + movingRect.width, stationaryRect.height + movingRect.height),
+				RectF::FromCentre(stationaryRect.Centre(), stationaryRect.size.x + movingRect.size.x, stationaryRect.size.y + movingRect.size.y),
 				InternalityFilter::External));
 	}
 	if (internalityFilter != InternalityFilter::External)
@@ -124,7 +151,7 @@ std::optional<Contact> Collision::RectangleRectangleCast(const RectF & movingRec
 		contacts.push_back(
 			PointRectangleCast(movingCentre,
 				movingCentre + movement,
-				RectF::FromCentre(stationaryRect.Centre(), stationaryRect.width - movingRect.width, stationaryRect.height - movingRect.height),
+				RectF::FromCentre(stationaryRect.Centre(), stationaryRect.size.x - movingRect.size.x, stationaryRect.size.y - movingRect.size.y),
 				InternalityFilter::Internal));
 	}
 
@@ -160,11 +187,12 @@ std::optional<Contact> Collision::RectangleRectangleCast(const RectF & movingRec
 		point += distance * movement.Normalised();
 	}
 
-	return Contact(contact.normal,
+	return PolygonContact(contact.normal,
 		point,
 		contact.side,
 		distance,
 		contact.collidedLineStart,
 		contact.collidedLineEnd,
 		contact.point);
+	return std::nullopt;
 }

@@ -23,12 +23,12 @@ namespace Tests
 	{
 		struct TestCase
 		{
-			Vector2F pointStart;
-			Vector2F pointEnd;
-			Vector2F lineStart;
-			Vector2F lineEnd;
+			Vector2F pointStart = Vector2F();
+			Vector2F pointEnd = Vector2F();
+			Vector2F lineStart = Vector2F();
+			Vector2F lineEnd = Vector2F();
 
-			std::optional<Contact> expectedResult;
+			std::optional<PolygonContact> expectedResult;
 		};
 
 		void RunTestCase(const TestCase& testCase)
@@ -80,8 +80,6 @@ namespace Tests
 							{
 								auto expectedNormal = swapPointEnds ? -expected.normal : expected.normal;
 								AreEqual(expectedNormal, actual.normal, Constants::FloatEqualityTolerance, message.c_str());
-								//Assert::AreEqual(expectedNormal.x, actual.normal.x, Constants::FloatEqualityTolerance, message.c_str());
-								//Assert::AreEqual(expectedNormal.y, actual.normal.y, Constants::FloatEqualityTolerance, message.c_str());
 							}
 
 						}
@@ -103,7 +101,7 @@ namespace Tests
 			testCase.lineEnd = { 0.0, 2.0 };
 
 			auto expectedPoint = Vector2F(1.0, 1.0);
-			testCase.expectedResult = Contact(Vector2F(-1, -1).Normalised(),
+			testCase.expectedResult = PolygonContact(Vector2F(-1, -1).Normalised(),
 				expectedPoint,
 				false,
 				Vector2F::DistanceBetween(testCase.pointStart, expectedPoint),
@@ -166,7 +164,7 @@ namespace Tests
 			testCase.lineEnd = Vector2F(0, 3);
 
 			auto expectedPoint = Vector2F(0, 2);
-			testCase.expectedResult = Contact(Vector2F(-1, 0).Normalised(), expectedPoint, false, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint), testCase.lineStart, testCase.lineEnd);
+			testCase.expectedResult = PolygonContact(Vector2F(-1, 0).Normalised(), expectedPoint, false, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint), testCase.lineStart, testCase.lineEnd);
 
 			RunTestCase(testCase);
 		}
@@ -181,7 +179,7 @@ namespace Tests
 			testCase.lineEnd = Vector2F(0, 2);
 
 			auto expectedPoint = Vector2F(0.5, 1);
-			testCase.expectedResult = Contact(Vector2F(-1, -0.5).Normalised(), expectedPoint, false, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint), testCase.lineStart, testCase.lineEnd);
+			testCase.expectedResult = PolygonContact(Vector2F(-1, -0.5).Normalised(), expectedPoint, false, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint), testCase.lineStart, testCase.lineEnd);
 
 			RunTestCase(testCase);
 		}

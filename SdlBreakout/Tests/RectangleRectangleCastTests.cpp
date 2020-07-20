@@ -21,7 +21,7 @@ namespace Tests
 			RectF movingRectangle;
 			Vector2F motion;
 
-			std::optional<Contact> expectedResult;
+			std::optional<PolygonContact> expectedResult;
 		};
 
 		void RunTestCase(TestCase testCase)
@@ -53,7 +53,7 @@ namespace Tests
 			testCase.motion = Vector2F(2, 0);
 
 			auto expectedPoint = Vector2F(1, 4);
-			testCase.expectedResult = Contact(Vector2F(-1, 0),
+			testCase.expectedResult = PolygonContact(Vector2F(-1, 0),
 				expectedPoint,
 				true,
 				Vector2F::DistanceBetween(testCase.movingRectangle.Centre(), expectedPoint), //TODO: Centroid, not point
@@ -72,7 +72,7 @@ namespace Tests
 			testCase.motion = Vector2F(2, 0);
 
 			auto expectedPoint = Vector2F(2, 0);
-			testCase.expectedResult = Contact(Vector2F(-1, 0),
+			testCase.expectedResult = PolygonContact(Vector2F(-1, 0),
 				expectedPoint,
 				false,
 				Vector2F::DistanceBetween(testCase.movingRectangle.Centre(), expectedPoint),

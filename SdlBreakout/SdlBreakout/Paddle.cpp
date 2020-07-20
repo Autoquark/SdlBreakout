@@ -21,16 +21,14 @@ void Paddle::Update(float timeElapsed)
 
 	if (currentKeyStates[SDL_SCANCODE_LEFT])
 	{
-		collisionBounds.x -= moveSpeed * timeElapsed;
+		collisionBounds.position.x -= moveSpeed * timeElapsed;
 	}
 	else if (currentKeyStates[SDL_SCANCODE_RIGHT])
 	{
-		collisionBounds.x += moveSpeed * timeElapsed;
+		collisionBounds.position.x += moveSpeed * timeElapsed;
 	}
 
-	collisionBounds.x = std::clamp(collisionBounds.x, (float)0.0, (float)Game::GetInstance().SCREEN_WIDTH - collisionBounds.width);
+	collisionBounds.position.x = std::clamp(collisionBounds.position.x, 0.0f, (float)Game::GetInstance().SCREEN_WIDTH - collisionBounds.size.x);
 
 	GameObject::Update(timeElapsed);
-
-	std::cout << collisionBounds.x << "," << collisionBounds.y << '\n';
 }

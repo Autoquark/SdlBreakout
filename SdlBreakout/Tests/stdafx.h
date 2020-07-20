@@ -13,3 +13,5 @@
 #include "CppUnitTest.h"
 
 // TODO: reference additional headers your program requires here
+// if this is not before the STL one, it multiply defines M_PI
+#include <corecrt_math_defines.h>

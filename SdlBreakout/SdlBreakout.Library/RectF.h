@@ -1,6 +1,7 @@
 #include "Vector2.h"
 
 #pragma once
+// Represents an axis-aligned rectangle
 class RectF
 {
 public:
@@ -11,81 +12,90 @@ public:
 
 	RectF() = default;
 
-	RectF(float x, float y, float width, float height) : x(x), y(y), width(width), height(height)
+	RectF(float x, float y, float width, float height) : RectF(Vector2F(x, y), Vector2F(width, height))
 	{
 	}
 
-	RectF(Vector2F position, Vector2F size) : RectF(position.x, position.y, size.x, size.y)
+	RectF(Vector2F position, Vector2F size) : position(position), size(size)
 	{
 	}
 
 	float Top() const
 	{
-		return y;
+		return position.y;
 	}
 
 	float Bottom() const
 	{
-		return y + height;
+		return position.y + size.y;
 	}
 
 	float Left() const
 	{
-		return x;
+		return position.x;
 	}
 
 	float Right() const
 	{
-		return x + width;
+		return position.x + size.x;
 	}
 
 	Vector2F TopLeft() const
 	{
-		return Vector2F(x, y);
+		return position;
 	}
 
 	Vector2F TopRight() const
 	{
-		return Vector2F(x + width, y);
+		return position + Vector2F(size.x, 0);
 	}
 
 	Vector2F BottomLeft() const
 	{
-		return Vector2F(x, y + height);
+		return position + Vector2F(0, size.y);
 	}
 
 	Vector2F BottomRight() const
 	{
-		return Vector2F(x + width, y + height);
+		return position + size;
 	}
 
 	Vector2F Centre() const
 	{
-		return Vector2F(x + width / 2, y + height / 2);
+		return position + size / 2;
 	}
 
 	void SetPosition(float x, float y)
 	{
-		this->x = x;
-		this->y = y;
+		position.x = x;
+		position.y = y;
 	}
 	void SetPosition(Vector2F position)
 	{
-		x = position.x;
-		y = position.y;
+		position = position;
 	}
 
-	Vector2F GetSize() const
+	void Rotate90()
 	{
-		return Vector2F(width, height);
+		auto centre = Centre();
+		position -= centre;
+		std::swap(position.x, position.y);
+		position += centre;
+	}
+
+	RectF Rotated90()
+	{
+		auto clone = RectF(*this);
+		clone.Rotate90();
+		return clone;
 	}
 
 	bool Contains(const Vector2F& point) const
 	{
-		return point.x >= x
-			&& point.x <= x + width
-			&& point.y >= y
-			&& point.y <= y + height;
+		return point.x >= position.x
+			&& point.x <= position.x + size.x
+			&& point.y >= position.y
+			&& point.y <= position.y + size.y;
 	}
 
 	bool Overlaps(const RectF& other) const
@@ -96,6 +106,6 @@ public:
 			|| other.Top() >= Bottom();
 	}
 
-	float x, y, width, height;
+	Vector2F position, size;
 };
 

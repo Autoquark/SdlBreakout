@@ -161,6 +161,8 @@
     <ClInclude Include="ToString.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CircleLineCastTests.cpp" />
+    <ClCompile Include="PointCircleCastTests.cpp" />
     <ClCompile Include="PointRectangleCastTests.cpp" />
     <ClCompile Include="RectangleRectangleCastTests.cpp" />
     <ClCompile Include="Assert.cpp" />
