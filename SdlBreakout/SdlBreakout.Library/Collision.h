@@ -4,7 +4,7 @@
 #include <vector>
 #include "Contact.h"
 #include "Vector2.h"
-#include "RectF.h"
+#include "AxisAlignedRectF.h"
 #include "CircleF.h"
 #include "PolygonContact.h"
 #include "OptionalUtilities.h"
@@ -63,9 +63,9 @@ public:
 	static std::optional<Contact> CircleLineCast(const CircleF& circle, const Vector2F& lineStart, const Vector2F& lineEnd, const Vector2F& movement);
 
 	// Finds the first point of intersection between a moving point and a rectangle
-	static std::optional<PolygonContact> PointRectangleCast(const Vector2F& pointStart, const Vector2F& pointEnd, const RectF & rect, const InternalityFilter internalityFilter = InternalityFilter::Both);
+	static std::optional<PolygonContact> PointRectangleCast(const Vector2F& pointStart, const Vector2F& pointEnd, const AxisAlignedRectF & rect, const InternalityFilter internalityFilter = InternalityFilter::Both);
 
 
 	// Finds the first point of contact between a moving and stationary rectangle
-	static std::optional<PolygonContact> RectangleRectangleCast(const RectF & movingRect, const RectF & stationaryRect, const Vector2F & movement, const InternalityFilter internalityFilter = InternalityFilter::Both);
+	static std::optional<PolygonContact> RectangleRectangleCast(const AxisAlignedRectF & movingRect, const AxisAlignedRectF & stationaryRect, const Vector2F & movement, const InternalityFilter internalityFilter = InternalityFilter::Both);
 };

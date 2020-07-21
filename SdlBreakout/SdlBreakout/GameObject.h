@@ -2,7 +2,7 @@
 #include <SDL_image.h>
 #include "Vector2.h"
 #include "Texture.h"
-#include "RectF.h"
+#include "AxisAlignedRectF.h"
 
 class GameObject
 {
@@ -18,18 +18,18 @@ public:
 	{
 		collisionBounds.SetPosition(x, y);
 	}
-	const RectF& GetCollisionBounds() const
+	const AxisAlignedRectF& GetCollisionBounds() const
 	{
 		return collisionBounds;
 	}
 
 	virtual void Update(float timeElapsed);
 
-	GameObject(RectF collisionBounds);
+	GameObject(AxisAlignedRectF collisionBounds);
 	~GameObject();
 
 protected:
-	RectF collisionBounds;
+	AxisAlignedRectF collisionBounds;
 	Texture* sprite = NULL;
 };
 

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include <optional>
-#include "RectF.h"
+#include "AxisAlignedRectF.h"
 #include "Contact.h"
 #include "Collision.h"
 #include "ToString.h"
@@ -17,8 +17,8 @@ namespace Tests
 	{
 		struct TestCase
 		{
-			RectF stationaryRectangle;
-			RectF movingRectangle;
+			AxisAlignedRectF stationaryRectangle;
+			AxisAlignedRectF movingRectangle;
 			Vector2F motion;
 
 			std::optional<PolygonContact> expectedResult;
@@ -48,8 +48,8 @@ namespace Tests
 		TEST_METHOD(LeftToRightCollision)
 		{
 			TestCase testCase;
-			testCase.stationaryRectangle = RectF(1, 1, 2, 4);
-			testCase.movingRectangle = RectF(-1, 4, 1, 1);
+			testCase.stationaryRectangle = AxisAlignedRectF(1, 1, 2, 4);
+			testCase.movingRectangle = AxisAlignedRectF(-1, 4, 1, 1);
 			testCase.motion = Vector2F(2, 0);
 
 			auto expectedPoint = Vector2F(1, 4);
@@ -67,8 +67,8 @@ namespace Tests
 		TEST_METHOD(LeftToRightInternalCollision)
 		{
 			TestCase testCase;
-			testCase.stationaryRectangle = RectF(-2, -2, 4, 4);
-			testCase.movingRectangle = RectF(-1, -1, 2, 2);
+			testCase.stationaryRectangle = AxisAlignedRectF(-2, -2, 4, 4);
+			testCase.movingRectangle = AxisAlignedRectF(-1, -1, 2, 2);
 			testCase.motion = Vector2F(2, 0);
 
 			auto expectedPoint = Vector2F(2, 0);

@@ -6,7 +6,7 @@
 #include "Vector2.h"
 
 
-Ball::Ball() : GameObject(RectF { 0, 0, 16, 16 })
+Ball::Ball() : GameObject(AxisAlignedRectF{ 0, 0, 16, 16 })
 {
 	sprite = Game::GetInstance().gBallTexture;
 	velocity.x = -30;

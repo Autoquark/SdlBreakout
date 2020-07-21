@@ -3,7 +3,7 @@
 #include <vector>
 #include "Vector2.h"
 #include "Contact.h"
-#include "RectF.h"
+#include "AxisAlignedRectF.h"
 #include "Collision.h"
 #include "ToString.h"
 #include "Assert.h"
@@ -19,7 +19,7 @@ namespace Tests
 		{
 			Vector2F pointStart = Vector2F();
 			Vector2F pointEnd = Vector2F();
-			RectF rectangle = RectF();
+			AxisAlignedRectF rectangle = AxisAlignedRectF();
 			Collision::InternalityFilter internalityFilter = Collision::InternalityFilter::Both;
 
 			std::optional<PolygonContact> expectedResult;
@@ -53,7 +53,7 @@ namespace Tests
 			TestCase testCase;
 			testCase.pointStart = Vector2F(0, 0);
 			testCase.pointEnd = Vector2F(2, 2);
-			testCase.rectangle = RectF(1, -2, 2, 2);
+			testCase.rectangle = AxisAlignedRectF(1, -2, 2, 2);
 			testCase.internalityFilter = Collision::InternalityFilter::Both;
 
 			RunTestCase(testCase);
@@ -65,7 +65,7 @@ namespace Tests
 			TestCase testCase;
 			testCase.pointStart = Vector2F(-2, 4);
 			testCase.pointEnd = Vector2F(1, 5);
-			testCase.rectangle = RectF(0, 2, 2, 4);
+			testCase.rectangle = AxisAlignedRectF(0, 2, 2, 4);
 			testCase.internalityFilter = Collision::InternalityFilter::Both;
 
 			auto expectedPoint = Vector2F(0, 4 + 2.0f / 3);
@@ -79,7 +79,7 @@ namespace Tests
 			TestCase testCase;
 			testCase.pointStart = Vector2F(0.5, 4.5);
 			testCase.pointEnd = Vector2F(2, 3);
-			testCase.rectangle = RectF(1, 1, 2, 4);
+			testCase.rectangle = AxisAlignedRectF(1, 1, 2, 4);
 			testCase.internalityFilter = Collision::InternalityFilter::Both;
 
 			auto expectedPoint = Vector2F(1, 4);
@@ -93,7 +93,7 @@ namespace Tests
 			TestCase testCase;
 			testCase.pointStart = Vector2F(2, 3);
 			testCase.pointEnd = Vector2F(5, 0);
-			testCase.rectangle = RectF(0, 0, 4, 2);
+			testCase.rectangle = AxisAlignedRectF(0, 0, 4, 2);
 			testCase.internalityFilter = Collision::InternalityFilter::Both;
 
 			auto expectedPoint = Vector2F(3, 2);
@@ -107,7 +107,7 @@ namespace Tests
 			TestCase testCase;
 			testCase.pointStart = Vector2F(2, 3);
 			testCase.pointEnd = Vector2F(5, 0);
-			testCase.rectangle = RectF(0, 0, 4, 2);
+			testCase.rectangle = AxisAlignedRectF(0, 0, 4, 2);
 			testCase.internalityFilter = Collision::InternalityFilter::Internal;
 
 			auto expectedPoint = Vector2F(4, 1);

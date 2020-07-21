@@ -2,21 +2,21 @@
 
 #pragma once
 // Represents an axis-aligned rectangle
-class RectF
+class AxisAlignedRectF
 {
 public:
-	static RectF FromCentre(Vector2F centre, float width, float height)
+	static AxisAlignedRectF FromCentre(Vector2F centre, float width, float height)
 	{
-		return RectF(centre.x - width / 2, centre.y - height / 2, width, height);
+		return AxisAlignedRectF(centre.x - width / 2, centre.y - height / 2, width, height);
 	}
 
-	RectF() = default;
+	AxisAlignedRectF() = default;
 
-	RectF(float x, float y, float width, float height) : RectF(Vector2F(x, y), Vector2F(width, height))
+	AxisAlignedRectF(float x, float y, float width, float height) : AxisAlignedRectF(Vector2F(x, y), Vector2F(width, height))
 	{
 	}
 
-	RectF(Vector2F position, Vector2F size) : position(position), size(size)
+	AxisAlignedRectF(Vector2F position, Vector2F size) : position(position), size(size)
 	{
 	}
 
@@ -84,9 +84,9 @@ public:
 		position += centre;
 	}
 
-	RectF Rotated90()
+	AxisAlignedRectF Rotated90()
 	{
-		auto clone = RectF(*this);
+		auto clone = AxisAlignedRectF(*this);
 		clone.Rotate90();
 		return clone;
 	}
@@ -99,7 +99,7 @@ public:
 			&& point.y <= position.y + size.y;
 	}
 
-	bool Overlaps(const RectF& other) const
+	bool Overlaps(const AxisAlignedRectF& other) const
 	{
 		return Right() >= other.Left()
 			|| other.Right() >= Left()

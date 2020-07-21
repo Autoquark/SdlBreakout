@@ -4,7 +4,7 @@
 #include <iostream>
 #include <algorithm>
 
-Paddle::Paddle() : GameObject(RectF { 0, 0, 128, 32})
+Paddle::Paddle() : GameObject(AxisAlignedRectF{ 0, 0, 128, 32})
 {
 	sprite = Game::GetInstance().gPaddleTexture;
 	moveSpeed = 1000;
