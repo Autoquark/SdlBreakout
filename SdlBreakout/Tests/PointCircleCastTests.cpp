@@ -103,5 +103,35 @@ namespace Tests
 
 			RunTestCase(testCase);
 		}
+
+		TEST_METHOD(MissAbove)
+		{
+			TestCase testCase;
+			testCase.circle = CircleF(Vector2F(0, 0), 1);
+			testCase.pointStart = Vector2F(-2, 2);
+			testCase.pointEnd = Vector2F(2, 2);
+
+			RunTestCase(testCase);
+		}
+
+		TEST_METHOD(FallShort)
+		{
+			TestCase testCase;
+			testCase.circle = CircleF(Vector2F(2, 2), 2);
+			testCase.pointStart = Vector2F(-6, 0);
+			testCase.pointEnd = Vector2F(-1, 0);
+
+			RunTestCase(testCase);
+		}
+
+		TEST_METHOD(FallShortInternal)
+		{
+			TestCase testCase;
+			testCase.circle = CircleF(Vector2F(2, 2), 2);
+			testCase.pointStart = Vector2F(1, 1);
+			testCase.pointEnd = Vector2F(3, 3);
+
+			RunTestCase(testCase);
+		}
 	};
 }

@@ -99,8 +99,8 @@ std::optional<Contact> Collision::CircleLineCast(const CircleF& circle, const Ve
 	auto circleEndCentre = circle.centre + movement;
 	auto linePerpendicular = (lineEnd - lineStart).Rotated(90)
 		.Normalised();
-	auto rect = RectF::FromCentre(Vector2F::LinearInterpolate(lineStart, lineEnd, 0.5f), Vector2F::DistanceBetween(lineStart, lineEnd), circle.radius);
-	if (lineStart.y == lineEnd.y)
+	auto rect = RectF::FromCentre(Vector2F::LinearInterpolate(lineStart, lineEnd, 0.5f), Vector2F::DistanceBetween(lineStart, lineEnd), circle.radius * 2);
+	if (lineStart.x == lineEnd.x)
 	{
 		rect.Rotate90();
 	}
@@ -110,7 +110,18 @@ std::optional<Contact> Collision::CircleLineCast(const CircleF& circle, const Ve
 		PointCircleCast(circle.centre, circleEndCentre, CircleF(lineEnd, circle.radius))
 	};
 
-	return FindClosestCollision(contacts);
+	auto nullable = FindClosestCollision(contacts);
+	if (!nullable.has_value())
+	{
+		return std::nullopt;
+	}
+	auto contact = *nullable;
+
+	auto normal = lineEnd - lineStart;
+	normal.Rotate(90);
+	auto dotProduct = normal.DotProduct(circleEndCentre - circle.centre);
+
+	return Contact(contact.normal, contact.point + circle.radius * movement.Normalised(), dotProduct < 0, contact.distance, contact.point);
 }
 
 std::optional<PolygonContact> Collision::PointRectangleCast(const Vector2F & pointStartPosition, const Vector2F & pointEndPosition, const RectF & rect, const InternalityFilter internalityFilter)

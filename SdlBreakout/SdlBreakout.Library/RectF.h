@@ -72,7 +72,7 @@ public:
 	}
 	void SetPosition(Vector2F position)
 	{
-		position = position;
+		this->position = position;
 	}
 
 	void Rotate90()
@@ -80,6 +80,7 @@ public:
 		auto centre = Centre();
 		position -= centre;
 		std::swap(position.x, position.y);
+		std::swap(size.x, size.y);
 		position += centre;
 	}
 
