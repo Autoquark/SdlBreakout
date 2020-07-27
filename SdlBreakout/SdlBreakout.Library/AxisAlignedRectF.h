@@ -1,10 +1,21 @@
 #include "Vector2.h"
+#include "Shape.h"
+
+class CircleF;
+class Point;
+class Line;
 
 #pragma once
 // Represents an axis-aligned rectangle
-class AxisAlignedRectF
+class AxisAlignedRectF : public Shape
 {
 public:
+	std::optional<Contact> CastAgainst(const Shape& other, const Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both) const override;
+	std::optional<Contact> CastAgainstThis(const AxisAlignedRectF& other, const Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both) const override;
+	std::optional<Contact> CastAgainstThis(const CircleF& other, const Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both) const override;
+	std::optional<Contact> CastAgainstThis(const Line& other, const Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both) const override;
+	std::optional<Contact> CastAgainstThis(const Point& other, const Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both) const override;
+
 	static AxisAlignedRectF FromCentre(Vector2F centre, float width, float height)
 	{
 		return AxisAlignedRectF(centre.x - width / 2, centre.y - height / 2, width, height);
@@ -64,6 +75,26 @@ public:
 	{
 		return position + size / 2;
 	}
+
+	/// <summary>
+	/// Returns the top edge of the rectangle, defined such that a Contact with side = true indicates an external collision
+	/// </summary>
+	Line TopEdge() const;
+
+	/// <summary>
+	/// Returns the right edge of the rectangle, defined such that a Contact with side = true indicates an external collision
+	/// </summary>
+	Line RightEdge() const;
+
+	/// <summary>
+	/// Returns the bottom edge of the rectangle, defined such that a Contact with side = true indicates an external collision
+	/// </summary>
+	Line BottomEdge() const;
+
+	/// <summary>
+	/// Returns the left edge of the rectangle, defined such that a Contact with side = true indicates an external collision
+	/// </summary>
+	Line LeftEdge() const;
 
 	void SetPosition(float x, float y)
 	{

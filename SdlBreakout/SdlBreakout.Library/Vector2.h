@@ -120,6 +120,12 @@ public:
 		return "(" + std::to_string(x) + "," + std::to_string(y) + ")";
 	}
 
+	// Returns the smallest rotation in degrees which makes this vector parallel to the given vector. A positive value indicates a clockwise rotation, and a negative value a counterclockwise one
+	float SignedAngleToDegrees(Vector2 other) const
+	{
+		return (float) ((180 / M_PI) * std::atan2(x * other.y - y * other.x, x * other.x + y * other.y));
+	}
+
 	float DotProduct(Vector2 other) const
 	{
 		return x * other.x + y * other.y;

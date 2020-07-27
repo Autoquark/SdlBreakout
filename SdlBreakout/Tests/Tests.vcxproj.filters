@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Collision">
+      <UniqueIdentifier>{c8109790-c9a5-4c26-b27a-7bc88fc7c54c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Vector2">
+      <UniqueIdentifier>{50fd84f7-73be-4c9d-a01f-617bef0dc911}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -32,23 +38,26 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PointLineCastTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PointRectangleCastTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RectangleRectangleCastTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Assert.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PointCircleCastTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CircleLineCastTests.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="PointCircleCastTests.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLineCastTests.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="PointRectangleCastTests.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="RectangleRectangleCastTests.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="SignedAngleToDegreesTests.cpp">
+      <Filter>Source Files\Vector2</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

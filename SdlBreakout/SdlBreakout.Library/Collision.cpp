@@ -5,7 +5,6 @@
 #include <limits>
 #include "Collision.h"
 #include "GeneralFormLine.h"
-#include "Rectangle.h"
 #include "AxisAlignedRectF.h"
 
 //Returns the first nullableContact between a point and a line, if any, when the point travels along the given line
@@ -185,8 +184,33 @@ std::optional<PolygonContact> Collision::RectangleRectangleCast(const AxisAligne
 	{
 		// For an internal collision return the centre of the side of the moving rect which collided
 		auto stationaryCentre = stationaryRect.Centre();
+
+		auto reducedRect = AxisAlignedRectF::FromCentre(stationaryRect.Centre(), stationaryRect.size.x - movingRect.size.x, stationaryRect.size.y - movingRect.size.y);
+		auto angle = (reducedRect.TopLeft() - reducedRect.Centre()).SignedAngleToDegrees(movement);
+
+		// Bottom
+		if (angle < -90)
+		{
+			point = Vector2F(movingCentre.x, movingRect.Bottom());
+		}
+		// Left
+		else if (angle < 0)
+		{
+			point = Vector2F(movingRect.Left(), movingCentre.y);
+		}
+		// Top
+		else if (angle < 90)
+		{
+			point = Vector2F(movingCentre.x, movingRect.Top());
+		}
+		// Right
+		else
+		{
+			point = Vector2F(movingRect.Right(), movingCentre.y);
+		}
+
 		// Either top or right
-		if (contact.collidedLineStart.y < stationaryCentre.y)
+		/*if (contact.collidedLineStart.y < stationaryCentre.y)
 		{
 			point = contact.collidedLineEnd.y < stationaryCentre.y ? Vector2F(movingCentre.x, movingRect.Top()) : Vector2F(movingRect.Right(), movingCentre.y);
 		}
@@ -194,7 +218,7 @@ std::optional<PolygonContact> Collision::RectangleRectangleCast(const AxisAligne
 		else
 		{
 			point = contact.collidedLineEnd.y > stationaryCentre.y ? Vector2F(movingCentre.x, movingRect.Bottom()) : Vector2F(movingRect.Left(), movingCentre.y);
-		}
+		}*/
 		point += distance * movement.Normalised();
 	}
 

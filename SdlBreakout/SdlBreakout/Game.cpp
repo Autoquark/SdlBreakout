@@ -10,6 +10,7 @@
 #include "block.h"
 #include "GameObject.h"
 #include "Texture.h"
+#include "Shape.h"
 
 Game::~Game()
 {

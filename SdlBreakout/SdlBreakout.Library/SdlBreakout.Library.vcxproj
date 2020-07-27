@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -157,22 +157,27 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Contact.h" />
     <ClInclude Include="GeneralFormLine.h" />
+    <ClInclude Include="Line.h" />
     <ClInclude Include="OptionalUtilities.h" />
+    <ClInclude Include="Point.h" />
     <ClInclude Include="PolygonContact.h" />
-    <ClInclude Include="Rectangle.h" />
     <ClInclude Include="AxisAlignedRectF.h" />
+    <ClInclude Include="Shape.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AxisAlignedRectF.cpp" />
     <ClCompile Include="CircleF.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Contact.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Line.cpp" />
+    <ClCompile Include="Point.cpp" />
     <ClCompile Include="PolygonContact.cpp" />
-    <ClCompile Include="Rectangle.cpp" />
+    <ClCompile Include="Shape.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
