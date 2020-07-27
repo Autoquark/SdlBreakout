@@ -5,6 +5,7 @@
 #include "ToString.h"
 #include "Constants.h"
 #include "Assert.h"
+#include "Point.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -17,14 +18,15 @@ namespace Tests
 			Vector2F pointStart = Vector2F();
 			Vector2F pointEnd = Vector2F();
 			CircleF circle = CircleF(Vector2F(0, 0), 1);
-			Collision::InternalityFilter internalityFilter = Collision::InternalityFilter::Both;
+			Shape::InternalityFilter internalityFilter = Shape::InternalityFilter::Both;
 
 			std::optional<Contact> expectedResult;
 		};
 
 		void RunTestCase(const TestCase& testCase)
 		{
-			auto hit = Collision::PointCircleCast(testCase.pointStart, testCase.pointEnd, testCase.circle, testCase.internalityFilter);
+			//auto hit = Collision::PointCircleCast(testCase.pointStart, testCase.pointEnd, testCase.circle, testCase.internalityFilter);
+			auto hit = Point(testCase.pointStart).CastAgainst(testCase.circle, testCase.pointEnd - testCase.pointStart, testCase.internalityFilter);
 			if (!testCase.expectedResult.has_value())
 			{
 				Assert::IsFalse(hit.has_value());
@@ -62,7 +64,7 @@ namespace Tests
 			testCase.circle = CircleF(Vector2F(0, 0), 1);
 			testCase.pointStart = Vector2F(-2, 0);
 			testCase.pointEnd = Vector2F(0, 0);
-			testCase.internalityFilter = Collision::InternalityFilter::Internal;
+			testCase.internalityFilter = Shape::InternalityFilter::Internal;
 
 			RunTestCase(testCase);
 		}
@@ -97,7 +99,7 @@ namespace Tests
 			testCase.circle = CircleF(Vector2F(0, 0), 1);
 			testCase.pointStart = Vector2F(-2, 0);
 			testCase.pointEnd = Vector2F(2, 0);
-			testCase.internalityFilter = Collision::InternalityFilter::Internal;
+			testCase.internalityFilter = Shape::InternalityFilter::Internal;
 
 			testCase.expectedResult = Contact(Vector2F(-1, 0), Vector2F(1, 0), false, 3);
 
