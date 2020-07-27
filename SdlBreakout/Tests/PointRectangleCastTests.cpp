@@ -8,6 +8,7 @@
 #include "ToString.h"
 #include "Assert.h"
 #include "Constants.h"
+#include "Point.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -20,7 +21,7 @@ namespace Tests
 			Vector2F pointStart = Vector2F();
 			Vector2F pointEnd = Vector2F();
 			AxisAlignedRectF rectangle = AxisAlignedRectF();
-			Collision::InternalityFilter internalityFilter = Collision::InternalityFilter::Both;
+			Shape::InternalityFilter internalityFilter = Shape::InternalityFilter::Both;
 
 			std::optional<PolygonContact> expectedResult;
 		};
@@ -28,7 +29,8 @@ namespace Tests
 		void RunTestCase(TestCase& testCase)
 		{
 			// Don't swap line ends as this might result in hitting a different side of the rectangle first
-			auto hit = Collision::PointRectangleCast(testCase.pointStart, testCase.pointEnd, testCase.rectangle, testCase.internalityFilter);
+			auto hit = Point(testCase.pointStart).CastAgainst(testCase.rectangle, testCase.pointEnd - testCase.pointStart, testCase.internalityFilter);
+			//auto hit = Collision::PointRectangleCast(testCase.pointStart, testCase.pointEnd, testCase.rectangle, testCase.internalityFilter);
 			if (!testCase.expectedResult.has_value())
 			{
 				Assert::IsFalse(hit.has_value());
@@ -54,7 +56,7 @@ namespace Tests
 			testCase.pointStart = Vector2F(0, 0);
 			testCase.pointEnd = Vector2F(2, 2);
 			testCase.rectangle = AxisAlignedRectF(1, -2, 2, 2);
-			testCase.internalityFilter = Collision::InternalityFilter::Both;
+			testCase.internalityFilter = Shape::InternalityFilter::Both;
 
 			RunTestCase(testCase);
 		}
@@ -66,7 +68,7 @@ namespace Tests
 			testCase.pointStart = Vector2F(-2, 4);
 			testCase.pointEnd = Vector2F(1, 5);
 			testCase.rectangle = AxisAlignedRectF(0, 2, 2, 4);
-			testCase.internalityFilter = Collision::InternalityFilter::Both;
+			testCase.internalityFilter = Shape::InternalityFilter::Both;
 
 			auto expectedPoint = Vector2F(0, 4 + 2.0f / 3);
 			testCase.expectedResult = PolygonContact(Vector2F(-1, 0), expectedPoint, true, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint), testCase.rectangle.BottomLeft(), testCase.rectangle.TopLeft());
@@ -80,7 +82,7 @@ namespace Tests
 			testCase.pointStart = Vector2F(0.5, 4.5);
 			testCase.pointEnd = Vector2F(2, 3);
 			testCase.rectangle = AxisAlignedRectF(1, 1, 2, 4);
-			testCase.internalityFilter = Collision::InternalityFilter::Both;
+			testCase.internalityFilter = Shape::InternalityFilter::Both;
 
 			auto expectedPoint = Vector2F(1, 4);
 			testCase.expectedResult = PolygonContact(Vector2F(-1, 0), expectedPoint, true, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint), testCase.rectangle.BottomLeft(), testCase.rectangle.TopLeft());
@@ -94,7 +96,7 @@ namespace Tests
 			testCase.pointStart = Vector2F(2, 3);
 			testCase.pointEnd = Vector2F(5, 0);
 			testCase.rectangle = AxisAlignedRectF(0, 0, 4, 2);
-			testCase.internalityFilter = Collision::InternalityFilter::Both;
+			testCase.internalityFilter = Shape::InternalityFilter::Both;
 
 			auto expectedPoint = Vector2F(3, 2);
 			testCase.expectedResult = PolygonContact(Vector2F(0, 1).Normalised(), expectedPoint, true, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint), testCase.rectangle.BottomRight(), testCase.rectangle.BottomLeft());
@@ -108,7 +110,7 @@ namespace Tests
 			testCase.pointStart = Vector2F(2, 3);
 			testCase.pointEnd = Vector2F(5, 0);
 			testCase.rectangle = AxisAlignedRectF(0, 0, 4, 2);
-			testCase.internalityFilter = Collision::InternalityFilter::Internal;
+			testCase.internalityFilter = Shape::InternalityFilter::Internal;
 
 			auto expectedPoint = Vector2F(4, 1);
 			testCase.expectedResult = PolygonContact(Vector2F(-1, 0).Normalised(), expectedPoint, false, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint), testCase.rectangle.TopRight(), testCase.rectangle.BottomRight());

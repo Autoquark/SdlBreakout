@@ -26,7 +26,8 @@ namespace Tests
 
 		void RunTestCase(TestCase testCase)
 		{
-			auto hit = Collision::RectangleRectangleCast(testCase.movingRectangle, testCase.stationaryRectangle, testCase.motion);
+			auto hit = testCase.movingRectangle.CastAgainst(testCase.stationaryRectangle, testCase.motion);
+			//auto hit = Collision::RectangleRectangleCast(testCase.movingRectangle, testCase.stationaryRectangle, testCase.motion);
 
 			if (!testCase.expectedResult.has_value())
 			{
