@@ -6,6 +6,7 @@
 #include "FloatCompare.h"
 #include "Assert.h"
 #include "Constants.h"
+#include "Line.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -27,7 +28,8 @@ namespace Tests
 		{
 			for (auto swapLineEnds : { false, true })
 			{
-				auto hit = Collision::CircleLineCast(testCase.circle, swapLineEnds ? testCase.lineEnd : testCase.lineStart, swapLineEnds ? testCase.lineStart : testCase.lineEnd, testCase.motion);
+				auto hit = testCase.circle.CastAgainst(Line(swapLineEnds ? testCase.lineEnd : testCase.lineStart, swapLineEnds ? testCase.lineStart : testCase.lineEnd), testCase.motion);
+				//auto hit = Collision::CircleLineCast(testCase.circle, swapLineEnds ? testCase.lineEnd : testCase.lineStart, swapLineEnds ? testCase.lineStart : testCase.lineEnd, testCase.motion);
 				if (!testCase.expectedResult.has_value())
 				{
 					Assert::IsFalse(hit.has_value());
