@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CircleF.h"
 #include "Point.h"
+#include "AxisAlignedRectF.h"
 
 std::optional<Contact> CircleF::CastAgainst(const Shape& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
@@ -58,4 +59,9 @@ std::optional<Contact> CircleF::CastAgainstThis(const Point& other, const Vector
 std::optional<Contact> CircleF::CastAgainstThis(const Line& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
     return std::optional<Contact>();
+}
+
+AxisAlignedRectF CircleF::GetAxisAlignedBoundingBox() const
+{
+	return AxisAlignedRectF(centre.x - radius, centre.y - radius, radius * 2, radius * 2);
 }

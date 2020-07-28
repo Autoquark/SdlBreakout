@@ -4,7 +4,7 @@
 #include <iostream>
 #include <algorithm>
 
-Paddle::Paddle() : GameObject(AxisAlignedRectF{ 0, 0, 128, 32})
+Paddle::Paddle() : GameObject(new AxisAlignedRectF{ 0, 0, 128, 32})
 {
 	sprite = Game::GetInstance().gPaddleTexture;
 	moveSpeed = 1000;
@@ -21,14 +21,22 @@ void Paddle::Update(float timeElapsed)
 
 	if (currentKeyStates[SDL_SCANCODE_LEFT])
 	{
-		collisionBounds.position.x -= moveSpeed * timeElapsed;
+		collisionBounds->Translate(-moveSpeed * timeElapsed, 0);
 	}
 	else if (currentKeyStates[SDL_SCANCODE_RIGHT])
 	{
-		collisionBounds.position.x += moveSpeed * timeElapsed;
+		collisionBounds->Translate(moveSpeed * timeElapsed, 0);
 	}
 
-	collisionBounds.position.x = std::clamp(collisionBounds.position.x, 0.0f, (float)Game::GetInstance().SCREEN_WIDTH - collisionBounds.size.x);
+	auto boundingBox = collisionBounds->GetAxisAlignedBoundingBox();
+	if (boundingBox.Left() < 0)
+	{
+		collisionBounds->Translate(-boundingBox.Left(), 0);
+	}
+	else if (boundingBox.Right() > Game::GetInstance().SCREEN_WIDTH)
+	{
+		collisionBounds->Translate(Game::GetInstance().SCREEN_WIDTH - boundingBox.Right(), 0);
+	}
 
 	GameObject::Update(timeElapsed);
 }

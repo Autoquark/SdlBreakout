@@ -38,8 +38,19 @@ public:
 	// Return the given point's first contact with this shape, if any, when the point is moved along the given vector
 	virtual std::optional<Contact> CastAgainstThis(const Point& other, const Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both) const = 0;
 
-	// Return the given line's first contact with this shape, if any, when the point is moved along the given vector
-	//virtual std::optional<Contact> CastAgainstThis(const Vector2F& lineStart, const Vector2F& lineEnd, const Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both) const = 0;
+	virtual AxisAlignedRectF GetAxisAlignedBoundingBox() const = 0;
+
+	virtual void SetCentre(Vector2F position) = 0;
+	void SetCentre(float x, float y)
+	{
+		SetCentre(Vector2F(x, y));
+	}
+
+	virtual void Translate(Vector2F amount) = 0;
+	void Translate(float x, float y)
+	{
+		Translate(Vector2F(x, y));
+	}
 
 	template<class ElementType>
 	static int FindClosestCollisionIndex(const std::vector<ElementType>& contacts, const InternalityFilter& internalityFilter = InternalityFilter::Both)

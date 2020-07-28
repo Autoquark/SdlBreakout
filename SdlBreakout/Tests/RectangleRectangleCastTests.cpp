@@ -17,9 +17,9 @@ namespace Tests
 	{
 		struct TestCase
 		{
-			AxisAlignedRectF stationaryRectangle;
-			AxisAlignedRectF movingRectangle;
-			Vector2F motion;
+			AxisAlignedRectF stationaryRectangle = AxisAlignedRectF(0, 0, 0, 0);
+			AxisAlignedRectF movingRectangle = AxisAlignedRectF(0, 0, 0, 0);
+			Vector2F motion = Vector2F(0, 0);
 
 			std::optional<PolygonContact> expectedResult;
 		};

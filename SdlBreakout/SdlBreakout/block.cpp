@@ -2,7 +2,7 @@
 #include "block.h"
 #include "Game.h"
 
-Block::Block() : GameObject(AxisAlignedRectF{ 0, 0, 32, 16 })
+Block::Block() : GameObject(new AxisAlignedRectF{ 0, 0, 32, 16 })
 {
 	sprite = Game::GetInstance().gBlockTexture;
 }

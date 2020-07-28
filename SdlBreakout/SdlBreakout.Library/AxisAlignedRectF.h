@@ -15,13 +15,12 @@ public:
 	std::optional<Contact> CastAgainstThis(const CircleF& other, const Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both) const override;
 	std::optional<Contact> CastAgainstThis(const Line& other, const Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both) const override;
 	std::optional<Contact> CastAgainstThis(const Point& other, const Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both) const override;
+	void Translate(Vector2F amount);
 
 	static AxisAlignedRectF FromCentre(Vector2F centre, float width, float height)
 	{
 		return AxisAlignedRectF(centre.x - width / 2, centre.y - height / 2, width, height);
 	}
-
-	AxisAlignedRectF() = default;
 
 	AxisAlignedRectF(float x, float y, float width, float height) : AxisAlignedRectF(Vector2F(x, y), Vector2F(width, height))
 	{
@@ -96,16 +95,6 @@ public:
 	/// </summary>
 	Line LeftEdge() const;
 
-	void SetPosition(float x, float y)
-	{
-		position.x = x;
-		position.y = y;
-	}
-	void SetPosition(Vector2F position)
-	{
-		this->position = position;
-	}
-
 	void Rotate90()
 	{
 		auto centre = Centre();
@@ -139,5 +128,15 @@ public:
 	}
 
 	Vector2F position, size;
+
+	void SetCentre(Vector2F position) override
+	{
+		this->position = position - size / 2;
+	}
+
+	AxisAlignedRectF GetAxisAlignedBoundingBox() const override
+	{
+		return *this;
+	}
 };
 

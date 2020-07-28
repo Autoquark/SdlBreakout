@@ -20,7 +20,7 @@ namespace Tests
 		{
 			Vector2F pointStart = Vector2F();
 			Vector2F pointEnd = Vector2F();
-			AxisAlignedRectF rectangle = AxisAlignedRectF();
+			AxisAlignedRectF rectangle = AxisAlignedRectF(0, 0, 0, 0);
 			Shape::InternalityFilter internalityFilter = Shape::InternalityFilter::Both;
 
 			std::optional<PolygonContact> expectedResult;

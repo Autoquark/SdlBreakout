@@ -95,6 +95,26 @@ std::optional<Contact> Line::CastAgainstThis(const Point& other, const Vector2F&
 	return Contact(-normal, contactPoint, dotProduct < 0, Vector2F::DistanceBetween(contactPoint, other));
 }
 
+void Line::Translate(Vector2F amount)
+{
+	start += amount;
+	end += amount;
+}
+
+void Line::SetCentre(Vector2F position)
+{
+	auto difference = end - start;
+	start = position - difference / 2;
+	end = position + difference / 2;
+}
+
+AxisAlignedRectF Line::GetAxisAlignedBoundingBox() const
+{
+	auto minX = std::min(start.x, end.x);
+	auto minY = std::min(start.y, end.y);
+	return AxisAlignedRectF(minX, minY, std::max(start.x, end.x) - minX, std::max(start.y, end.y) - minY);
+}
+
 std::optional<Contact> Line::CastAgainstThis(const Line& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
 	return std::optional<Contact>();

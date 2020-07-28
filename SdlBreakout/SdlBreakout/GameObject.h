@@ -10,26 +10,17 @@ public:
 	Texture* getSprite();
 	void setSprite(Texture* value);
 
-	void SetPosition(Vector2F position)
-	{
-		collisionBounds.SetPosition(position);
-	}
-	void SetPosition(float x, float y)
-	{
-		collisionBounds.SetPosition(x, y);
-	}
-	const AxisAlignedRectF& GetCollisionBounds() const
-	{
-		return collisionBounds;
-	}
-
 	virtual void Update(float timeElapsed);
 
-	GameObject(AxisAlignedRectF collisionBounds);
-	~GameObject();
+	Shape* const collisionBounds;
+
+	GameObject(AxisAlignedRectF* collisionBounds);
+	~GameObject()
+	{
+		delete collisionBounds;
+	}
 
 protected:
-	AxisAlignedRectF collisionBounds;
 	Texture* sprite = NULL;
 };
 

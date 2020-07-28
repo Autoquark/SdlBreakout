@@ -133,3 +133,8 @@ std::optional<Contact> AxisAlignedRectF::CastAgainstThis(const Line& other, cons
 {
 	return std::optional<Contact>();
 }
+
+void AxisAlignedRectF::Translate(Vector2F amount)
+{
+	position += amount;
+}

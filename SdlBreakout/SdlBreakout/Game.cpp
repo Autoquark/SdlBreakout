@@ -24,6 +24,7 @@ Game& Game::GetInstance()
 
 void Game::Destroy(GameObject * gameObject)
 {
+	blocks.erase(std::find(blocks.begin(), blocks.end(), gameObject));
 	gameObjects.erase(std::find(gameObjects.begin(), gameObjects.end(), gameObject));
 	delete gameObject;
 }
@@ -47,7 +48,7 @@ int Game::Start()
 		for (int x = 240; x < 480; x += (int)gBlockTexture->GetSize().x)
 		{
 			blocks.push_back(new Block());
-			blocks.back()->SetPosition((float)x, (float)y);
+			blocks.back()->collisionBounds->Translate((float)x, (float)y);
 		}
 	}
 
@@ -58,10 +59,10 @@ int Game::Start()
 
 	paddle = new Paddle();
 	gameObjects.push_back(paddle);
-	gameObjects.back()->SetPosition(320, 440);
+	gameObjects.back()->collisionBounds->Translate(320, 440);
 
 	gameObjects.push_back(new Ball());
-	gameObjects.back()->SetPosition(320, 400);
+	gameObjects.back()->collisionBounds->Translate(320, 400);
 
 	bool quit = false;
 

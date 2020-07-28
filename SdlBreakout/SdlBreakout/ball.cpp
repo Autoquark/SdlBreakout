@@ -6,7 +6,7 @@
 #include "Vector2.h"
 
 
-Ball::Ball() : GameObject(AxisAlignedRectF{ 0, 0, 16, 16 })
+Ball::Ball() : GameObject(new AxisAlignedRectF{ 0, 0, 16, 16 })
 {
 	sprite = Game::GetInstance().gBallTexture;
 	velocity.x = -30;
@@ -25,8 +25,8 @@ void Ball::Update(float timeElapsed)
 	while (true)
 	{
 		auto paddle = game.paddle;
-		auto screenEdgeCollision = Collision::RectangleRectangleCast(GetCollisionBounds(), game.screenRect, remainingVelocity, Collision::InternalityFilter::Internal);
-		auto paddleCollision = Collision::RectangleRectangleCast(GetCollisionBounds(), paddle->GetCollisionBounds(), remainingVelocity, Collision::InternalityFilter::External);
+		auto screenEdgeCollision = collisionBounds->CastAgainst(game.screenRect, remainingVelocity, Shape::InternalityFilter::Internal);
+		auto paddleCollision = collisionBounds->CastAgainst(*paddle->collisionBounds, remainingVelocity, Shape::InternalityFilter::External);
 
 		std::vector<std::optional<Contact>> contacts = {
 			screenEdgeCollision,
@@ -35,13 +35,13 @@ void Ball::Update(float timeElapsed)
 
 		for (auto block : game.GetBlocks())
 		{
-			contacts.push_back(Collision::RectangleRectangleCast(GetCollisionBounds(), block->GetCollisionBounds(), remainingVelocity, Collision::InternalityFilter::External));
+			contacts.push_back(collisionBounds->CastAgainst(*block->collisionBounds, remainingVelocity, Shape::InternalityFilter::External));
 		}
 
 		auto index = Collision::FindClosestCollisionIndex(contacts);
 		if(index == -1)
 		{
-			collisionBounds.SetPosition(collisionBounds.TopLeft() + remainingVelocity);
+			collisionBounds->Translate(remainingVelocity);
 			break;
 		}
 
@@ -52,7 +52,7 @@ void Ball::Update(float timeElapsed)
 
 		auto collision = *contacts[index];
 		remainingVelocity *= 1 - (collision.distance / remainingVelocity.Magnitude());
-		collisionBounds.SetPosition(collision.centroid - (collisionBounds.size / 2.0f));
+		collisionBounds->SetCentre(collision.centroid);
 		remainingVelocity.Reflect(collision.normal);
 		velocity.Reflect(collision.normal);
 	}
