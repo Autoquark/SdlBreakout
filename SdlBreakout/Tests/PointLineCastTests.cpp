@@ -30,7 +30,7 @@ namespace Tests
 			Vector2F lineStart = Vector2F();
 			Vector2F lineEnd = Vector2F();
 
-			std::optional<PolygonContact> expectedResult;
+			std::optional<Contact> expectedResult;
 		};
 
 		void RunTestCase(const TestCase& testCase)
@@ -74,8 +74,8 @@ namespace Tests
 							Assert::IsTrue(hit.has_value(), message.c_str());
 							auto &expected = testCase.expectedResult.value();
 							auto &actual = hit.value();
-							Assert::AreEqual(expected.point, actual.point, message.c_str());
-							Assert::AreEqual(expected.centroid, actual.centroid, message.c_str());
+							AreEqual(expected.point, actual.point, Constants::FloatEqualityTolerance, message.c_str());
+							AreEqual(expected.centroid, actual.centroid, Constants::FloatEqualityTolerance, message.c_str());
 							Assert::AreEqual((swapLineEnds ^ swapPointEnds ^ swapPointAndLine) ? !expected.side : expected.side, actual.side, message.c_str());
 
 							// Don't check the normal if the line & point are swapped as it's not trivially calculable from the normal in the original case
@@ -167,7 +167,7 @@ namespace Tests
 			testCase.lineEnd = Vector2F(0, 3);
 
 			auto expectedPoint = Vector2F(0, 2);
-			testCase.expectedResult = PolygonContact(Vector2F(-1, 0).Normalised(), expectedPoint, false, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint), testCase.lineStart, testCase.lineEnd);
+			testCase.expectedResult = Contact(Vector2F(-1, 0).Normalised(), expectedPoint, false, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint));
 
 			RunTestCase(testCase);
 		}
@@ -182,7 +182,7 @@ namespace Tests
 			testCase.lineEnd = Vector2F(0, 2);
 
 			auto expectedPoint = Vector2F(0.5, 1);
-			testCase.expectedResult = PolygonContact(Vector2F(-1, -0.5).Normalised(), expectedPoint, false, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint), testCase.lineStart, testCase.lineEnd);
+			testCase.expectedResult = Contact(Vector2F(-1, -0.5).Normalised(), expectedPoint, false, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint));
 
 			RunTestCase(testCase);
 		}
@@ -211,6 +211,57 @@ namespace Tests
 			testCase.lineEnd = Vector2F(1, 3);
 
 			testCase.expectedResult = std::nullopt;
+
+			RunTestCase(testCase);
+		}
+
+		// Regression test for an issue where, due to limited precision, a collision with a vertical line could fail to be detected because the calculated x was not precisely the same as the line's
+		// x value
+		TEST_METHOD(VerticalLinePrecisionProblemTest)
+		{
+			TestCase testCase;
+			testCase.pointStart = Vector2F(229.41f, 431);
+			testCase.pointEnd = Vector2F(229.41f, 447);
+
+			testCase.lineStart = Vector2F(293, 456);
+			testCase.lineEnd = Vector2F(221, 439);
+
+			auto expectedPoint = Vector2F(229.41f, 440.985694f);
+			testCase.expectedResult = Contact(Vector2F(0.229793f, -0.97324f), expectedPoint, false, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint));
+
+			RunTestCase(testCase);
+		}
+
+		// TODO: Check if there are issues with almost vertical lines
+
+		// TODO: Check if there are issues with horizontal lines
+
+		TEST_METHOD(StartingPreciselyOnLineTest)
+		{
+			TestCase testCase;
+			testCase.pointStart = Vector2F(0, 5);
+			testCase.pointEnd = Vector2F(5, 5);
+
+			testCase.lineStart = Vector2F(0, 0);
+			testCase.lineEnd = Vector2F(0, 10);
+
+			auto expectedPoint = Vector2F(0, 5);
+			testCase.expectedResult = Contact(Vector2F(-1, 0), expectedPoint, false, 0);
+
+			RunTestCase(testCase);
+		}
+
+		TEST_METHOD(EndingPreciselyOnLineTest)
+		{
+			TestCase testCase;
+			testCase.pointStart = Vector2F(-5, 5);
+			testCase.pointEnd = Vector2F(0, 5);
+
+			testCase.lineStart = Vector2F(0, 0);
+			testCase.lineEnd = Vector2F(0, 10);
+
+			auto expectedPoint = Vector2F(0, 5);
+			testCase.expectedResult = Contact(Vector2F(-1, 0), expectedPoint, false, 0);
 
 			RunTestCase(testCase);
 		}

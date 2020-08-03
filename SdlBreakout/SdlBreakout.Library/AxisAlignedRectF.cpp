@@ -67,7 +67,12 @@ std::optional<Contact> AxisAlignedRectF::CastAgainstThis(const AxisAlignedRectF&
 	if (contact.side)
 	{
 		// For an external collision, cast a point from the position of the moving rect at collision to the centre of the stationary rect
-		point = CastAgainstThis(Point(contact.centroid), Centre() - contact.centroid, InternalityFilter::External).value().point;
+		auto temp = CastAgainstThis(Point(contact.centroid), Centre() - contact.centroid, InternalityFilter::External);
+		if (!temp.has_value())
+		{
+			auto blah = 0;
+		}
+		point = temp.value().point;
 	}
 	else
 	{

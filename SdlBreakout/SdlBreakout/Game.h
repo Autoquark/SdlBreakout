@@ -38,6 +38,7 @@ public:
 
 	// Special game objects
 	Paddle* paddle = NULL;
+	Ball* ball = NULL;
 
 	int Start();
 

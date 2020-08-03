@@ -8,8 +8,6 @@ public:
 	~Ball();
 
 	void Update(float timeElapsed) override;
-
-private:
 	Vector2F velocity;
 };
 

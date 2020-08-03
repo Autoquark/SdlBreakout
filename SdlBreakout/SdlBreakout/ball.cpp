@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include <algorithm>
+#include <iostream>
 #include "ball.h"
 #include "game.h"
 #include "Collision.h"
@@ -48,6 +49,11 @@ void Ball::Update(float timeElapsed)
 		if (index > 1)
 		{
 			game.GetBlocks()[index - 2]->OnBallHit(*this);
+		}
+
+		if (index == 1)
+		{
+			std::cout << "Ball hit paddle";
 		}
 
 		auto collision = *contacts[index];

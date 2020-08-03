@@ -4,7 +4,6 @@
 #include <vector>
 #include "Contact.h"
 #include "OptionalUtilities.h"
-//#include "Collision.h"
 
 class CircleF;
 class AxisAlignedRectF;
@@ -23,8 +22,6 @@ public:
 
 	// Return the first contact with the given shape, if any, when this shape is moved along the given vector
 	virtual std::optional<Contact> CastAgainst(const Shape& other, const Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both) const = 0;
-
-	//virtual std::optional<PolygonContact> CastAgainstRect(const AxisAlignedRectF& other, const Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both) const = 0;
 
 	// Return the given axis aligned rectangle's first contact with this shape, if any, when the other shape is moved along the given vector
 	virtual std::optional<Contact> CastAgainstThis(const AxisAlignedRectF& other, const Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both) const = 0;

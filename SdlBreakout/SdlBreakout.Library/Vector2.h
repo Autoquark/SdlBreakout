@@ -178,6 +178,19 @@ public:
 		return clone;
 	}
 
+	void Scale(float magnitude)
+	{
+		Normalise();
+		*this *= magnitude;
+	}
+
+	Vector2 Scaled(float magnitude)
+	{
+		auto clone = Vector2(*this);
+		clone.Scale(magnitude);
+		return clone;
+	}
+
 	ElementType x;
 	ElementType y;
 };

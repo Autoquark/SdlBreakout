@@ -15,7 +15,7 @@ public:
 	Vector2F point;
 	// The position of the centre of the shape when the collision occurred
 	Vector2F centroid;
-	// Value indicating which side of the stationary line was hit. A true value indicates that the moving object originated to the right of the vector defining the line hit.
+	// Value indicating which side of the stationary line was hit. A true value indicates that the moving object originated to the left of the vector defining the line hit.
 	// For a collision against a shape, a true value always indicates an external collision and a false value an internal one
 	bool side;
 	// Distance the object moves before colliding

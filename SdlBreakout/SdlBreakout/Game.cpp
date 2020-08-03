@@ -61,7 +61,8 @@ int Game::Start()
 	gameObjects.push_back(paddle);
 	gameObjects.back()->collisionBounds->Translate(320, 440);
 
-	gameObjects.push_back(new Ball());
+	ball = new Ball();
+	gameObjects.push_back(ball);
 	gameObjects.back()->collisionBounds->Translate(320, 400);
 
 	bool quit = false;
@@ -94,6 +95,15 @@ int Game::Start()
 		for (auto gameObject : gameObjects)
 		{
 			gameObject->Update(elapsed);
+		}
+
+		// Debug tool: Speed up when space held
+		if (SDL_GetKeyboardState(NULL)[SDL_SCANCODE_SPACE])
+		{
+			for (auto gameObject : gameObjects)
+			{
+				gameObject->Update(elapsed);
+			}
 		}
 
 		lastUpdateTime = time;

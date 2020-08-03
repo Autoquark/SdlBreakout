@@ -61,20 +61,32 @@ std::optional<Contact> Line::CastAgainstThis(const Point& other, const Vector2F&
 	auto denominator = line.xCoefficient * pointTrajectory.yCoefficient - pointTrajectory.xCoefficient * line.yCoefficient;
 
 	float x;
-	// Special case: two segments of the same line
+	// Special case: parallel lines. Could be segments of the same line, but we don't count that as a collision
 	if (denominator == 0)
 	{
 		return std::nullopt;
 	}
 	else
 	{
-		x = (pointTrajectory.constant * line.yCoefficient - line.constant * pointTrajectory.yCoefficient)
-			/ denominator;
+		if (pointTrajectory.minX == pointTrajectory.maxX)
+		{
+			x = pointTrajectory.minX;
+		}
+		else if (line.minX == line.maxX)
+		{
+			x = line.minX;
+		}
+		else
+		{
+			x = (pointTrajectory.constant * line.yCoefficient - line.constant * pointTrajectory.yCoefficient) / denominator;
+		}
 	}
 
 	float y;
+	// This will not work for a vertical line
 	if (!line.TryYFromX(x, y))
 	{
+		// This must be a vertical line so this must work
 		pointTrajectory.TryYFromX(x, y);
 	}
 
