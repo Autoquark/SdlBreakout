@@ -33,8 +33,8 @@ namespace Microsoft
 				value.append(L", normal: ");
 				value.append(ToString(t.normal));
 
-				value.append(L", side: ");
-				value.append(ToString(t.side));
+				value.append(L", stationarySide: ");
+				value.append(ToString(t.stationarySide));
 
 				value.append(L", distance: ");
 				value.append(ToString(t.distance));
@@ -54,8 +54,8 @@ namespace Microsoft
 				value.append(L", normal: ");
 				value.append(ToString(t.normal));
 
-				value.append(L", side: ");
-				value.append(ToString(t.side));
+				value.append(L", stationarySide: ");
+				value.append(ToString(t.stationarySide));
 
 				value.append(L", distance: ");
 				value.append(ToString(t.distance));

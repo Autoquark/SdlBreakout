@@ -10,16 +10,22 @@ class PolygonContact : public Contact
 public:
 	PolygonContact(const Vector2F& normal,
 		const Vector2F& point,
-		const bool side,
+		const bool stationarySide,
+		const bool movingSide,
 		const float distance,
 		const Vector2F collidedLineStart,
 		const Vector2F collidedLineEnd,
-		const Vector2F& centroid) : Contact(normal, point, side, distance, centroid), collidedLineStart(collidedLineStart), collidedLineEnd(collidedLineEnd)
+		const Vector2F& centroid) : Contact(normal, point, stationarySide, movingSide, distance, centroid), collidedLineStart(collidedLineStart), collidedLineEnd(collidedLineEnd)
 	{
 	}
 
-	PolygonContact(const Vector2F& normal, const Vector2F& point, const bool side, const float distance, const Vector2F collidedLineStart, const Vector2F collidedLineEnd)
-		: Contact(normal, point, side, distance), collidedLineStart(collidedLineStart), collidedLineEnd(collidedLineEnd)
+	PolygonContact(const Vector2F& normal,
+		const Vector2F& point,
+		const bool stationarySide,
+		const bool movingSide, const float distance,
+		const Vector2F collidedLineStart,
+		const Vector2F collidedLineEnd)
+		: Contact(normal, point, stationarySide, movingSide, distance), collidedLineStart(collidedLineStart), collidedLineEnd(collidedLineEnd)
 	{
 	}
 

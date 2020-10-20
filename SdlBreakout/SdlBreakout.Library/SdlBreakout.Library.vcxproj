@@ -171,7 +171,6 @@
   <ItemGroup>
     <ClCompile Include="AxisAlignedRectF.cpp" />
     <ClCompile Include="CircleF.cpp" />
-    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Contact.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Line.cpp" />

@@ -7,26 +7,31 @@
 
 std::optional<Contact> Line::CastAgainst(const Shape& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
-	return std::optional<Contact>();
+	throw new std::exception();
 }
 
 std::optional<Contact> Line::CastAgainstThis(const AxisAlignedRectF& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
-	return std::optional<Contact>();
+	throw new std::exception();
 }
 
 std::optional<Contact> Line::CastAgainstThis(const CircleF& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
-	// Can currently only handle horizontal or vertical lines
+	// Can currently only handle horizontal or vertical lines; Need rotated rectangle type for other cases
 	if (start.x != end.x && start.y != end.y)
 	{
 		throw std::exception();
 	}
 
+	// Reduce the circle to a point, and expand the line in the two perpendicular directions to form a rectangle.
+	// Also check against two circles placed at either end of the line with radius equal to the radius of the original circle.
 	auto circleEndCentre = other.centre + movement;
 	auto linePerpendicular = (end - start).Rotated(90)
 		.Normalised();
+
+	// Create a rectangle that's long in the horizontal axis
 	auto rect = AxisAlignedRectF::FromCentre(Vector2F::LinearInterpolate(start, end, 0.5f), Vector2F::DistanceBetween(start, end), other.radius * 2);
+	// If this is a vertical line, rotate the rectangle
 	if (start.x == end.x)
 	{
 		rect.Rotate90();
@@ -50,7 +55,7 @@ std::optional<Contact> Line::CastAgainstThis(const CircleF& other, const Vector2
 	normal.Rotate(90);
 	auto dotProduct = normal.DotProduct(circleEndCentre - other.centre);
 
-	return Contact(contact.normal, contact.point + other.radius * movement.Normalised(), dotProduct < 0, contact.distance, contact.point);
+	return Contact(contact.normal, contact.point + other.radius * movement.Normalised(), dotProduct < 0, true /*TODO: Case where circle envelops line*/,  contact.distance, contact.point);
 }
 
 std::optional<Contact> Line::CastAgainstThis(const Point& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
@@ -104,7 +109,7 @@ std::optional<Contact> Line::CastAgainstThis(const Point& other, const Vector2F&
 	normal = normal * dotProduct;
 	normal.Normalise();
 
-	return Contact(-normal, contactPoint, dotProduct < 0, Vector2F::DistanceBetween(contactPoint, other));
+	return Contact(-normal, contactPoint, dotProduct < 0, true, Vector2F::DistanceBetween(contactPoint, other));
 }
 
 void Line::Translate(Vector2F amount)
@@ -129,5 +134,5 @@ AxisAlignedRectF Line::GetAxisAlignedBoundingBox() const
 
 std::optional<Contact> Line::CastAgainstThis(const Line& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
-	return std::optional<Contact>();
+	throw new std::exception();
 }

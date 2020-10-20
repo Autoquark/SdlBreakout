@@ -10,12 +10,21 @@ std::optional<Contact> CircleF::CastAgainst(const Shape& other, const Vector2F& 
 
 std::optional<Contact> CircleF::CastAgainstThis(const AxisAlignedRectF& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
-    return std::optional<Contact>();
+	/*auto contactOptional = other.CastAgainstThis(*this, -movement, internalityFilter);
+	if (!contactOptional)
+	{
+		return std::nullopt;
+	}
+	auto contact = contactOptional.value();
+	return Contact(-contact.normal,
+		other.Centre() - Vector2F::Between(centre, contact.point),
+		contact.stationarySide)*/
+	throw new std::exception();
 }
 
 std::optional<Contact> CircleF::CastAgainstThis(const CircleF& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
-    return std::optional<Contact>();
+	throw new std::exception();
 }
 
 std::optional<Contact> CircleF::CastAgainstThis(const Point& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
@@ -44,13 +53,13 @@ std::optional<Contact> CircleF::CastAgainstThis(const Point& other, const Vector
 		// (since t1 uses -b - discriminant)
 		// This must be an external hit
 		auto point = Vector2F::LinearInterpolate(other, pointEndPosition, t1);
-		return Contact((point - centre).Normalised(), point, true, (point - other).Magnitude());
+		return Contact((point - centre).Normalised(), point, true, true, (point - other).Magnitude());
 	}
 	else if (t2 >= 0 && t2 <= 1 && internalityFilter != InternalityFilter::External)
 	{
 		// Internal hit
 		auto point = Vector2F::LinearInterpolate(other, pointEndPosition, t2);
-		return Contact((centre - point).Normalised(), point, false, (point - other).Magnitude());
+		return Contact((centre - point).Normalised(), point, false, true, (point - other).Magnitude());
 	}
 
 	return std::nullopt;
@@ -58,7 +67,7 @@ std::optional<Contact> CircleF::CastAgainstThis(const Point& other, const Vector
 
 std::optional<Contact> CircleF::CastAgainstThis(const Line& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
-    return std::optional<Contact>();
+	throw new std::exception();
 }
 
 AxisAlignedRectF CircleF::GetAxisAlignedBoundingBox() const

@@ -10,6 +10,10 @@ template<class ElementType>
 struct Vector2
 {
 public:
+	static Vector2 Between(const Vector2& first, const Vector2& second)
+	{
+		return second - first;
+	}
 
 	static float DistanceBetween(const Vector2& first, const Vector2& second)
 	{
@@ -20,6 +24,11 @@ public:
 	{
 		proportion = std::clamp(proportion, 0.0f, 1.0f);
 		return first + proportion * (second - first);
+	}
+
+	static Vector2 Up()
+	{
+		return Vector2(0, -1);
 	}
 
 	Vector2() = default;
@@ -120,6 +129,26 @@ public:
 		return "(" + std::to_string(x) + "," + std::to_string(y) + ")";
 	}
 
+	float ClockwiseAngleFromUp() const
+	{
+		return Up().ClockwiseAngleToDegrees(*this);
+	}
+
+	float SignedAngleFromUp() const
+	{
+		return Up().SignedAngleToDegrees(*this);
+	}
+
+	float ClockwiseAngleToDegrees(Vector2 other) const
+	{
+		auto signedValue = SignedAngleToDegrees(other);
+		if (signedValue < 0)
+		{
+			signedValue += 360;
+		}
+		return signedValue;
+	}
+
 	// Returns the smallest rotation in degrees which makes this vector parallel to the given vector. A positive value indicates a clockwise rotation, and a negative value a counterclockwise one
 	float SignedAngleToDegrees(Vector2 other) const
 	{
@@ -184,7 +213,7 @@ public:
 		*this *= magnitude;
 	}
 
-	Vector2 Scaled(float magnitude)
+	Vector2 Scaled(float magnitude) const
 	{
 		auto clone = Vector2(*this);
 		clone.Scale(magnitude);

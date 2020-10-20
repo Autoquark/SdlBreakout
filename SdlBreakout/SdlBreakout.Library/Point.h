@@ -6,6 +6,8 @@ class AxisAlignedRectF;
 class CircleF;
 class Line;
 
+// Represents a point with a location but no size.
+// Collisions with a Point are always considered to be with the exterior of the Point
 class Point : public Shape
 {
 public:

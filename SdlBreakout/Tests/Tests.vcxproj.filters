@@ -41,23 +41,26 @@
     <ClCompile Include="Assert.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CircleLineCastTests.cpp">
-      <Filter>Source Files\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="PointCircleCastTests.cpp">
-      <Filter>Source Files\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="PointLineCastTests.cpp">
-      <Filter>Source Files\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="PointRectangleCastTests.cpp">
-      <Filter>Source Files\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="RectangleRectangleCastTests.cpp">
-      <Filter>Source Files\Collision</Filter>
-    </ClCompile>
     <ClCompile Include="SignedAngleToDegreesTests.cpp">
       <Filter>Source Files\Vector2</Filter>
+    </ClCompile>
+    <ClCompile Include="CircleAgainstLineCastTests.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="PointAgainstCircleCastTests.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="PointAgainstLineCastTests.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="PointAgainstRectangleCastTests.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="RectangleAgainstRectangleCastTests.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="CircleAgainstRectangleCastTests.cpp">
+      <Filter>Source Files\Collision</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -13,7 +13,7 @@ using namespace std::string_literals;
 
 namespace Tests
 {
-	TEST_CLASS(RectangleRectangleCastTests)
+	TEST_CLASS(RectangleAgainstRectangleCastTests)
 	{
 		struct TestCase
 		{
@@ -27,7 +27,6 @@ namespace Tests
 		void RunTestCase(TestCase testCase)
 		{
 			auto hit = testCase.movingRectangle.CastAgainst(testCase.stationaryRectangle, testCase.motion);
-			//auto hit = Collision::RectangleRectangleCast(testCase.movingRectangle, testCase.stationaryRectangle, testCase.motion);
 
 			if (!testCase.expectedResult.has_value())
 			{
@@ -40,7 +39,7 @@ namespace Tests
 				auto &actual = hit.value();
 				Assert::AreEqual(expected.point, actual.point);
 				Assert::AreEqual(expected.centroid, actual.centroid);
-				Assert::AreEqual(expected.side, actual.side);
+				Assert::AreEqual(expected.stationarySide, actual.stationarySide);
 				AreEqual(expected.normal, actual.normal, Constants::FloatEqualityTolerance);
 			}
 		}
@@ -56,6 +55,7 @@ namespace Tests
 			auto expectedPoint = Vector2F(1, 4);
 			testCase.expectedResult = PolygonContact(Vector2F(-1, 0),
 				expectedPoint,
+				true,
 				true,
 				Vector2F::DistanceBetween(testCase.movingRectangle.Centre(), expectedPoint), //TODO: Centroid, not point
 				testCase.stationaryRectangle.BottomLeft(),
@@ -76,6 +76,7 @@ namespace Tests
 			testCase.expectedResult = PolygonContact(Vector2F(-1, 0),
 				expectedPoint,
 				false,
+				true,
 				Vector2F::DistanceBetween(testCase.movingRectangle.Centre(), expectedPoint),
 				testCase.stationaryRectangle.TopRight(),
 				testCase.stationaryRectangle.BottomRight(),

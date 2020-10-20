@@ -11,7 +11,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace Tests
 {
-	TEST_CLASS(PointCircleCastTests)
+	TEST_CLASS(PointAgainstCircleCastTests)
 	{
 		struct TestCase
 		{
@@ -38,7 +38,7 @@ namespace Tests
 				auto& actual = hit.value();
 				Assert::AreEqual(expected.point, actual.point);
 				Assert::AreEqual(expected.centroid, actual.centroid);
-				Assert::AreEqual(expected.side, actual.side);
+				Assert::AreEqual(expected.stationarySide, actual.stationarySide);
 				Assert::AreEqual(expected.distance, actual.distance);
 
 				AreEqual(expected.normal, actual.normal, Constants::FloatEqualityTolerance);
@@ -53,7 +53,7 @@ namespace Tests
 			testCase.pointStart = Vector2F(-2, 0);
 			testCase.pointEnd = Vector2F(0, 0);
 
-			testCase.expectedResult = Contact(Vector2F(-1, 0), Vector2F(-1, 0), true, 1);
+			testCase.expectedResult = Contact(Vector2F(-1, 0), Vector2F(-1, 0), true, true, 1);
 
 			RunTestCase(testCase);
 		}
@@ -76,7 +76,7 @@ namespace Tests
 			testCase.pointStart = Vector2F(0, 0);
 			testCase.pointEnd = Vector2F(2, 0);
 
-			testCase.expectedResult = Contact(Vector2F(-1, 0), Vector2F(1, 0), false, 1);
+			testCase.expectedResult = Contact(Vector2F(-1, 0), Vector2F(1, 0), false, true, 1);
 
 			RunTestCase(testCase);
 		}
@@ -88,7 +88,7 @@ namespace Tests
 			testCase.pointStart = Vector2F(-2, 0);
 			testCase.pointEnd = Vector2F(2, 0);
 
-			testCase.expectedResult = Contact(Vector2F(-1, 0), Vector2F(-1, 0), true, 1);
+			testCase.expectedResult = Contact(Vector2F(-1, 0), Vector2F(-1, 0), true, true, 1);
 
 			RunTestCase(testCase);
 		}
@@ -101,7 +101,7 @@ namespace Tests
 			testCase.pointEnd = Vector2F(2, 0);
 			testCase.internalityFilter = Shape::InternalityFilter::Internal;
 
-			testCase.expectedResult = Contact(Vector2F(-1, 0), Vector2F(1, 0), false, 3);
+			testCase.expectedResult = Contact(Vector2F(-1, 0), Vector2F(1, 0), false, true, 3);
 
 			RunTestCase(testCase);
 		}

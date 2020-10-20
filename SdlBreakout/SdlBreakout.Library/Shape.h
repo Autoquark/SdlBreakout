@@ -61,7 +61,7 @@ public:
 				continue;
 			}
 			auto contact = *nullable;
-			if ((contact.side && internalityFilter == InternalityFilter::Internal) || (!contact.side && internalityFilter == InternalityFilter::External))
+			if ((contact.stationarySide && internalityFilter == InternalityFilter::Internal) || (!contact.stationarySide && internalityFilter == InternalityFilter::External))
 			{
 				continue;
 			}

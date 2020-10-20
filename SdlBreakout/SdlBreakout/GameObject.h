@@ -14,7 +14,7 @@ public:
 
 	Shape* const collisionBounds;
 
-	GameObject(AxisAlignedRectF* collisionBounds);
+	GameObject(Shape* collisionBounds) : collisionBounds(collisionBounds) {}
 	~GameObject()
 	{
 		delete collisionBounds;

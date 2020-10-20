@@ -161,10 +161,11 @@
     <ClInclude Include="ToString.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CircleLineCastTests.cpp" />
-    <ClCompile Include="PointCircleCastTests.cpp" />
-    <ClCompile Include="PointRectangleCastTests.cpp" />
-    <ClCompile Include="RectangleRectangleCastTests.cpp" />
+    <ClCompile Include="CircleAgainstLineCastTests.cpp" />
+    <ClCompile Include="CircleAgainstRectangleCastTests.cpp" />
+    <ClCompile Include="PointAgainstCircleCastTests.cpp" />
+    <ClCompile Include="PointAgainstRectangleCastTests.cpp" />
+    <ClCompile Include="RectangleAgainstRectangleCastTests.cpp" />
     <ClCompile Include="Assert.cpp" />
     <ClCompile Include="SignedAngleToDegreesTests.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -173,7 +174,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="PointLineCastTests.cpp" />
+    <ClCompile Include="PointAgainstLineCastTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SdlBreakout.Library\SdlBreakout.Library.vcxproj">

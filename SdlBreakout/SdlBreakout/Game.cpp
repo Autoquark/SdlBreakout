@@ -129,7 +129,7 @@ bool Game::loadMedia()
 		success = false;
 	}
 
-	gBallTexture = loadTexture("Images\\squareBall.png");
+	gBallTexture = loadTexture("Images\\ball.png");
 	if (gBallTexture == NULL)
 	{
 		printf("Failed to load PNG image!\n");

@@ -14,7 +14,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace Tests
 {
-	TEST_CLASS(PointRectangleCastTests)
+	TEST_CLASS(PointAgainstRectangleCastTests)
 	{
 		struct TestCase
 		{
@@ -42,7 +42,7 @@ namespace Tests
 				auto& actual = hit.value();
 				Assert::AreEqual(expected.point, actual.point);
 				Assert::AreEqual(expected.centroid, actual.centroid);
-				Assert::AreEqual(expected.side, actual.side);
+				Assert::AreEqual(expected.stationarySide, actual.stationarySide);
 				Assert::AreEqual(expected.distance, actual.distance);
 
 				AreEqual(expected.normal, actual.normal, Constants::FloatEqualityTolerance);
@@ -71,7 +71,13 @@ namespace Tests
 			testCase.internalityFilter = Shape::InternalityFilter::Both;
 
 			auto expectedPoint = Vector2F(0, 4 + 2.0f / 3);
-			testCase.expectedResult = PolygonContact(Vector2F(-1, 0), expectedPoint, true, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint), testCase.rectangle.BottomLeft(), testCase.rectangle.TopLeft());
+			testCase.expectedResult = PolygonContact(Vector2F(-1, 0),
+				expectedPoint,
+				true,
+				true,
+				Vector2F::DistanceBetween(testCase.pointStart, expectedPoint),
+				testCase.rectangle.BottomLeft(),
+				testCase.rectangle.TopLeft());
 
 			RunTestCase(testCase);
 		}
@@ -85,7 +91,13 @@ namespace Tests
 			testCase.internalityFilter = Shape::InternalityFilter::Both;
 
 			auto expectedPoint = Vector2F(1, 4);
-			testCase.expectedResult = PolygonContact(Vector2F(-1, 0), expectedPoint, true, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint), testCase.rectangle.BottomLeft(), testCase.rectangle.TopLeft());
+			testCase.expectedResult = PolygonContact(Vector2F(-1, 0),
+				expectedPoint,
+				true,
+				true,
+				Vector2F::DistanceBetween(testCase.pointStart, expectedPoint),
+				testCase.rectangle.BottomLeft(),
+				testCase.rectangle.TopLeft());
 
 			RunTestCase(testCase);
 		}
@@ -99,7 +111,13 @@ namespace Tests
 			testCase.internalityFilter = Shape::InternalityFilter::Both;
 
 			auto expectedPoint = Vector2F(3, 2);
-			testCase.expectedResult = PolygonContact(Vector2F(0, 1).Normalised(), expectedPoint, true, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint), testCase.rectangle.BottomRight(), testCase.rectangle.BottomLeft());
+			testCase.expectedResult = PolygonContact(Vector2F(0, 1).Normalised(),
+				expectedPoint,
+				true,
+				true,
+				Vector2F::DistanceBetween(testCase.pointStart, expectedPoint),
+				testCase.rectangle.BottomRight(),
+				testCase.rectangle.BottomLeft());
 
 			RunTestCase(testCase);
 		}
@@ -113,7 +131,13 @@ namespace Tests
 			testCase.internalityFilter = Shape::InternalityFilter::Internal;
 
 			auto expectedPoint = Vector2F(4, 1);
-			testCase.expectedResult = PolygonContact(Vector2F(-1, 0).Normalised(), expectedPoint, false, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint), testCase.rectangle.TopRight(), testCase.rectangle.BottomRight());
+			testCase.expectedResult = PolygonContact(Vector2F(-1, 0).Normalised(),
+				expectedPoint,
+				false,
+				true,
+				Vector2F::DistanceBetween(testCase.pointStart, expectedPoint),
+				testCase.rectangle.TopRight(),
+				testCase.rectangle.BottomRight());
 
 			RunTestCase(testCase);
 		}
