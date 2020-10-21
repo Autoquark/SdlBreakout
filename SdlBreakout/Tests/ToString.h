@@ -2,7 +2,6 @@
 #include "stdafx.h"
 #include <optional>
 #include "Vector2.h"
-#include "PolygonContact.h"
 #include "Contact.h"
 
 namespace Microsoft
@@ -42,35 +41,6 @@ namespace Microsoft
 				value.append(L")");
 				return value;
 			}
-
-			template<> inline std::wstring ToString<PolygonContact>(const PolygonContact& t)
-			{
-				std::wstring value = L"(point: ";
-				value.append(ToString(t.point));
-
-				value.append(L", centroid: ");
-				value.append(ToString(t.centroid));
-
-				value.append(L", normal: ");
-				value.append(ToString(t.normal));
-
-				value.append(L", stationarySide: ");
-				value.append(ToString(t.stationarySide));
-
-				value.append(L", distance: ");
-				value.append(ToString(t.distance));
-
-				value.append(L", collidedLineStart: ");
-				value.append(ToString(t.collidedLineStart));
-
-				value.append(L", collidedLineEnd: ");
-				value.append(ToString(t.collidedLineEnd));
-
-				value.append(L")");
-
-				return value;
-			}
-
 
 			template<typename T> inline std::wstring ToString(const std::optional<T>& t)
 			{

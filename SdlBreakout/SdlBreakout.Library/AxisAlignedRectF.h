@@ -28,6 +28,8 @@ public:
 
 	AxisAlignedRectF(Vector2F position, Vector2F size) : position(position), size(size)
 	{
+		assert(size.x >= 0);
+		assert(size.y >= 0);
 	}
 
 	float Top() const

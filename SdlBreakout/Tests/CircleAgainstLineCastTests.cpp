@@ -1,7 +1,6 @@
 #include "stdafx.h"
 
 #include "CircleF.h"
-#include "Collision.h"
 #include "ToString.h"
 #include "FloatCompare.h"
 #include "Assert.h"

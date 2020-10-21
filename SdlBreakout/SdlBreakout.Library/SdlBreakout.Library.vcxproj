@@ -153,14 +153,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CircleF.h" />
-    <ClInclude Include="Collision.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Contact.h" />
     <ClInclude Include="GeneralFormLine.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="OptionalUtilities.h" />
     <ClInclude Include="Point.h" />
-    <ClInclude Include="PolygonContact.h" />
     <ClInclude Include="AxisAlignedRectF.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="stdafx.h" />
@@ -175,7 +173,6 @@
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="Point.cpp" />
-    <ClCompile Include="PolygonContact.cpp" />
     <ClCompile Include="Shape.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

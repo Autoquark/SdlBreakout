@@ -49,6 +49,16 @@ public:
 		Translate(Vector2F(x, y));
 	}
 
+	// Given a Contact resulting from a collision between an object A making movement M and stationary object B, returns the collision that would result from object B making movement -M.
+	static Contact InvertContact(const Contact& contact, const Vector2F& movement)
+	{
+		return Contact(-contact.normal,
+			contact.point - movement.Scaled(contact.distance),
+			contact.movingSide,
+			contact.stationarySide,
+			contact.distance);
+	}
+
 	template<class ElementType>
 	static int FindClosestCollisionIndex(const std::vector<ElementType>& contacts, const InternalityFilter& internalityFilter = InternalityFilter::Both)
 	{

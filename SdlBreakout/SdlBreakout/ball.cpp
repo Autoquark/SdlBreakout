@@ -3,7 +3,6 @@
 #include <iostream>
 #include "ball.h"
 #include "game.h"
-#include "Collision.h"
 #include "Vector2.h"
 
 
@@ -39,7 +38,7 @@ void Ball::Update(float timeElapsed)
 			contacts.push_back(collisionBounds->CastAgainst(*block->collisionBounds, remainingVelocity, Shape::InternalityFilter::External));
 		}
 
-		auto index = Collision::FindClosestCollisionIndex(contacts);
+		auto index = Shape::FindClosestCollisionIndex(contacts);
 		if(index == -1)
 		{
 			collisionBounds->Translate(remainingVelocity);

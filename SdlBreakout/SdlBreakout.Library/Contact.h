@@ -1,14 +1,12 @@
 #pragma once
+
+#include "stdafx.h"
 #include "Vector2.h"
+#include <assert.h>
 
 struct Contact
 {
 public:
-	/*static bool ApproxEquals(const Contact& lhs, const Contact& rhs, const float tolerance)
-	{
-		return 
-	}*/
-
 	// Normal of the collision
 	Vector2F normal;
 	// The point at which the objects touch
@@ -39,8 +37,10 @@ public:
 	}
 
 	Contact(const Vector2F& normal, const Vector2F& point, const bool stationarySide, const bool movingSide, const float distance, const Vector2F& centroid)
-		: normal(normal), point(point), stationarySide(stationarySide), distance(distance), centroid(centroid)
+		: normal(normal), point(point), stationarySide(stationarySide), movingSide(movingSide), distance(distance), centroid(centroid)
 	{
+		// Check for inside on inside collisions which are impossible
+		assert(stationarySide || movingSide);
 	}
 
 	Contact(const Vector2F& normal, const Vector2F& point, const bool stationarySide, const bool movingSide, const float distance)

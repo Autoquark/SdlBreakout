@@ -3,7 +3,6 @@
 #include <optional>
 #include "AxisAlignedRectF.h"
 #include "Contact.h"
-#include "Collision.h"
 #include "ToString.h"
 #include "Assert.h"
 #include "Constants.h"
@@ -21,7 +20,7 @@ namespace Tests
 			AxisAlignedRectF movingRectangle = AxisAlignedRectF(0, 0, 0, 0);
 			Vector2F motion = Vector2F(0, 0);
 
-			std::optional<PolygonContact> expectedResult;
+			std::optional<Contact> expectedResult;
 		};
 
 		void RunTestCase(TestCase testCase)
@@ -40,6 +39,7 @@ namespace Tests
 				Assert::AreEqual(expected.point, actual.point);
 				Assert::AreEqual(expected.centroid, actual.centroid);
 				Assert::AreEqual(expected.stationarySide, actual.stationarySide);
+				Assert::AreEqual(expected.movingSide, actual.movingSide);
 				AreEqual(expected.normal, actual.normal, Constants::FloatEqualityTolerance);
 			}
 		}
@@ -53,13 +53,11 @@ namespace Tests
 			testCase.motion = Vector2F(2, 0);
 
 			auto expectedPoint = Vector2F(1, 4);
-			testCase.expectedResult = PolygonContact(Vector2F(-1, 0),
+			testCase.expectedResult = Contact(Vector2F(-1, 0),
 				expectedPoint,
 				true,
 				true,
 				Vector2F::DistanceBetween(testCase.movingRectangle.Centre(), expectedPoint), //TODO: Centroid, not point
-				testCase.stationaryRectangle.BottomLeft(),
-				testCase.stationaryRectangle.TopLeft(),
 				Vector2F(0.5, 4.5));
 
 			RunTestCase(testCase);
@@ -73,13 +71,47 @@ namespace Tests
 			testCase.motion = Vector2F(2, 0);
 
 			auto expectedPoint = Vector2F(2, 0);
-			testCase.expectedResult = PolygonContact(Vector2F(-1, 0),
+			testCase.expectedResult = Contact(Vector2F(-1, 0),
 				expectedPoint,
 				false,
 				true,
 				Vector2F::DistanceBetween(testCase.movingRectangle.Centre(), expectedPoint),
-				testCase.stationaryRectangle.TopRight(),
-				testCase.stationaryRectangle.BottomRight(),
+				Vector2F(1, 0));
+
+			RunTestCase(testCase);
+		}
+
+		TEST_METHOD(RightToLeftEnvelopingCollision)
+		{
+			TestCase testCase;
+			testCase.stationaryRectangle = AxisAlignedRectF(-1, -1, 2, 2);
+			testCase.movingRectangle = AxisAlignedRectF(-2, -2, 4, 4);
+			testCase.motion = Vector2F(-2, 0);
+
+			auto expectedPoint = Vector2F(1, 0);
+			testCase.expectedResult = Contact(Vector2F(-1, 0),
+				expectedPoint,
+				true,
+				false,
+				1,
+				Vector2F(1, 0));
+
+			RunTestCase(testCase);
+		}
+
+		TEST_METHOD(LeftToRightEnvelopingCollision)
+		{
+			TestCase testCase;
+			testCase.stationaryRectangle = AxisAlignedRectF(-1, -1, 2, 2);
+			testCase.movingRectangle = AxisAlignedRectF(-2, -2, 4, 4);
+			testCase.motion = Vector2F(2, 0);
+
+			auto expectedPoint = Vector2F(-1, 0);
+			testCase.expectedResult = Contact(Vector2F(-1, 0),
+				expectedPoint,
+				true,
+				false,
+				1,
 				Vector2F(1, 0));
 
 			RunTestCase(testCase);

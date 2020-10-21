@@ -10,16 +10,12 @@ std::optional<Contact> CircleF::CastAgainst(const Shape& other, const Vector2F& 
 
 std::optional<Contact> CircleF::CastAgainstThis(const AxisAlignedRectF& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
-	/*auto contactOptional = other.CastAgainstThis(*this, -movement, internalityFilter);
+	auto contactOptional = other.CastAgainstThis(*this, -movement, internalityFilter);
 	if (!contactOptional)
 	{
 		return std::nullopt;
 	}
-	auto contact = contactOptional.value();
-	return Contact(-contact.normal,
-		other.Centre() - Vector2F::Between(centre, contact.point),
-		contact.stationarySide)*/
-	throw new std::exception();
+	return Shape::InvertContact(contactOptional.value(), movement);
 }
 
 std::optional<Contact> CircleF::CastAgainstThis(const CircleF& other, const Vector2F& movement, const InternalityFilter internalityFilter) const

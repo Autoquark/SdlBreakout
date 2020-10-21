@@ -27,9 +27,6 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Collision.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Contact.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -43,9 +40,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Constants.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PolygonContact.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OptionalUtilities.h">
@@ -80,13 +74,7 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PolygonContact.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Point.cpp">
-      <Filter>Source Files\Shape</Filter>
-    </ClCompile>
-    <ClCompile Include="Shape.cpp">
       <Filter>Source Files\Shape</Filter>
     </ClCompile>
     <ClCompile Include="AxisAlignedRectF.cpp">
@@ -97,6 +85,9 @@
     </ClCompile>
     <ClCompile Include="Line.cpp">
       <Filter>Source Files\Shape</Filter>
+    </ClCompile>
+    <ClCompile Include="Shape.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

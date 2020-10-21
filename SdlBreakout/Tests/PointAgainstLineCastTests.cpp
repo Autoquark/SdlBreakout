@@ -8,7 +8,6 @@
 #include <iostream>
 #include "Vector2.h"
 #include "CppUnitTest.h"
-#include "Collision.h"
 #include "ToString.h"
 #include "Contact.h"
 #include "Constants.h"
@@ -104,13 +103,11 @@ namespace Tests
 			testCase.lineEnd = { 0.0, 2.0 };
 
 			auto expectedPoint = Vector2F(1.0, 1.0);
-			testCase.expectedResult = PolygonContact(Vector2F(-1, -1).Normalised(),
+			testCase.expectedResult = Contact(Vector2F(-1, -1).Normalised(),
 				expectedPoint,
 				false,
 				true,
-				Vector2F::DistanceBetween(testCase.pointStart, expectedPoint),
-				testCase.lineStart,
-				testCase.lineEnd);
+				Vector2F::DistanceBetween(testCase.pointStart, expectedPoint));
 
 			RunTestCase(testCase);
 		}
