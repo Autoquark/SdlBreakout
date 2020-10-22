@@ -59,8 +59,8 @@ public:
 			contact.distance);
 	}
 
-	template<class ElementType>
-	static int FindClosestCollisionIndex(const std::vector<ElementType>& contacts, const InternalityFilter& internalityFilter = InternalityFilter::Both)
+	// Returns the index in the given vector of the Contact with the lowest distance that matches the given filter, or an empty optional if the input contains no such contacts
+	static int FindClosestCollisionIndex(const std::vector<std::optional<Contact>>& contacts, const InternalityFilter& internalityFilter = InternalityFilter::Both)
 	{
 		int bestIndex = -1;
 		for (unsigned int i = 0; i < contacts.size(); i++)
@@ -85,8 +85,8 @@ public:
 		return bestIndex;
 	}
 
-	template<class ElementType>
-	static ElementType FindClosestCollision(const std::vector<ElementType>& contacts, const InternalityFilter& internalityFilter = InternalityFilter::Both)
+	// Returns the Contact in the given vector with the lowest distance that matches the given filter, or an empty optional if the input contains no such contacts
+	static std::optional<Contact> FindClosestCollision(const std::vector<std::optional<Contact>>& contacts, const InternalityFilter& internalityFilter = InternalityFilter::Both)
 	{
 		auto index = FindClosestCollisionIndex(contacts, internalityFilter);
 		return index == -1 ? std::nullopt : contacts[index];
