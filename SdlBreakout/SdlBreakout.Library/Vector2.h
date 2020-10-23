@@ -207,16 +207,16 @@ public:
 		return clone;
 	}
 
-	void Scale(float magnitude)
+	void SetLength(float magnitude)
 	{
 		Normalise();
 		*this *= magnitude;
 	}
 
-	Vector2 Scaled(float magnitude) const
+	Vector2 WithLength(float magnitude) const
 	{
 		auto clone = Vector2(*this);
-		clone.Scale(magnitude);
+		clone.SetLength(magnitude);
 		return clone;
 	}
 

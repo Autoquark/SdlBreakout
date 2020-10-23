@@ -53,7 +53,7 @@ public:
 	static Contact InvertContact(const Contact& contact, const Vector2F& movement)
 	{
 		return Contact(-contact.normal,
-			contact.point - movement.Scaled(contact.distance),
+			contact.point - movement.WithLength(contact.distance),
 			contact.movingSide,
 			contact.stationarySide,
 			contact.distance);

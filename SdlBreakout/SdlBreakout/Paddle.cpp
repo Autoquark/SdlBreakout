@@ -38,8 +38,8 @@ void Paddle::Update(float timeElapsed)
 		std::cout << "Paddle hit ball";
 		// I think this is buggy because of numerical precision errors placing things in exact contact (ball ends up inside paddle)
 		// OTOH sometimes there's not even an initial collision
-		//collisionBounds->SetCentre(ballHit.value().centroid - movement.Scaled(0.5f));
-		movement.Scale(std::max(hit.distance - 1.0f, 0.0f));
+		//collisionBounds->SetCentre(ballHit.value().centroid - movement.WithLength(0.5f));
+		movement.SetLength(std::max(hit.distance - 1.0f, 0.0f));
 		collisionBounds->Translate(movement);
 
 	}

@@ -190,7 +190,7 @@ std::optional<Contact> AxisAlignedRectF::CastAgainstThis(const CircleF& other, c
 	auto contact = nullable.value();
 
 	return Contact(contact.normal,
-		contact.point + movement.Scaled(other.radius),
+		contact.point + movement.WithLength(other.radius),
 		contact.stationarySide,
 		true, // TODO: What if the circle encloses the rectangle?
 		contact.distance - other.radius,
