@@ -46,7 +46,7 @@ std::optional<Contact> Line::CastAgainstThis(const CircleF& other, const Vector2
 	{
 		return std::nullopt;
 	}
-	auto contact = *nullable;
+	auto contact = *bestContact;
 
 	auto normal = end - start;
 	normal.Rotate(90);
