@@ -38,14 +38,11 @@ std::optional<Contact> Line::CastAgainstThis(const CircleF& other, const Vector2
 	}
 
 	auto circleCentre = Point(other.centre);
-	std::vector<std::optional<Contact>> contacts = {
-		rect.CastAgainstThis(circleCentre, movement),
-		CircleF(start, other.radius).CastAgainstThis(circleCentre, movement),
-		CircleF(end, other.radius).CastAgainstThis(circleCentre, movement),
-	};
+	std::optional<Contact> bestContact = rect.CastAgainstThis(circleCentre, movement);
+	bestContact = ClosestContact(bestContact, CircleF(start, other.radius).CastAgainstThis(circleCentre, movement));
+	bestContact = ClosestContact(bestContact, CircleF(end, other.radius).CastAgainstThis(circleCentre, movement));
 
-	auto nullable = FindClosestCollision(contacts);
-	if (!nullable.has_value())
+	if (!bestContact.has_value())
 	{
 		return std::nullopt;
 	}

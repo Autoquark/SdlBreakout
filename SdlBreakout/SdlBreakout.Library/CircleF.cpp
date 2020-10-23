@@ -15,7 +15,7 @@ std::optional<Contact> CircleF::CastAgainstThis(const AxisAlignedRectF& other, c
 	{
 		return std::nullopt;
 	}
-	return Shape::InvertContact(contactOptional.value(), movement);
+	return InvertContact(contactOptional.value(), movement);
 }
 
 std::optional<Contact> CircleF::CastAgainstThis(const CircleF& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
