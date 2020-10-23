@@ -81,7 +81,7 @@ namespace Tests
 			RunTestCase(testCase);
 		}
 
-		TEST_METHOD(RightToLeftEnvelopingCollision)
+		/*TEST_METHOD(RightToLeftEnvelopingCollision)
 		{
 			TestCase testCase;
 			testCase.stationaryRectangle = AxisAlignedRectF(-1, -1, 2, 2);
@@ -115,6 +115,6 @@ namespace Tests
 				Vector2F(1, 0));
 
 			RunTestCase(testCase);
-		}
+		}*/
 	};
 }

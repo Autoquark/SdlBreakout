@@ -36,35 +36,31 @@ std::optional<Contact> AxisAlignedRectF::CastAgainstThis(const AxisAlignedRectF&
 {
 	auto movingCentre = Point(other.Centre());
 
-	std::vector<std::optional<Contact>> contacts;
+	std::optional<Contact> bestContact;
 
 	if (stationaryInternalityFilter != InternalityFilter::Internal)
 	{
 		// Check for external collision by reducing the moving rectangle to a point and expanding this rectangle to compensate
-		contacts.push_back(
-			AxisAlignedRectF::FromCentre(Centre(), size.x + other.size.x, size.y + other.size.y)
+		bestContact = AxisAlignedRectF::FromCentre(Centre(), size.x + other.size.x, size.y + other.size.y)
 			.CastAgainstThis(movingCentre,
 				movement,
-				InternalityFilter::External));
+				InternalityFilter::External);
 	}
 	if (stationaryInternalityFilter != InternalityFilter::External)
 	{
 		// Check for internal collision by reducing the moving rectangle to a point and shrinking this rectangle to compensate
-		contacts.push_back(
-			AxisAlignedRectF::FromCentre(Centre(), size.x - other.size.x, size.y - other.size.y)
+		bestContact = ClosestContact(bestContact, AxisAlignedRectF::FromCentre(Centre(), size.x - other.size.x, size.y - other.size.y)
 			.CastAgainstThis(movingCentre,
 				movement,
 				InternalityFilter::Internal));
 	}
 
-	auto nullableContact = FindClosestCollision(contacts, stationaryInternalityFilter);
-
-	if (!nullableContact.has_value())
+	if (!bestContact.has_value())
 	{
 		return std::nullopt;
 	}
 
-	auto contact = nullableContact.value();
+	auto contact = bestContact.value();
 	Vector2F point;
 	auto distance = Vector2F::DistanceBetween(contact.point, movingCentre);
 	if (contact.stationarySide)
@@ -112,7 +108,7 @@ std::optional<Contact> AxisAlignedRectF::CastAgainstThis(const AxisAlignedRectF&
 
 std::optional<Contact> AxisAlignedRectF::CastAgainstThis(const CircleF& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
-	std::vector<std::optional<Contact>> contacts;
+	std::optional<Contact> bestContact;
 	auto point = Point(other.centre);
 	if (internalityFilter != InternalityFilter::Internal)
 	{
@@ -121,28 +117,28 @@ std::optional<Contact> AxisAlignedRectF::CastAgainstThis(const CircleF& other, c
 		// For the corners, check the point against stationary circles at the original rectangle's corners with radius equal to the moving circle's
 		auto edge = TopEdge();
 		edge.Translate(0.0f, -other.radius);
-		contacts.push_back(edge.CastAgainstThis(point, movement, InternalityFilter::External));
+		bestContact = ClosestContact(bestContact, edge.CastAgainstThis(point, movement, InternalityFilter::External));
 
 		edge = RightEdge();
 		edge.Translate(other.radius, 0.0f);
-		contacts.push_back(edge.CastAgainstThis(point, movement, InternalityFilter::External));
+		bestContact = ClosestContact(bestContact, edge.CastAgainstThis(point, movement, InternalityFilter::External));
 
 		edge = BottomEdge();
 		edge.Translate(0.0f, other.radius);
-		contacts.push_back(edge.CastAgainstThis(point, movement, InternalityFilter::External));
+		bestContact = ClosestContact(bestContact, edge.CastAgainstThis(point, movement, InternalityFilter::External));
 
 		edge = LeftEdge();
 		edge.Translate(-other.radius, 0.0f);
-		contacts.push_back(edge.CastAgainstThis(point, movement, InternalityFilter::External));
+		bestContact = ClosestContact(bestContact, edge.CastAgainstThis(point, movement, InternalityFilter::External));
 
-		// TODO: Check angle, we're only interested in 1/4 of each circle
+		// TODO: Check angle we can't miss the line but be out of arc for the circle due to floating point weirdness
 		auto contact = CircleF(TopLeft(), other.radius).CastAgainstThis(point, movement, InternalityFilter::External);
 		if (contact.has_value())
 		{
 			auto angle = (contact.value().point - other.centre).SignedAngleFromUp();
 			if (angle >= -90 && angle <= 0)
 			{
-				contacts.push_back(contact);
+				bestContact = ClosestContact(bestContact, contact);
 			}
 		}
 		contact = CircleF(TopRight(), other.radius).CastAgainstThis(point, movement, InternalityFilter::External);
@@ -151,7 +147,7 @@ std::optional<Contact> AxisAlignedRectF::CastAgainstThis(const CircleF& other, c
 			auto angle = (contact.value().point - other.centre).SignedAngleFromUp();
 			if (angle >= 0 && angle <= 90)
 			{
-				contacts.push_back(contact);
+				bestContact = ClosestContact(bestContact, contact);
 			}
 		}
 		contact = CircleF(BottomRight(), other.radius).CastAgainstThis(point, movement, InternalityFilter::External);
@@ -160,7 +156,7 @@ std::optional<Contact> AxisAlignedRectF::CastAgainstThis(const CircleF& other, c
 			auto angle = (contact.value().point - other.centre).SignedAngleFromUp();
 			if (angle >= 90 && angle <= 180)
 			{
-				contacts.push_back(contact);
+				bestContact = ClosestContact(bestContact, contact);
 			}
 		}
 		contact = CircleF(BottomLeft(), other.radius).CastAgainstThis(point, movement, InternalityFilter::External);
@@ -169,7 +165,7 @@ std::optional<Contact> AxisAlignedRectF::CastAgainstThis(const CircleF& other, c
 			auto angle = (contact.value().point - other.centre).SignedAngleFromUp();
 			if (angle == 180 || (angle >= -180 && angle <= -90))
 			{
-				contacts.push_back(contact);
+				bestContact = ClosestContact(bestContact, contact);
 			}
 		}
 	}
@@ -177,17 +173,17 @@ std::optional<Contact> AxisAlignedRectF::CastAgainstThis(const CircleF& other, c
 	if (internalityFilter != InternalityFilter::External)
 	{
 		// Check for internal collisions by reducing the circle to a point and shrinking the rectangle.
-		contacts.push_back(AxisAlignedRectF::FromCentre(Centre(), size.x - other.radius, size.y - other.radius).CastAgainstThis(point, movement, InternalityFilter::Internal));
+		bestContact = ClosestContact(bestContact,
+			AxisAlignedRectF::FromCentre(Centre(), size.x - other.radius, size.y - other.radius)
+				.CastAgainstThis(point, movement, InternalityFilter::Internal));
 	}
 
-	auto nullable = FindClosestCollision(contacts, internalityFilter);
-
-	if (!nullable.has_value())
+	if (!bestContact.has_value())
 	{
 		return std::nullopt;
 	}
 
-	auto contact = nullable.value();
+	auto contact = bestContact.value();
 
 	return Contact(contact.normal,
 		contact.point + movement.WithLength(other.radius),
@@ -206,14 +202,12 @@ std::optional<Contact> AxisAlignedRectF::CastAgainstThis(const Point& other, con
 	}
 
 	// Defining the vectors in a clockwise cycle ensures that the meaning of the Contact.side value remains consistent
-	std::vector<std::optional<Contact>> contacts = {
-		TopEdge().CastAgainstThis(other, movement, internalityFilter),
-		RightEdge().CastAgainstThis(other, movement, internalityFilter),
-		BottomEdge().CastAgainstThis(other, movement, internalityFilter),
-		LeftEdge().CastAgainstThis(other, movement, internalityFilter),
-	};
+	std::optional<Contact> bestContact = TopEdge().CastAgainstThis(other, movement, internalityFilter);
+	bestContact = ClosestContact(bestContact, RightEdge().CastAgainstThis(other, movement, internalityFilter));
+	bestContact = ClosestContact(bestContact, BottomEdge().CastAgainstThis(other, movement, internalityFilter));
+	bestContact = ClosestContact(bestContact, LeftEdge().CastAgainstThis(other, movement, internalityFilter));
 
-	return FindClosestCollision(contacts, internalityFilter);
+	return bestContact;
 }
 
 std::optional<Contact> AxisAlignedRectF::CastAgainstThis(const Line& other, const Vector2F& movement, const InternalityFilter internalityFilter) const

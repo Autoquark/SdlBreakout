@@ -106,10 +106,17 @@ std::optional<Contact> Line::CastAgainstThis(const Point& other, const Vector2F&
 	auto normal = end - start;
 	normal.Rotate(90);
 	auto dotProduct = normal.DotProduct(movement);
+	bool stationarySide = dotProduct < 0;
+
+	if ((stationarySide && internalityFilter == InternalityFilter::Internal) || (!stationarySide && internalityFilter == InternalityFilter::External))
+	{
+		return std::nullopt;
+	}
+
 	normal = normal * dotProduct;
 	normal.Normalise();
 
-	return Contact(-normal, contactPoint, dotProduct < 0, true, Vector2F::DistanceBetween(contactPoint, other));
+	return Contact(-normal, contactPoint, stationarySide, true, Vector2F::DistanceBetween(contactPoint, other));
 }
 
 void Line::Translate(Vector2F amount)

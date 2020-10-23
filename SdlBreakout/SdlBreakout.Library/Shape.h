@@ -59,6 +59,11 @@ public:
 			contact.distance);
 	}
 
+	static std::optional<Contact> ClosestContact(std::optional<Contact> first, std::optional<Contact> second)
+	{
+		return optionalUtilities::MinValue(first, second, [](auto x, auto y) { return y.distance > x.distance; });
+	}
+
 	// Returns the index in the given vector of the Contact with the lowest distance that matches the given filter, or an empty optional if the input contains no such contacts
 	static int FindClosestCollisionIndex(const std::vector<std::optional<Contact>>& contacts, const InternalityFilter& internalityFilter = InternalityFilter::Both)
 	{
