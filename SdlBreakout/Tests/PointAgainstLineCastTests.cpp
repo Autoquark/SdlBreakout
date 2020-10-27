@@ -230,6 +230,21 @@ namespace Tests
 			RunTestCase(testCase);
 		}
 
+		TEST_METHOD(VerticalLinePrecisionProblemTest2)
+		{
+			TestCase testCase;
+			testCase.pointStart = Vector2F(66.9999847f, 456);
+			testCase.pointEnd = Vector2F(testCase.pointStart.x - 9.60000038f, 456);
+
+			testCase.lineStart = Vector2F(66, 462);
+			testCase.lineEnd = Vector2F(66, 18);
+
+			auto expectedPoint = Vector2F(66, 456);
+			testCase.expectedResult = Contact(Vector2F(1, 0), expectedPoint, false, true, Vector2F::DistanceBetween(testCase.pointStart, expectedPoint));
+
+			RunTestCase(testCase);
+		}
+
 		// TODO: Check if there are issues with almost vertical lines
 
 		// TODO: Check if there are issues with horizontal lines

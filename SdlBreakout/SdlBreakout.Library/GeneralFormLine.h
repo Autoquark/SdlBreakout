@@ -35,7 +35,29 @@ public:
 		//assert(xCoefficient * point2.x + yCoefficient * point2.y + constant < Constants::FloatEqualityTolerance);
 	}
 
-	bool TryXFromY(float y, float& x)
+	bool IsVertical() const
+	{
+		return yCoefficient == 0;
+	}
+
+	bool IsHorizontal() const
+	{
+		return xCoefficient == 0;
+	}
+
+	// Returns whether there is a point with the given x that is on the line
+	bool ExistsAtX(float x) const
+	{
+		return x >= minX && x <= maxX;
+	}
+
+	// Returns whether there is a point with the given y that is on the line
+	bool ExistsAtY(float y) const
+	{
+		return y >= minY && y <= maxY;
+	}
+
+	bool TryXFromY(float y, float& x) const
 	{
 		// If this is a horizontal line
 		if (xCoefficient == 0)
@@ -46,7 +68,7 @@ public:
 		return true;
 	}
 
-	bool TryYFromX(float x, float& y)
+	bool TryYFromX(float x, float& y) const
 	{
 		// If this is a vertical line
 		if (yCoefficient == 0)

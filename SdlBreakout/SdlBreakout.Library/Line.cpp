@@ -70,11 +70,11 @@ std::optional<Contact> Line::CastAgainstThis(const Point& other, const Vector2F&
 	}
 	else
 	{
-		if (pointTrajectory.minX == pointTrajectory.maxX)
+		if (pointTrajectory.IsVertical())
 		{
 			x = pointTrajectory.minX;
 		}
-		else if (line.minX == line.maxX)
+		else if (line.IsVertical())
 		{
 			x = line.minX;
 		}
@@ -92,8 +92,13 @@ std::optional<Contact> Line::CastAgainstThis(const Point& other, const Vector2F&
 		pointTrajectory.TryYFromX(x, y);
 	}
 
-	// Need to check both x and y to handle vertical lines
-	if (x < pointTrajectory.minX || x < line.minX || x > pointTrajectory.maxX || x > line.maxX || y < pointTrajectory.minY || y < line.minY || y > pointTrajectory.maxY || y > line.maxY)
+	// Need to check both x and y to handle vertical/horizontal lines (because our answer will always be in x range for a vertical line, but may not be in y range, and vice-versa for horizontal)
+	// For a vertical line at x = a, we know that our calculated collision point 'should' have x = a and any discrepancy is a floating point error; therefore we can bypass the potential
+	// error by not checking it. We can apply the same logic for not checking y values for horizontal lines.
+	if((!pointTrajectory.IsVertical() && !pointTrajectory.ExistsAtX(x))
+		|| (!pointTrajectory.IsHorizontal() && !pointTrajectory.ExistsAtY(y))
+		|| (!line.IsVertical() && !line.ExistsAtX(x))
+		|| (!line.IsHorizontal() && !line.ExistsAtY(y)))
 	{
 		return std::nullopt;
 	}

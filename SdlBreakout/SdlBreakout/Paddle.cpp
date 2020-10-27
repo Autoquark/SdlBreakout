@@ -1,7 +1,10 @@
 #include "stdafx.h"
+
+#include "Debug.h"
 #include "Paddle.h"
 #include "game.h"
 #include "Textures.h"
+
 #include <iostream>
 #include <algorithm>
 
@@ -34,6 +37,10 @@ void Paddle::Update(float timeElapsed)
 	// Check if we're moving into the ball
 	auto& ball = *Game::GetInstance().ball;
 	auto bestContact = collisionBounds->CastAgainst(*ball.collisionBounds, movement, Shape::InternalityFilter::External);
+	if (movement.x != 0 && collisionBounds->GetAxisAlignedBoundingBox().Left() + movement.x <= 2)
+	{
+		auto x = 1;
+	}
 	bestContact = Shape::ClosestContact(bestContact, collisionBounds->CastAgainst(*game.bounds->collisionBounds, movement, Shape::InternalityFilter::Internal));
 	if (bestContact.has_value())
 	{
@@ -50,6 +57,8 @@ void Paddle::Update(float timeElapsed)
 	{
 		collisionBounds->Translate(movement);
 	}
+
+	Debug::PrintChanges("paddle", collisionBounds->GetAxisAlignedBoundingBox().Left());
 
 	// Clamp the position of the paddle to be fully inside the screen
 	// Don't currently use a collision cast because if we're starting pressed up against the boundary numerical precision errors can let the paddle move past
