@@ -5,7 +5,8 @@
 #include "Texture.h"
 #include "AxisAlignedRectF.h"
 #include "Paddle.h"
-#include "block.h"
+#include "Block.h"
+#include "Bounds.h"
 
 class Game
 {
@@ -28,17 +29,15 @@ public:
 
 	void Destroy(GameObject* gameObject);
 
-	// Sprites
-	Texture* gBlockTexture = NULL;
-	Texture* gBallTexture = NULL;
-	Texture* gPaddleTexture = NULL;
-
 	// The window renderer
-	SDL_Renderer* gRenderer = NULL;
+	SDL_Renderer* renderer = NULL;
 
 	// Special game objects
+	Bounds* bounds = NULL;
 	Paddle* paddle = NULL;
 	Ball* ball = NULL;
+
+	bool drawCollisionShapes = false;
 
 	int Start();
 
@@ -60,8 +59,6 @@ private:
 	SDL_Texture* gTexture = NULL;
 
 	bool init();
-	bool loadMedia();
-	Texture* loadTexture(std::string path);
 	SDL_Surface* loadSurface(std::string path);
 	void close();
 };

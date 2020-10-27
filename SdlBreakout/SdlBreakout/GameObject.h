@@ -1,4 +1,5 @@
 #pragma once
+
 #include <SDL_image.h>
 #include "Vector2.h"
 #include "Texture.h"
@@ -14,7 +15,7 @@ public:
 
 	Shape* const collisionBounds;
 
-	GameObject(Shape* collisionBounds) : collisionBounds(collisionBounds) {}
+	GameObject(Shape* collisionBounds = NULL) : collisionBounds(collisionBounds) {}
 	~GameObject()
 	{
 		delete collisionBounds;

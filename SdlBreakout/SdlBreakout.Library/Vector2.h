@@ -3,6 +3,7 @@
 #include <cmath>
 #include <string>
 #include <algorithm>
+#include <assert.h>
 
 using namespace std::string_literals;
 
@@ -168,6 +169,7 @@ public:
 	void Normalise()
 	{
 		auto magnitude = Magnitude();
+		assert(magnitude != 0);
 		x /= magnitude;
 		y /= magnitude;
 	}

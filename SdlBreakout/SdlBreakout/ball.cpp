@@ -4,11 +4,13 @@
 #include "ball.h"
 #include "game.h"
 #include "Vector2.h"
+#include "Textures.h"
 
 
 Ball::Ball() : GameObject(new AxisAlignedRectF{ 0, 0, 16, 16 })
 {
-	sprite = Game::GetInstance().gBallTexture;
+	auto textures = Textures::GetTextures();
+	sprite = textures["ball"s];
 	velocity.x = -30;
 	velocity.y = -90;
 }
@@ -25,7 +27,7 @@ void Ball::Update(float timeElapsed)
 	while (true)
 	{
 		auto paddle = game.paddle;
-		auto screenEdgeCollision = collisionBounds->CastAgainst(game.screenRect, remainingVelocity, Shape::InternalityFilter::Internal);
+		auto screenEdgeCollision = collisionBounds->CastAgainst(*game.bounds->collisionBounds, remainingVelocity, Shape::InternalityFilter::Internal);
 		auto paddleCollision = collisionBounds->CastAgainst(*paddle->collisionBounds, remainingVelocity, Shape::InternalityFilter::External);
 
 		std::vector<std::optional<Contact>> contacts = {
@@ -52,7 +54,7 @@ void Ball::Update(float timeElapsed)
 
 		if (index == 1)
 		{
-			std::cout << "Ball hit paddle";
+			std::cout << "Ball hit paddle\n";
 		}
 
 		auto collision = *contacts[index];

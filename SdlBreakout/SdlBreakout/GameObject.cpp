@@ -1,6 +1,10 @@
 #include "stdafx.h"
+
+#include <typeinfo>
+#include <typeindex>
 #include "GameObject.h"
 #include "game.h"
+#include "Conversion.h"
 
 Texture* GameObject::getSprite()
 {
@@ -14,6 +18,11 @@ void GameObject::setSprite(Texture * value)
 
 void GameObject::Update(float timeElapsed)
 {
+	if (collisionBounds == NULL || sprite == NULL)
+	{
+		return;
+	}
+
 	auto centre = collisionBounds->GetAxisAlignedBoundingBox().Centre();
 
 	// Use the centre of the collision bounds but the size of the sprite, in case the sprite and collision bounds differ
@@ -23,5 +32,14 @@ void GameObject::Update(float timeElapsed)
 	destinationRect.w = (int)sprite->GetSize().x;
 	destinationRect.h = (int)sprite->GetSize().y;
 
-	SDL_RenderCopy(Game::GetInstance().gRenderer, sprite->GetSdlTexture(), NULL, &destinationRect);
+	auto& game = Game::GetInstance();
+	SDL_SetRenderDrawColor(game.renderer, 255, 0, 0, 255);
+	SDL_RenderCopy(game.renderer, sprite->GetSdlTexture(), NULL, &destinationRect);
+
+	if (game.drawCollisionShapes)
+	{
+		auto bounds = collisionBounds->GetAxisAlignedBoundingBox();
+		auto rect = ToSdlShape(bounds);
+		SDL_RenderDrawRectF(game.renderer, &rect);
+	}
 }

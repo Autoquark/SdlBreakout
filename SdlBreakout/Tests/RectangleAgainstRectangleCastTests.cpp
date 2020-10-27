@@ -81,6 +81,42 @@ namespace Tests
 			RunTestCase(testCase);
 		}
 
+		TEST_METHOD(RightToLeftCollision)
+		{
+			TestCase testCase;
+			testCase.stationaryRectangle = AxisAlignedRectF(1, 1, 2, 4);
+			testCase.movingRectangle = AxisAlignedRectF(4, 4, 1, 1);
+			testCase.motion = Vector2F(-2, 0);
+
+			auto expectedPoint = Vector2F(3, 4);
+			testCase.expectedResult = Contact(Vector2F(1, 0),
+				expectedPoint,
+				true,
+				true,
+				Vector2F::DistanceBetween(testCase.movingRectangle.Centre(), expectedPoint), //TODO: Centroid, not point
+				Vector2F(3.5, 4.5));
+
+			RunTestCase(testCase);
+		}
+
+		TEST_METHOD(RightToLeftInternalCollision)
+		{
+			TestCase testCase;
+			testCase.stationaryRectangle = AxisAlignedRectF(-2, -2, 4, 4);
+			testCase.movingRectangle = AxisAlignedRectF(-1, -1, 2, 2);
+			testCase.motion = Vector2F(-2, 0);
+
+			auto expectedPoint = Vector2F(-2, 0);
+			testCase.expectedResult = Contact(Vector2F(1, 0),
+				expectedPoint,
+				false,
+				true,
+				Vector2F::DistanceBetween(testCase.movingRectangle.Centre(), expectedPoint),
+				Vector2F(-1, 0));
+
+			RunTestCase(testCase);
+		}
+
 		/*TEST_METHOD(RightToLeftEnvelopingCollision)
 		{
 			TestCase testCase;

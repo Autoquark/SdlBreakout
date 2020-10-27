@@ -1,9 +1,12 @@
 #include "stdafx.h"
+
 #include <algorithm>
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 #include <stdio.h>
 #include <string>
 #include <vector>
+
 #include "Game.h"
 #include "Paddle.h"
 #include "ball.h"
@@ -11,6 +14,9 @@
 #include "GameObject.h"
 #include "Texture.h"
 #include "Shape.h"
+#include "Bounds.h"
+#include "Textures.h"
+#include "Sounds.h"
 
 Game::~Game()
 {
@@ -37,15 +43,21 @@ int Game::Start()
 		return -1;
 	}
 
-	if (!loadMedia())
+	if (!Textures::LoadTextures())
 	{
-		printf("Failed to load media!\n");
+		printf("Failed to load textures!\n");
 		return -1;
 	}
 
-	for (int y = 120; y < 360; y += (int)gBlockTexture->GetSize().y)
+	if (!Sounds::LoadSounds())
 	{
-		for (int x = 240; x < 480; x += (int)gBlockTexture->GetSize().x)
+		printf("Failed to load sounds!\n");
+		return -1;
+	}
+
+	for (int y = 120; y < 360; y += (int)Textures::GetTexture("block")->GetSize().y)
+	{
+		for (int x = 240; x < 480; x += (int)Textures::GetTexture("block")->GetSize().x)
 		{
 			blocks.push_back(new Block());
 			blocks.back()->collisionBounds->Translate((float)x, (float)y);
@@ -64,6 +76,9 @@ int Game::Start()
 	ball = new Ball();
 	gameObjects.push_back(ball);
 	gameObjects.back()->collisionBounds->Translate(320, 400);
+
+	bounds = new Bounds();
+	gameObjects.push_back(bounds);
 
 	bool quit = false;
 
@@ -85,8 +100,8 @@ int Game::Start()
 			}
 		}
 
-		SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-		SDL_RenderClear(gRenderer);
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+		SDL_RenderClear(renderer);
 
 		auto time = SDL_GetTicks();
 		// If the update loop goes over our time budget (perhaps due to debugging), don't let the elapsed time grow too big
@@ -108,7 +123,7 @@ int Game::Start()
 
 		lastUpdateTime = time;
 
-		SDL_RenderPresent(gRenderer);
+		SDL_RenderPresent(renderer);
 	}
 
 	close();
@@ -116,40 +131,10 @@ int Game::Start()
 	return 0;
 }
 
-bool Game::loadMedia()
-{
-	//Loading success flag
-	bool success = true;
-
-	//Load PNG surface
-	gBlockTexture = loadTexture("Images\\block.png");
-	if (gBlockTexture == NULL)
-	{
-		printf("Failed to load PNG image!\n");
-		success = false;
-	}
-
-	gBallTexture = loadTexture("Images\\ball.png");
-	if (gBallTexture == NULL)
-	{
-		printf("Failed to load PNG image!\n");
-		success = false;
-	}
-
-	gPaddleTexture = loadTexture("Images\\paddle.png");
-	if (gBallTexture == NULL)
-	{
-		printf("Failed to load PNG image!\n");
-		success = false;
-	}
-
-	return success;
-}
-
 bool Game::init()
 {
 	//Initialize SDL
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 	{
 		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
 		return false;
@@ -164,15 +149,15 @@ bool Game::init()
 	}
 
 	//Create renderer for window
-	gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	if (gRenderer == NULL)
+	renderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	if (renderer == NULL)
 	{
 		printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
 		return false;
 	}
 
 	//Initialize renderer color
-	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
 	//Initialize PNG loading
 	int imgFlags = IMG_INIT_PNG;
@@ -185,34 +170,13 @@ bool Game::init()
 	//Get window surface
 	gScreenSurface = SDL_GetWindowSurface(gWindow);
 
+	//Initialize SDL_mixer
+	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1)
+	{
+		return false;
+	}
+
 	return true;
-}
-
-Texture* Game::loadTexture(std::string path)
-{
-	//Load image at specified path
-	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
-	if (loadedSurface == NULL)
-	{
-		printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
-		return NULL;
-	}
-
-	//Create texture from surface pixels
-	SDL_Texture* newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface);	
-
-	if (newTexture == NULL)
-	{
-		printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
-		SDL_FreeSurface(loadedSurface);
-		return NULL;
-	}
-
-	SDL_FreeSurface(loadedSurface);
-
-	auto texture = new Texture(newTexture, Vector2<int>{ loadedSurface->w, loadedSurface->h });
-
-	return texture;
 }
 
 SDL_Surface* Game::loadSurface(std::string path)
@@ -245,11 +209,11 @@ SDL_Surface* Game::loadSurface(std::string path)
 void Game::close()
 {
 	//Free loaded image
-	SDL_DestroyTexture(gBlockTexture->GetSdlTexture());
-	SDL_DestroyTexture(gBallTexture->GetSdlTexture());
+	Textures::FreeAllTextures();
+	Sounds::FreeAllSounds();
 
 	//Destroy window
-	SDL_DestroyRenderer(gRenderer);
+	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(gWindow);
 
 	//Quit SDL subsystems

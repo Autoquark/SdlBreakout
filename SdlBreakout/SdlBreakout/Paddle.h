@@ -11,5 +11,7 @@ public:
 
 private:
 	float moveSpeed;
+	bool blockedLeft = false;
+	bool blockedRight = false;
 };
 
