@@ -29,7 +29,7 @@ bool Textures::LoadTextures()
 		success = false;
 	}
 
-	textures["paddle"] = LoadTexture("Images\\paddle.png");
+	textures["paddle"] = LoadTexture("Images\\paddle_rounded.png");
 	if (textures["paddle"] == NULL)
 	{
 		printf("Failed to load PNG image!\n");

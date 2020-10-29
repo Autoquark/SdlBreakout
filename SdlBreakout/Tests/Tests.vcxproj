@@ -161,6 +161,7 @@
     <ClInclude Include="ToString.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CircleAgainstCircleCastTests.cpp" />
     <ClCompile Include="CircleAgainstLineCastTests.cpp" />
     <ClCompile Include="CircleAgainstRectangleCastTests.cpp" />
     <ClCompile Include="PointAgainstCircleCastTests.cpp" />

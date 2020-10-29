@@ -62,5 +62,8 @@
     <ClCompile Include="CircleAgainstRectangleCastTests.cpp">
       <Filter>Source Files\Collision</Filter>
     </ClCompile>
+    <ClCompile Include="CircleAgainstCircleCastTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

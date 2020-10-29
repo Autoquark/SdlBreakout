@@ -20,7 +20,22 @@ std::optional<Contact> CircleF::CastAgainstThis(const AxisAlignedRectF& other, c
 
 std::optional<Contact> CircleF::CastAgainstThis(const CircleF& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
-	throw new std::exception();
+	std::optional<Contact> bestContact = std::nullopt;
+
+	// Check for external collisions by shrinking the moving circle to a point and expanding the stationary circle
+	if (internalityFilter != InternalityFilter::Internal)
+	{
+		bestContact = CircleF(centre, radius + other.radius).CastAgainstThis(Point(other.centre), movement, InternalityFilter::External);
+	}
+
+	// Check for internal collisions by shrinking the moving circle to a point and shrinking the stationary circle
+	if (internalityFilter != InternalityFilter::External)
+	{
+		assert(other.radius < radius);
+		bestContact = ClosestContact(bestContact, CircleF(centre, radius - other.radius).CastAgainstThis(Point(other.centre), movement, InternalityFilter::External));
+	}
+
+	return bestContact;
 }
 
 std::optional<Contact> CircleF::CastAgainstThis(const Point& other, const Vector2F& movement, const InternalityFilter internalityFilter) const

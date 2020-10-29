@@ -131,42 +131,26 @@ std::optional<Contact> AxisAlignedRectF::CastAgainstThis(const CircleF& other, c
 		edge.Translate(-other.radius, 0.0f);
 		bestContact = ClosestContact(bestContact, edge.CastAgainstThis(point, movement, InternalityFilter::External));
 
-		// TODO: Check we can't miss the line but be out of arc for the circle due to floating point weirdness
+		// Don't check the angle of collision with the circle; due to floating point weirdness we could miss the line but be out of the strict 90 degree arc for the circle
 		auto contact = CircleF(TopLeft(), other.radius).CastAgainstThis(point, movement, InternalityFilter::External);
 		if (contact.has_value())
 		{
-			auto angle = (contact.value().point - other.centre).SignedAngleFromUp();
-			if (angle >= -90 && angle <= 0)
-			{
-				bestContact = ClosestContact(bestContact, contact);
-			}
+			bestContact = ClosestContact(bestContact, contact);
 		}
 		contact = CircleF(TopRight(), other.radius).CastAgainstThis(point, movement, InternalityFilter::External);
 		if (contact.has_value())
 		{
-			auto angle = (contact.value().point - other.centre).SignedAngleFromUp();
-			if (angle >= 0 && angle <= 90)
-			{
-				bestContact = ClosestContact(bestContact, contact);
-			}
+			bestContact = ClosestContact(bestContact, contact);
 		}
 		contact = CircleF(BottomRight(), other.radius).CastAgainstThis(point, movement, InternalityFilter::External);
 		if (contact.has_value())
 		{
-			auto angle = (contact.value().point - other.centre).SignedAngleFromUp();
-			if (angle >= 90 && angle <= 180)
-			{
-				bestContact = ClosestContact(bestContact, contact);
-			}
+			bestContact = ClosestContact(bestContact, contact);
 		}
 		contact = CircleF(BottomLeft(), other.radius).CastAgainstThis(point, movement, InternalityFilter::External);
 		if (contact.has_value())
 		{
-			auto angle = (contact.value().point - other.centre).SignedAngleFromUp();
-			if (angle == 180 || (angle >= -180 && angle <= -90))
-			{
-				bestContact = ClosestContact(bestContact, contact);
-			}
+			bestContact = ClosestContact(bestContact, contact);
 		}
 	}
 
