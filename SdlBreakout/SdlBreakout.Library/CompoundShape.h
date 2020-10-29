@@ -1,11 +1,18 @@
 #pragma once
 
-#include "Shape.h"
+#include "stdafx.h"
 
-class Line : public Shape
+#include "Shape.h"
+#include "AxisAlignedRectF.h"
+
+#include <vector>
+
+class CompoundShape : public Shape
 {
 public:
-	Line(Vector2F start, Vector2F end) : start(start), end(end) {}
+	CompoundShape(std::vector<Shape*> shapes) : shapes(shapes)
+	{
+	}
 
 	std::optional<Contact> CastAgainst(const Shape& other, const Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both) const override;
 	std::optional<Contact> CastAgainstThis(const AxisAlignedRectF& other, const Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both) const override;
@@ -13,13 +20,11 @@ public:
 	std::optional<Contact> CastAgainstThis(const Line& other, const Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both) const override;
 	std::optional<Contact> CastAgainstThis(const Point& other, const Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both) const override;
 
-	using Shape::Translate;
 	void Translate(Vector2F amount) override;
+	// Centres this shape's axis aligned bounding box on the given point
 	void SetCentre(Vector2F position) override;
 	AxisAlignedRectF GetAxisAlignedBoundingBox() const override;
 
-	Vector2F start;
-	Vector2F end;
-
+	std::vector<Shape*> shapes;
 };
 

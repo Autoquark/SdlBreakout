@@ -4,11 +4,12 @@
 #include "Paddle.h"
 #include "game.h"
 #include "Textures.h"
+#include "CompoundShape.h"
 
 #include <iostream>
 #include <algorithm>
 
-Paddle::Paddle() : GameObject(new AxisAlignedRectF{ 0, 0, 128, 32})
+Paddle::Paddle() : GameObject(new CompoundShape(std::vector<Shape*>{new AxisAlignedRectF{ 0, 0, 128, 32 }}))
 {
 	sprite = Textures::GetTexture("paddle");
 	moveSpeed = 600;

@@ -131,7 +131,7 @@ std::optional<Contact> AxisAlignedRectF::CastAgainstThis(const CircleF& other, c
 		edge.Translate(-other.radius, 0.0f);
 		bestContact = ClosestContact(bestContact, edge.CastAgainstThis(point, movement, InternalityFilter::External));
 
-		// TODO: Check angle we can't miss the line but be out of arc for the circle due to floating point weirdness
+		// TODO: Check we can't miss the line but be out of arc for the circle due to floating point weirdness
 		auto contact = CircleF(TopLeft(), other.radius).CastAgainstThis(point, movement, InternalityFilter::External);
 		if (contact.has_value())
 		{
@@ -174,7 +174,7 @@ std::optional<Contact> AxisAlignedRectF::CastAgainstThis(const CircleF& other, c
 	{
 		// Check for internal collisions by reducing the circle to a point and shrinking the rectangle.
 		bestContact = ClosestContact(bestContact,
-			AxisAlignedRectF::FromCentre(Centre(), size.x - other.radius, size.y - other.radius)
+			AxisAlignedRectF::FromEdges(position.x + other.radius, position.y + other.radius, Right() - other.radius, Bottom() - other.radius)
 				.CastAgainstThis(point, movement, InternalityFilter::Internal));
 	}
 
@@ -189,7 +189,7 @@ std::optional<Contact> AxisAlignedRectF::CastAgainstThis(const CircleF& other, c
 		contact.point + movement.WithLength(other.radius),
 		contact.stationarySide,
 		true, // TODO: What if the circle encloses the rectangle?
-		contact.distance - other.radius,
+		contact.distance,
 		contact.point);
 }
 
@@ -218,4 +218,17 @@ std::optional<Contact> AxisAlignedRectF::CastAgainstThis(const Line& other, cons
 void AxisAlignedRectF::Translate(Vector2F amount)
 {
 	position += amount;
+}
+
+void AxisAlignedRectF::Union(const Shape& other)
+{
+	Union(other.GetAxisAlignedBoundingBox());
+}
+
+void AxisAlignedRectF::Union(const AxisAlignedRectF& other)
+{
+	SetLeft(std::min(Left(), other.Left()));
+	SetTop(std::min(Top(), other.Top()));
+	SetRight(std::max(Right(), other.Right()));
+	SetBottom(std::max(Bottom(), other.Bottom()));
 }

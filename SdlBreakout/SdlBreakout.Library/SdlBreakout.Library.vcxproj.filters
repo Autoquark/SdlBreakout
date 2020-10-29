@@ -60,6 +60,9 @@
     <ClInclude Include="Line.h">
       <Filter>Header Files\Shape</Filter>
     </ClInclude>
+    <ClInclude Include="CompoundShape.h">
+      <Filter>Header Files\Shape</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -88,6 +91,9 @@
     </ClCompile>
     <ClCompile Include="Shape.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CompoundShape.cpp">
+      <Filter>Source Files\Shape</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

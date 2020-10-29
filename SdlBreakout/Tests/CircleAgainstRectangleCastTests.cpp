@@ -38,6 +38,7 @@ namespace Tests
 				Assert::AreEqual(expected.point, actual.point);
 				Assert::AreEqual(expected.centroid, actual.centroid);
 				Assert::AreEqual(expected.stationarySide, actual.stationarySide);
+				Assert::AreEqual(expected.distance, actual.distance);
 				AreEqual(expected.normal, actual.normal, Constants::FloatEqualityTolerance);
 			}
 		}

@@ -5,9 +5,11 @@
 #include "game.h"
 #include "Vector2.h"
 #include "Textures.h"
+#include "CircleF.h"
 
 
-Ball::Ball() : GameObject(new AxisAlignedRectF{ 0, 0, 16, 16 })
+Ball::Ball() : GameObject(new CircleF(0, 0, 8))
+//Ball::Ball() : GameObject(new AxisAlignedRectF(0, 0, 16, 16))
 {
 	auto textures = Textures::GetTextures();
 	sprite = textures["ball"s];

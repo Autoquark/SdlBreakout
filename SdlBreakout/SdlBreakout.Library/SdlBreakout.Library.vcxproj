@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CircleF.h" />
+    <ClInclude Include="CompoundShape.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Contact.h" />
     <ClInclude Include="GeneralFormLine.h" />
@@ -170,6 +171,7 @@
   <ItemGroup>
     <ClCompile Include="AxisAlignedRectF.cpp" />
     <ClCompile Include="CircleF.cpp" />
+    <ClCompile Include="CompoundShape.cpp" />
     <ClCompile Include="Contact.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Line.cpp" />

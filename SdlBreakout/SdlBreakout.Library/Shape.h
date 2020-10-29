@@ -9,6 +9,7 @@ class CircleF;
 class AxisAlignedRectF;
 class Point;
 class Line;
+class CompoundShape;
 
 class Shape
 {
