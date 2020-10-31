@@ -1,4 +1,7 @@
 #include "stdafx.h"
+
+#include <filesystem>
+
 #include "Textures.h"
 #include "Game.h"
 
@@ -36,6 +39,9 @@ bool Textures::LoadTextures()
 		success = false;
 	}
 
+	blockTextures["normal"] = LoadTextureSequence("Images\\block");
+	blockTextures["invulnerable"] = LoadTextureSequence("Images\\invulnerable");
+
 	return success;
 }
 
@@ -62,18 +68,32 @@ Texture* Textures::LoadTexture(std::string path)
 	//Create texture from surface pixels
 	SDL_Texture* newTexture = SDL_CreateTextureFromSurface(Game::GetInstance().renderer, loadedSurface);
 
+	SDL_FreeSurface(loadedSurface);
+
 	if (newTexture == NULL)
 	{
 		printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
-		SDL_FreeSurface(loadedSurface);
 		return NULL;
 	}
 
-	SDL_FreeSurface(loadedSurface);
+	return new Texture(newTexture, Vector2<int>{ loadedSurface->w, loadedSurface->h });
+}
 
-	auto texture = new Texture(newTexture, Vector2<int>{ loadedSurface->w, loadedSurface->h });
+std::vector<Texture*> Textures::LoadTextureSequence(std::string pathPrefix)
+{
+	std::vector<Texture*> textures;
+	for(int i = 1; true; i++)
+	{
+		auto filename = pathPrefix + std::to_string(i) + ".png";
+		if (!std::filesystem::exists(filename))
+		{
+			break;
+		}
+		textures.push_back(LoadTexture(filename));
+	}
 
-	return texture;
+	return textures;
 }
 
 std::map<std::string, Texture*> Textures::textures;
+std::map<std::string, std::vector<Texture*>> Textures::blockTextures;

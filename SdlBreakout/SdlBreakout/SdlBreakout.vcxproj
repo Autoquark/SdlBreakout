@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="Ball.cpp" />
     <ClCompile Include="Block.cpp" />
+    <ClCompile Include="BlockMaker.cpp" />
     <ClCompile Include="Bounds.cpp" />
     <ClCompile Include="Conversion.cpp" />
     <ClCompile Include="Debug.cpp" />
@@ -146,6 +147,7 @@
   <ItemGroup>
     <ClInclude Include="Ball.h" />
     <ClInclude Include="Block.h" />
+    <ClInclude Include="BlockMaker.h" />
     <ClInclude Include="Bounds.h" />
     <ClInclude Include="Conversion.h" />
     <ClInclude Include="Debug.h" />

@@ -12,6 +12,13 @@ bool Sounds::LoadSounds()
 		success = false;
 	}
 
+	sounds["bounce_invulnerable"] = Mix_LoadWAV("Sounds\\dullTwang.wav");
+	if (sounds["bounce_invulnerable"] == NULL)
+	{
+		printf("Failed to load sound!\n");
+		success = false;
+	}
+
 	return success;
 }
 

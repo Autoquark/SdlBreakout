@@ -37,7 +37,7 @@ public:
 	Paddle* paddle = NULL;
 	Ball* ball = NULL;
 
-	bool drawCollisionShapes = true;
+	bool drawCollisionShapes = false;
 
 	int Start();
 

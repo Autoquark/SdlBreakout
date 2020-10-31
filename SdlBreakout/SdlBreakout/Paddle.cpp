@@ -10,6 +10,8 @@
 #include <iostream>
 #include <algorithm>
 
+const float Paddle::MAX_VIRTUAL_CURVE = 20;
+
 Paddle::Paddle() : GameObject(new CompoundShape(std::vector<Shape*>
 {
 	new CircleF(0, 16, 16),
@@ -17,6 +19,7 @@ Paddle::Paddle() : GameObject(new CompoundShape(std::vector<Shape*>
 	new CircleF(96, 16, 16),
 }))
 {
+	centreSegment = (AxisAlignedRectF*)((CompoundShape*)collisionBounds)->shapes[1];
 	sprite = Textures::GetTexture("paddle");
 	moveSpeed = 600;
 }
@@ -31,11 +34,11 @@ void Paddle::Update(float timeElapsed)
 	const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
 
 	Vector2F movement = Vector2F(0, 0);
-	if (currentKeyStates[SDL_SCANCODE_LEFT] && !blockedLeft)
+	if (currentKeyStates[SDL_SCANCODE_LEFT])
 	{
 		movement = Vector2F(-moveSpeed * timeElapsed, 0);
 	}
-	else if (currentKeyStates[SDL_SCANCODE_RIGHT] && !blockedRight)
+	else if (currentKeyStates[SDL_SCANCODE_RIGHT])
 	{
 		movement = Vector2F(moveSpeed * timeElapsed, 0);
 	}
@@ -44,18 +47,12 @@ void Paddle::Update(float timeElapsed)
 	// Check if we're moving into the ball
 	auto& ball = *Game::GetInstance().ball;
 	auto bestContact = collisionBounds->CastAgainst(*ball.collisionBounds, movement, Shape::InternalityFilter::External);
-	if (movement.x != 0 && collisionBounds->GetAxisAlignedBoundingBox().Left() + movement.x <= 2)
-	{
-		auto x = 1;
-	}
 	bestContact = Shape::ClosestContact(bestContact, collisionBounds->CastAgainst(*game.bounds->collisionBounds, movement, Shape::InternalityFilter::Internal));
 	if (bestContact.has_value())
 	{
 		auto hit = bestContact.value();
-		std::cout << "Paddle hit something\n";
-		movement.SetLength(std::max(hit.distance - 1.0f, 0.0f));
+		movement.SetMagnitude(std::max(hit.distance - 1.0f, 0.0f));
 		collisionBounds->Translate(movement);
-		std::cout << "Paddle moving " << movement.x << std::endl;
 	}
 	else
 	{

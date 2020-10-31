@@ -7,9 +7,9 @@
 #include "Textures.h"
 #include "Sounds.h"
 
-Block::Block() : GameObject(new AxisAlignedRectF{ 0, 0, 32, 16 })
+Block::Block(std::string textureKey) : GameObject(new AxisAlignedRectF{ 0, 0, 40, 20 }), textureKey(textureKey)
 {
-	sprite = Textures::GetTexture("block"s);
+	SetHealth(1);
 }
 
 
@@ -19,6 +19,24 @@ Block::~Block()
 
 void Block::OnBallHit(Ball& ball)
 {
-	Mix_PlayChannel(-1, Sounds::GetSound("bounce"), 0);
-	Game::GetInstance().Destroy(this);
+	if (!invulnerable)
+	{
+		SetHealth(health - 1);
+		Mix_PlayChannel(-1, Sounds::GetSound("bounce"), 0);
+	}
+	else
+	{
+		Mix_PlayChannel(-1, Sounds::GetSound("bounce_invulnerable"), 0);
+	}
+}
+
+void Block::SetHealth(int value)
+{
+	health = value;
+	if (health == 0)
+	{
+		Game::GetInstance().Destroy(this);
+		return;
+	}
+	sprite = Textures::GetBlockTextures(textureKey)[health - 1];
 }

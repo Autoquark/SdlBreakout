@@ -9,8 +9,8 @@
 
 #include "Game.h"
 #include "Paddle.h"
-#include "ball.h"
-#include "block.h"
+#include "Ball.h"
+#include "BlockMaker.h"
 #include "GameObject.h"
 #include "Texture.h"
 #include "Shape.h"
@@ -55,13 +55,20 @@ int Game::Start()
 		return -1;
 	}
 
-	for (int y = 120; y < 360; y += (int)Textures::GetTexture("block")->GetSize().y)
+	int x,y;
+	for (y = 120; y < 340; y += (int)Textures::GetTexture("block")->GetSize().y)
 	{
-		for (int x = 240; x < 480; x += (int)Textures::GetTexture("block")->GetSize().x)
+		for (x = 240; x < 480; x += (int)Textures::GetTexture("block")->GetSize().x)
 		{
-			blocks.push_back(new Block());
+			blocks.push_back(BlockMaker::MakeNormal(3));
 			blocks.back()->collisionBounds->Translate((float)x, (float)y);
 		}
+	}
+
+	for (x = 240; x < 480; x += (int)Textures::GetTexture("block")->GetSize().x)
+	{
+		blocks.push_back(BlockMaker::MakeInvulnerable());
+		blocks.back()->collisionBounds->Translate((float)x, (float)y);
 	}
 
 	for (auto block : blocks)

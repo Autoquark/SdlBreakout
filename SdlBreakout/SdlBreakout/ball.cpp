@@ -11,10 +11,10 @@
 Ball::Ball() : GameObject(new CircleF(0, 0, 8))
 //Ball::Ball() : GameObject(new AxisAlignedRectF(0, 0, 16, 16))
 {
-	auto textures = Textures::GetTextures();
-	sprite = textures["ball"s];
-	velocity.x = -30;
-	velocity.y = -90;
+	sprite = Textures::GetTexture("ball"s);
+	velocity.x = -60;
+	velocity.y = -180;
+	speed = velocity.Magnitude();
 }
 
 
@@ -54,16 +54,29 @@ void Ball::Update(float timeElapsed)
 			game.GetBlocks()[index - 2]->OnBallHit(*this);
 		}
 
+		auto collision = *contacts[index];
+
+		// If we hit the paddle
+		auto normal = collision.normal;
 		if (index == 1)
 		{
-			std::cout << "Ball hit paddle\n";
+			auto centreSegment = game.paddle->centreSegment;
+			auto contact = collisionBounds->CastAgainst(*centreSegment, remainingVelocity, Shape::InternalityFilter::External);
+			if (contact.has_value() && contact.value().distance <= collision.distance)
+			{
+				auto curveProportion = (collision.point.x - centreSegment->Centre().x) * 2 / centreSegment->size.x;
+				normal.Rotate(curveProportion * Paddle::MAX_VIRTUAL_CURVE);
+				std::cout << "Curve proportion: " << curveProportion << " normal: " << normal.ToString();
+			}
 		}
 
-		auto collision = *contacts[index];
 		remainingVelocity *= 1 - (collision.distance / remainingVelocity.Magnitude());
 		collisionBounds->SetCentre(collision.centroid);
-		remainingVelocity.Reflect(collision.normal);
-		velocity.Reflect(collision.normal);
+		remainingVelocity.Reflect(normal);
+		velocity.Reflect(normal);
+
+		// Correct any variation in speed due to rounding error
+		SetSpeed(speed);
 	}
 
 	GameObject::Update(timeElapsed);

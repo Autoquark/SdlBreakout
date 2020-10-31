@@ -209,16 +209,16 @@ public:
 		return clone;
 	}
 
-	void SetLength(float magnitude)
+	void SetMagnitude(float magnitude)
 	{
 		Normalise();
 		*this *= magnitude;
 	}
 
-	Vector2 WithLength(float magnitude) const
+	Vector2 WithMagnitude(float magnitude) const
 	{
 		auto clone = Vector2(*this);
-		clone.SetLength(magnitude);
+		clone.SetMagnitude(magnitude);
 		return clone;
 	}
 
