@@ -11,8 +11,11 @@ public:
 	void OnBallHit(Ball& ball);
 	void SetHealth(int value);
 
+	void Update(float timeElapsed) override;
+
 	const std::string textureKey;
 	bool invulnerable = false;
+	BallStatusEffect* appliesStatus;
 
 private:
 	int health = 1;

@@ -222,6 +222,20 @@ public:
 		return clone;
 	}
 
+	void SetDirection(const Vector2& direction)
+	{
+		auto magnitude = Magnitude();
+		*this = direction;
+		SetMagnitude(magnitude);
+	}
+
+	Vector2 WithDirection(const Vector2& direction)
+	{
+		auto clone = Vector2(*this);
+		clone.SetMagnitude(direction);
+		return clone;
+	}
+
 	ElementType x;
 	ElementType y;
 };

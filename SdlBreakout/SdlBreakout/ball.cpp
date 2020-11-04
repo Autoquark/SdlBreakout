@@ -9,7 +9,6 @@
 
 
 Ball::Ball() : GameObject(new CircleF(0, 0, 8))
-//Ball::Ball() : GameObject(new AxisAlignedRectF(0, 0, 16, 16))
 {
 	sprite = Textures::GetTexture("ball"s);
 	velocity.x = -60;
@@ -25,7 +24,32 @@ Ball::~Ball()
 void Ball::Update(float timeElapsed)
 {
 	auto& game = Game::GetInstance();
+	auto effectiveSpeed = speed;
+
+	// Only the single largest speed buff and single largest speed debuff apply
+	auto iterator = std::max_element(statusEffects.begin(), statusEffects.end(), [](auto& x, auto& y) { return y->GetSpeedMultiplier() > x->GetSpeedMultiplier(); });
+	if (iterator != statusEffects.end())
+	{
+		auto value = (*iterator)->GetSpeedMultiplier();
+		if (value > 1)
+		{
+			effectiveSpeed *= value;
+		}
+	}
+
+	iterator = std::min_element(statusEffects.begin(), statusEffects.end(), [](auto& x, auto& y) { return y->GetSpeedMultiplier() > x->GetSpeedMultiplier(); });
+	if (iterator != statusEffects.end())
+	{
+		auto value = (*iterator)->GetSpeedMultiplier();
+		if (value < 1)
+		{
+			effectiveSpeed *= value;
+		}
+	}
+
+	velocity.SetMagnitude(effectiveSpeed);
 	auto remainingVelocity = velocity * timeElapsed;
+
 	while (true)
 	{
 		auto paddle = game.paddle;
@@ -51,7 +75,12 @@ void Ball::Update(float timeElapsed)
 
 		if (index > 1)
 		{
-			game.GetBlocks()[index - 2]->OnBallHit(*this);
+			auto block = game.GetBlocks()[index - 2];
+			for (auto& status : statusEffects)
+			{
+				status->OnHitBlock(*block);
+			}
+			block->OnBallHit(*this);
 		}
 
 		auto collision = *contacts[index];
@@ -74,10 +103,14 @@ void Ball::Update(float timeElapsed)
 		collisionBounds->SetCentre(collision.centroid);
 		remainingVelocity.Reflect(normal);
 		velocity.Reflect(normal);
-
-		// Correct any variation in speed due to rounding error
-		SetSpeed(speed);
 	}
+
+	for(auto& status : statusEffects)
+	{
+		status->Update(timeElapsed);
+	}
+	
+	statusEffects.erase(std::remove_if(statusEffects.begin(), statusEffects.end(), [this](auto const& x) { return toRemove.find(x.get()) != toRemove.end(); }), statusEffects.end());
 
 	GameObject::Update(timeElapsed);
 }

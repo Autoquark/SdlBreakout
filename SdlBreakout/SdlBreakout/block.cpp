@@ -7,7 +7,7 @@
 #include "Textures.h"
 #include "Sounds.h"
 
-Block::Block(std::string textureKey) : GameObject(new AxisAlignedRectF{ 0, 0, 40, 20 }), textureKey(textureKey)
+Block::Block(const std::string textureKey) : GameObject(new AxisAlignedRectF{ 0, 0, 40, 20 }), textureKey(textureKey)
 {
 	SetHealth(1);
 }
@@ -19,6 +19,11 @@ Block::~Block()
 
 void Block::OnBallHit(Ball& ball)
 {
+	if (appliesStatus)
+	{
+		appliesStatus->ApplyToBall(&ball);
+	}
+
 	if (!invulnerable)
 	{
 		SetHealth(health - 1);
@@ -39,4 +44,26 @@ void Block::SetHealth(int value)
 		return;
 	}
 	sprite = Textures::GetBlockTextures(textureKey)[health - 1];
+}
+
+void Block::Update(float timeElapsed)
+{
+	GameObject::Update(timeElapsed);
+
+	if (!appliesStatus)
+	{
+		return;
+	}
+
+	auto centre = collisionBounds->GetAxisAlignedBoundingBox().Centre();
+	auto statusSprite = appliesStatus->GetIcon();
+	SDL_Rect destinationRect;
+	destinationRect.x = (int)centre.x - statusSprite->GetSize().x / 2;
+	destinationRect.y = (int)centre.y - statusSprite->GetSize().y / 2;
+	destinationRect.w = (int)statusSprite->GetSize().x;
+	destinationRect.h = (int)statusSprite->GetSize().y;
+
+	auto& game = Game::GetInstance();
+	SDL_SetRenderDrawColor(game.renderer, 255, 0, 0, 255);
+	SDL_RenderCopy(game.renderer, statusSprite->GetSdlTexture(), NULL, &destinationRect);
 }

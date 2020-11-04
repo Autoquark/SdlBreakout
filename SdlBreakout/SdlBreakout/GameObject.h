@@ -8,7 +8,7 @@
 class GameObject
 {
 public:
-	Texture* getSprite();
+	const Texture* getSprite();
 	void setSprite(Texture* value);
 
 	virtual void Update(float timeElapsed);
@@ -22,6 +22,6 @@ public:
 	}
 
 protected:
-	Texture* sprite = NULL;
+	const Texture* sprite = NULL;
 };
 

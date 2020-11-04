@@ -2,15 +2,16 @@
 #include "stdafx.h"
 
 #include <map>
+#include <vector>
 
 #include "Texture.h"
 
 class Textures
 {
 public:
-	static Texture* GetTexture(const std::string& key)
+	static const Texture* GetTexture(const std::string& key)
 	{
-		return textures[key];
+		return textures.at(key);
 	}
 	static const std::vector<Texture*>& GetBlockTextures(const std::string& key)
 	{

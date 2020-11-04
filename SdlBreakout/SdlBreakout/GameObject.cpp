@@ -6,7 +6,7 @@
 #include "game.h"
 #include "Conversion.h"
 
-Texture* GameObject::getSprite()
+const Texture* GameObject::getSprite()
 {
 	return sprite;
 }

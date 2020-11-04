@@ -80,6 +80,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <PrecompiledHeader>Use</PrecompiledHeader>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -93,6 +94,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -129,6 +131,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="BallStatusEffect.cpp" />
+    <ClCompile Include="BallStatus_Accelerate.cpp" />
+    <ClCompile Include="BallStatus_Downfall.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="BlockMaker.cpp" />
     <ClCompile Include="Bounds.cpp" />
@@ -146,6 +151,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ball.h" />
+    <ClInclude Include="BallStatusEffect.h" />
+    <ClInclude Include="BallStatus_Accelerate.h" />
+    <ClInclude Include="BallStatus_Downfall.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="BlockMaker.h" />
     <ClInclude Include="Bounds.h" />

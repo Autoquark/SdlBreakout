@@ -5,12 +5,12 @@ Texture::Texture(SDL_Texture*& sdlTexture, const Vector2<int>& size) : sdlTextur
 {
 }
 
-SDL_Texture* Texture::GetSdlTexture()
+SDL_Texture* Texture::GetSdlTexture() const
 {
 	return sdlTexture;
 }
 
-Vector2<int> Texture::GetSize()
+Vector2<int> Texture::GetSize() const
 {
 	return size;
 }

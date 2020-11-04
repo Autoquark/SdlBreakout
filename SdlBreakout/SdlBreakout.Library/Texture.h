@@ -6,8 +6,8 @@ class Texture
 {
 public:
 	Texture(SDL_Texture*& sdlTexture, const Vector2<int>& size);
-	SDL_Texture* GetSdlTexture();
-	Vector2<int> GetSize();
+	SDL_Texture* GetSdlTexture() const;
+	Vector2<int> GetSize() const;
 
 private:
 	SDL_Texture* sdlTexture;

@@ -27,6 +27,11 @@ public:
 		return blocks;
 	}
 
+	float GetTime()
+	{
+		return time;
+	}
+
 	void Destroy(GameObject* gameObject);
 
 	// The window renderer
@@ -58,8 +63,9 @@ private:
 	//Current displayed texture
 	SDL_Texture* gTexture = NULL;
 
+	float time = 0;
+
 	bool init();
 	SDL_Surface* loadSurface(std::string path);
 	void close();
 };
-

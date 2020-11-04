@@ -12,32 +12,13 @@ bool Textures::LoadTextures()
 
 	//Load PNG surface
 	textures["bounds"] = LoadTexture("Images\\bounds.png");
-	if (textures["bounds"] == NULL)
-	{
-		printf("Failed to load PNG image!\n");
-		success = false;
-	}
-
 	textures["block"] = LoadTexture("Images\\block.png");
-	if (textures["block"] == NULL)
-	{
-		printf("Failed to load PNG image!\n");
-		success = false;
-	}
-
 	textures["ball"] = LoadTexture("Images\\ball.png");
-	if (textures["ball"] == NULL)
-	{
-		printf("Failed to load PNG image!\n");
-		success = false;
-	}
-
 	textures["paddle"] = LoadTexture("Images\\paddle_rounded.png");
-	if (textures["paddle"] == NULL)
-	{
-		printf("Failed to load PNG image!\n");
-		success = false;
-	}
+
+	textures["missingStatus"] = LoadTexture("Images\\missingStatus.png");
+	textures["downfall"] = LoadTexture("Images\\downfall.png");
+	textures["accelerate"] = LoadTexture("Images\\accelerate.png");
 
 	blockTextures["normal"] = LoadTextureSequence("Images\\block");
 	blockTextures["invulnerable"] = LoadTextureSequence("Images\\invulnerable");
@@ -62,7 +43,7 @@ Texture* Textures::LoadTexture(std::string path)
 	if (loadedSurface == NULL)
 	{
 		printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
-		return NULL;
+		throw new std::exception();
 	}
 
 	//Create texture from surface pixels
@@ -73,7 +54,7 @@ Texture* Textures::LoadTexture(std::string path)
 	if (newTexture == NULL)
 	{
 		printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
-		return NULL;
+		throw new std::exception();
 	}
 
 	return new Texture(newTexture, Vector2<int>{ loadedSurface->w, loadedSurface->h });

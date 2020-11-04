@@ -89,10 +89,10 @@
     <ClCompile Include="Line.cpp">
       <Filter>Source Files\Shape</Filter>
     </ClCompile>
-    <ClCompile Include="Shape.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CompoundShape.cpp">
+      <Filter>Source Files\Shape</Filter>
+    </ClCompile>
+    <ClCompile Include="Shape.cpp">
       <Filter>Source Files\Shape</Filter>
     </ClCompile>
   </ItemGroup>

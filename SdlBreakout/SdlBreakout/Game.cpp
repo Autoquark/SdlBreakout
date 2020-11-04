@@ -89,7 +89,7 @@ int Game::Start()
 
 	bool quit = false;
 
-	auto lastUpdateTime = SDL_GetTicks();
+	auto lastUpdateSdlTime = SDL_GetTicks();
 
 	while (!quit)
 	{
@@ -110,9 +110,10 @@ int Game::Start()
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 		SDL_RenderClear(renderer);
 
-		auto time = SDL_GetTicks();
+		auto sdlTime = SDL_GetTicks();
 		// If the update loop goes over our time budget (perhaps due to debugging), don't let the elapsed time grow too big
-		float elapsed = (float)std::min((time - lastUpdateTime) / 1000.0, 1.0 / TARGET_FPS);
+		float elapsed = (float)std::min((sdlTime - lastUpdateSdlTime) / 1000.0, 1.0 / TARGET_FPS);
+		time += elapsed;
 
 		for (auto gameObject : gameObjects)
 		{
@@ -128,7 +129,7 @@ int Game::Start()
 			}
 		}
 
-		lastUpdateTime = time;
+		lastUpdateSdlTime = sdlTime;
 
 		SDL_RenderPresent(renderer);
 	}

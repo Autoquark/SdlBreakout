@@ -19,6 +19,12 @@
     <Filter Include="Header Files\GameObject">
       <UniqueIdentifier>{acd20e6b-3625-4c6d-a478-5a8ebb554c6f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\BallStatus">
+      <UniqueIdentifier>{6c4755e3-4b68-4def-8be0-7b69a0d9b17d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\BallStatus">
+      <UniqueIdentifier>{78d81dff-1953-4fac-9e52-124af59f80fb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -60,6 +66,15 @@
     <ClCompile Include="BlockMaker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BallStatusEffect.cpp">
+      <Filter>Source Files\BallStatus</Filter>
+    </ClCompile>
+    <ClCompile Include="BallStatus_Downfall.cpp">
+      <Filter>Source Files\BallStatus</Filter>
+    </ClCompile>
+    <ClCompile Include="BallStatus_Accelerate.cpp">
+      <Filter>Source Files\BallStatus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -100,6 +115,15 @@
     </ClInclude>
     <ClInclude Include="BlockMaker.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BallStatusEffect.h">
+      <Filter>Header Files\BallStatus</Filter>
+    </ClInclude>
+    <ClInclude Include="BallStatus_Downfall.h">
+      <Filter>Header Files\BallStatus</Filter>
+    </ClInclude>
+    <ClInclude Include="BallStatus_Accelerate.h">
+      <Filter>Header Files\BallStatus</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
