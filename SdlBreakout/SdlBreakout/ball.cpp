@@ -1,12 +1,14 @@
 #include "stdafx.h"
+
 #include <algorithm>
 #include <iostream>
+
 #include "ball.h"
 #include "game.h"
 #include "Vector2.h"
 #include "Textures.h"
 #include "CircleF.h"
-
+#include "Debug.h"
 
 Ball::Ball() : GameObject(new CircleF(0, 0, 8))
 {
@@ -46,6 +48,8 @@ void Ball::Update(float timeElapsed)
 			effectiveSpeed *= value;
 		}
 	}
+
+	Debug::PrintChanges("effectiveSpeed: ", std::to_string(effectiveSpeed));
 
 	velocity.SetMagnitude(effectiveSpeed);
 	auto remainingVelocity = velocity * timeElapsed;
@@ -95,7 +99,6 @@ void Ball::Update(float timeElapsed)
 			{
 				auto curveProportion = (collision.point.x - centreSegment->Centre().x) * 2 / centreSegment->size.x;
 				normal.Rotate(curveProportion * Paddle::MAX_VIRTUAL_CURVE);
-				std::cout << "Curve proportion: " << curveProportion << " normal: " << normal.ToString();
 			}
 		}
 
@@ -111,6 +114,7 @@ void Ball::Update(float timeElapsed)
 	}
 	
 	statusEffects.erase(std::remove_if(statusEffects.begin(), statusEffects.end(), [this](auto const& x) { return toRemove.find(x.get()) != toRemove.end(); }), statusEffects.end());
+	toRemove.clear();
 
 	GameObject::Update(timeElapsed);
 }
