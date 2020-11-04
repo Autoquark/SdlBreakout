@@ -3,6 +3,7 @@
 
 #include <map>
 #include <vector>
+#include <filesystem>
 
 #include "Texture.h"
 
@@ -15,16 +16,16 @@ public:
 	}
 	static const std::vector<Texture*>& GetBlockTextures(const std::string& key)
 	{
-		return blockTextures[key];
+		return blockTextures.at(key);
 	}
-	static bool LoadTextures();
+	static void LoadTextures();
 	static void FreeAllTextures();
 
 private:
 	static std::map<std::string, Texture*> textures;
 	static std::map<std::string, std::vector<Texture*>> blockTextures;
 
-	static Texture* LoadTexture(std::string path);
-	static std::vector<Texture*> LoadTextureSequence(std::string pathPrefix);
+	static Texture* LoadTexture(const std::filesystem::path path);
+	static std::vector<Texture*> LoadTextureSequence(const std::filesystem::path directory);
 };
 

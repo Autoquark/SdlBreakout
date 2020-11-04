@@ -43,11 +43,7 @@ int Game::Start()
 		return -1;
 	}
 
-	if (!Textures::LoadTextures())
-	{
-		printf("Failed to load textures!\n");
-		return -1;
-	}
+	Textures::LoadTextures();
 
 	if (!Sounds::LoadSounds())
 	{

@@ -1,29 +1,24 @@
 #include "stdafx.h"
 
 #include <filesystem>
+#include <vector>
 
 #include "Textures.h"
 #include "Game.h"
 
-bool Textures::LoadTextures()
+void Textures::LoadTextures()
 {
-	//Loading success flag
-	bool success = true;
-
-	//Load PNG surface
-	textures["bounds"] = LoadTexture("Images\\bounds.png");
-	textures["block"] = LoadTexture("Images\\block.png");
-	textures["ball"] = LoadTexture("Images\\ball.png");
-	textures["paddle"] = LoadTexture("Images\\paddle_rounded.png");
-
-	textures["missingStatus"] = LoadTexture("Images\\missingStatus.png");
-	textures["downfall"] = LoadTexture("Images\\downfall.png");
-	textures["accelerate"] = LoadTexture("Images\\accelerate.png");
-
-	blockTextures["normal"] = LoadTextureSequence("Images\\block");
-	blockTextures["invulnerable"] = LoadTextureSequence("Images\\invulnerable");
-
-	return success;
+	for (auto file : std::filesystem::directory_iterator("Images"))
+	{
+		if (file.is_directory())
+		{
+			blockTextures[file.path().filename().string()] = LoadTextureSequence(file.path());
+		}
+		else
+		{
+			textures[file.path().filename().replace_extension().string()] = LoadTexture(file.path().string());
+		}
+	}
 }
 
 void Textures::FreeAllTextures()
@@ -36,13 +31,13 @@ void Textures::FreeAllTextures()
 	textures.clear();
 }
 
-Texture* Textures::LoadTexture(std::string path)
+Texture* Textures::LoadTexture(const std::filesystem::path path)
 {
 	//Load image at specified path
-	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
+	SDL_Surface* loadedSurface = IMG_Load(path.string().c_str());
 	if (loadedSurface == NULL)
 	{
-		printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
+		printf("Unable to load image %s! SDL_image Error: %s\n", path.string().c_str(), IMG_GetError());
 		throw new std::exception();
 	}
 
@@ -53,24 +48,27 @@ Texture* Textures::LoadTexture(std::string path)
 
 	if (newTexture == NULL)
 	{
-		printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
+		printf("Unable to create texture from %s! SDL Error: %s\n", path.string().c_str(), SDL_GetError());
 		throw new std::exception();
 	}
 
 	return new Texture(newTexture, Vector2<int>{ loadedSurface->w, loadedSurface->h });
 }
 
-std::vector<Texture*> Textures::LoadTextureSequence(std::string pathPrefix)
+std::vector<Texture*> Textures::LoadTextureSequence(const std::filesystem::path directory)
 {
+	std::vector<std::filesystem::directory_entry> files;
+	std::copy(std::filesystem::directory_iterator(directory), std::filesystem::directory_iterator(), std::back_inserter(files));
+	std::sort(files.begin(), files.end());
+
 	std::vector<Texture*> textures;
-	for(int i = 1; true; i++)
+	for(auto file : files)
 	{
-		auto filename = pathPrefix + std::to_string(i) + ".png";
-		if (!std::filesystem::exists(filename))
+		if (file.is_directory() || file.path().extension() != ".png")
 		{
-			break;
+			continue;
 		}
-		textures.push_back(LoadTexture(filename));
+		textures.push_back(LoadTexture(file.path()));
 	}
 
 	return textures;
