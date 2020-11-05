@@ -18,3 +18,7 @@ jobs:
     - name: Run MSBuild
       working-directory: SdlBreakout/SdlBreakout
       run: msbuild SdlBreakout.vcxproj
+      
+    - name: Run Tests
+      working-directory: SdlBreakout/Win32/Debug
+      run: vstest.console Tests.dll
