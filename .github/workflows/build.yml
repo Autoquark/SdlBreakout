@@ -16,8 +16,8 @@ jobs:
       run: nuget restore SdlBreakout.vcxproj -SolutionDirectory ..
 
     - name: Run MSBuild
-      working-directory: SdlBreakout/SdlBreakout
-      run: msbuild SdlBreakout.vcxproj -property:Configuration=Debug -property:Platform=x64
+      working-directory: SdlBreakout
+      run: msbuild SdlBreakout/SdlBreakout.vcxproj -property:Configuration=Debug -property:Platform=x64
       
     - name: Run Tests
       working-directory: SdlBreakout/x64/Debug
