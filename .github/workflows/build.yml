@@ -1,4 +1,3 @@
-steps:
 name: CI
 on: [push]
 jobs:
