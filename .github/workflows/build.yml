@@ -13,7 +13,7 @@ jobs:
       
     - name: Nuget Restore
       working-directory: SdlBreakout/SdlBreakout
-      run: nuget restore SdlBreakout.vcxproj
+      run: nuget restore SdlBreakout.vcxproj -SolutionDirectory ..
 
     - name: Run MSBuild
       working-directory: SdlBreakout/SdlBreakout
