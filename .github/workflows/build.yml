@@ -17,8 +17,8 @@ jobs:
 
     - name: Run MSBuild
       working-directory: SdlBreakout/SdlBreakout
-      run: msbuild SdlBreakout.vcxproj
+      run: msbuild SdlBreakout.vcxproj -property:Configuration=Debug -property:Platform=x64
       
     - name: Run Tests
-      working-directory: Win32/Debug
+      working-directory: x64/Debug
       run: vstest.console Tests.dll
