@@ -4,12 +4,17 @@ jobs:
   build:
     runs-on: windows-latest
 
-    steps:
-    - uses: actions/checkout@master
+    steps: 
+    - name: Checkout code
+      uses: actions/checkout@master
 
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.0.2
+      
+    - name: Nuget Restore
+      working-directory: SdlBreakout/SdlBreakout
+      run: nuget restore SdlBreakout.vcxproj
 
-    - name: MSBuild
+    - name: Run MSBuild
       working-directory: SdlBreakout/SdlBreakout
       run: msbuild SdlBreakout.vcxproj
