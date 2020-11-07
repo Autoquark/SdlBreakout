@@ -35,7 +35,7 @@ jobs:
       run: ls
       
     - name: Setup VSTest.console.exe
-      uses: darenm/Setup-VSTest
+      uses: darenm/Setup-VSTest@v1.1.1
       
     - name: Run Tests
       working-directory: SdlBreakout/x64/Debug
