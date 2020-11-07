@@ -12,12 +12,12 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.2
       
     - name: Nuget Restore
-      working-directory: SdlBreakout/SdlBreakout
-      run: nuget restore SdlBreakout.vcxproj -SolutionDirectory ..
+      working-directory: SdlBreakout
+      run: nuget restore SdlBreakout.sln -SolutionDirectory .
 
     - name: Run MSBuild
       working-directory: SdlBreakout
-      run: msbuild SdlBreakout/SdlBreakout.vcxproj -property:Configuration=Debug -property:Platform=x64
+      run: msbuild SdlBreakout.sln -property:Configuration=Debug -property:Platform=x64
       
     - working-directory: .
       run: ls
