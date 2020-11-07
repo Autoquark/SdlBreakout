@@ -28,7 +28,10 @@ jobs:
     - working-directory: SdlBreakout/SdlBreakout
       run: ls
       
-    - working-directory: SdlBreakout/x64
+    - working-directory: SdlBreakout/SdlBreakout/x64
+      run: ls
+      
+    - working-directory: SdlBreakout/SdlBreakout/x64/Debug
       run: ls
       
     - name: Run Tests
