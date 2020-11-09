@@ -8,7 +8,7 @@
 class BallStatus_Accelerate : public BallStatusEffect
 {
 public:
-	BallStatus_Accelerate() : BallStatusEffect()
+	BallStatus_Accelerate() : BallStatusEffect(), removeAt(-1)
 	{
 		speedMultiplier = SPEED_FACTOR;
 	}

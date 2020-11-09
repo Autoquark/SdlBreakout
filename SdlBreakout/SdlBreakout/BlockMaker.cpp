@@ -8,9 +8,6 @@ Block* BlockMaker::MakeNormal(int health)
 {
     auto block = new Block("normal");
     block->SetHealth(health);
-    //TEMP
-    block->appliesStatus = new BallStatus_Accelerate();
-    //TEMP
     return block;
 }
 

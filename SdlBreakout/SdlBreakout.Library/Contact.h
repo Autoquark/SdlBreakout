@@ -7,6 +7,8 @@
 struct Contact
 {
 public:
+	static const float MIN_SEPARATION_DISTANCE;
+
 	// Normal of the collision
 	Vector2F normal;
 	// The point at which the objects touch
