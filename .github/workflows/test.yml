@@ -1,4 +1,4 @@
-name: Compile
+name: CI
 on: [push]
 jobs:
   build:
@@ -18,3 +18,10 @@ jobs:
     - name: Run MSBuild
       working-directory: SdlBreakout
       run: msbuild SdlBreakout.sln -property:Configuration=Debug -property:Platform=x64
+      
+    - name: Setup VSTest.console.exe
+      uses: darenm/Setup-VSTest@v1.1.1
+      
+    - name: Run Tests
+      working-directory: SdlBreakout/x64/Debug
+      run: vstest.console Tests.dll
