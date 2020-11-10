@@ -103,7 +103,7 @@ public:
 
 	// Returns the index in the given vector of the Contact with the lowest distance that matches the given filter, or an empty optional if the input contains no such contacts
 	[[nodiscard]]
-	static std::vector<std::optional<Contact>>::size_type FindClosestCollisionIndex(const std::vector<std::optional<Contact>>& contacts, const InternalityFilter& internalityFilter = InternalityFilter::Both)
+	static int FindClosestCollisionIndex(const std::vector<std::optional<Contact>>& contacts, const InternalityFilter& internalityFilter = InternalityFilter::Both)
 	{
 		int bestIndex = -1;
 		for (unsigned int i = 0; i < contacts.size(); i++)

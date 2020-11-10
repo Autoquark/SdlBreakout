@@ -31,14 +31,12 @@ Paddle::~Paddle()
 
 void Paddle::Update(float timeElapsed)
 {
-	const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
-
 	Vector2F movement = Vector2F(0, 0);
-	if (currentKeyStates[SDL_SCANCODE_LEFT])
+	if (Game::GetInput().KeyIsDown(SDL_SCANCODE_LEFT))
 	{
 		movement = Vector2F(-moveSpeed * timeElapsed, 0);
 	}
-	else if (currentKeyStates[SDL_SCANCODE_RIGHT])
+	else if (Game::GetInput().KeyIsDown(SDL_SCANCODE_RIGHT))
 	{
 		movement = Vector2F(moveSpeed * timeElapsed, 0);
 	}

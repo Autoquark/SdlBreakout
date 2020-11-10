@@ -3,10 +3,12 @@
 #include <algorithm>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
+#include <SDL_ttf.h>
 #include <stdio.h>
 #include <string>
 #include <vector>
 
+#include "Input.h"
 #include "Game.h"
 #include "Paddle.h"
 #include "Ball.h"
@@ -20,6 +22,17 @@
 
 Game::~Game()
 {
+	//Free loaded image
+	Textures::FreeAllTextures();
+	Sounds::FreeAllSounds();
+
+	//Destroy window
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(gWindow);
+
+	//Quit SDL subsystems
+	IMG_Quit();
+	SDL_Quit();
 }
 
 Game& Game::GetInstance()
@@ -35,20 +48,16 @@ void Game::Destroy(GameObject * gameObject)
 	delete gameObject;
 }
 
-int Game::Start()
+void Game::Start()
 {
-	if (!init())
-	{
-		printf("Failed to initialize!\n");
-		return -1;
-	}
+	init();
 
 	Textures::LoadTextures();
 
 	if (!Sounds::LoadSounds())
 	{
 		printf("Failed to load sounds!\n");
-		return -1;
+		throw new std::exception();
 	}
 
 	int x,y;
@@ -89,7 +98,6 @@ int Game::Start()
 
 	while (!quit)
 	{
-		//Event handler
 		SDL_Event e;
 
 		//Handle events on queue
@@ -101,47 +109,71 @@ int Game::Start()
 				quit = true;
 				break;
 			}
+			if (e.type == SDL_KEYUP || e.type == SDL_KEYDOWN)
+			{
+				input.KeyEvent(e.key);
+			}
+		}
+
+		if (!currentMenu && input.KeyPressed(SDL_SCANCODE_ESCAPE))
+		{
+			currentMenu = new Menu();
+			currentMenu->Show(std::vector{ "Resume"s, "Quit"s });
 		}
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 		SDL_RenderClear(renderer);
 
-		auto sdlTime = SDL_GetTicks();
-		// If the update loop goes over our time budget (perhaps due to debugging), don't let the elapsed time grow too big
-		float elapsed = (float)std::min((sdlTime - lastUpdateSdlTime) / 1000.0, 1.0 / TARGET_FPS);
-		time += elapsed;
-
-		for (auto gameObject : gameObjects)
+		if (currentMenu)
 		{
-			gameObject->Update(elapsed);
+			auto value = currentMenu->Update();
+			if (value == 0)
+			{
+				delete currentMenu;
+				currentMenu = nullptr;
+			}
+			else if (value == 1)
+			{
+				break;
+			}
 		}
-
-		// Debug tool: Speed up when space held
-		if (SDL_GetKeyboardState(NULL)[SDL_SCANCODE_SPACE])
+		else
 		{
+
+			auto sdlTime = SDL_GetTicks();
+			// If the update loop goes over our time budget (perhaps due to debugging), don't let the elapsed time grow too big
+			float elapsed = (float)std::min((sdlTime - lastUpdateSdlTime) / 1000.0, 1.0 / TARGET_FPS);
+			time += elapsed;
+
 			for (auto gameObject : gameObjects)
 			{
 				gameObject->Update(elapsed);
 			}
+
+			// Debug tool: Speed up when space held
+			if (input.KeyIsDown(SDL_SCANCODE_SPACE))
+			{
+				for (auto gameObject : gameObjects)
+				{
+					gameObject->Update(elapsed);
+				}
+			}
+
+			lastUpdateSdlTime = sdlTime;
 		}
 
-		lastUpdateSdlTime = sdlTime;
-
+		input.EndUpdate();
 		SDL_RenderPresent(renderer);
 	}
-
-	close();
-
-	return 0;
 }
 
-bool Game::init()
+void Game::init()
 {
 	//Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 	{
 		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
-		return false;
+		throw new std::exception();
 	}
 
 	//Create window
@@ -149,7 +181,7 @@ bool Game::init()
 	if (gWindow == NULL)
 	{
 		printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
-		return false;
+		throw new std::exception();
 	}
 
 	//Create renderer for window
@@ -157,18 +189,25 @@ bool Game::init()
 	if (renderer == NULL)
 	{
 		printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
-		return false;
+		throw new std::exception();
 	}
 
-	//Initialize renderer color
+	// Initialize renderer color
 	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
-	//Initialize PNG loading
+	// Initialize PNG loading
 	int imgFlags = IMG_INIT_PNG;
 	if (!(IMG_Init(imgFlags) & imgFlags))
 	{
 		printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-		return false;
+		throw new std::exception();
+	}
+
+	// Initialize SDL_TTF
+	if (TTF_Init() == -1)
+	{
+		printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+		throw new std::exception();
 	}
 
 	//Get window surface
@@ -177,10 +216,8 @@ bool Game::init()
 	//Initialize SDL_mixer
 	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1)
 	{
-		return false;
+		throw new std::exception();
 	}
-
-	return true;
 }
 
 SDL_Surface* Game::loadSurface(std::string path)
@@ -208,19 +245,4 @@ SDL_Surface* Game::loadSurface(std::string path)
 	}
 
 	return optimizedSurface;
-}
-
-void Game::close()
-{
-	//Free loaded image
-	Textures::FreeAllTextures();
-	Sounds::FreeAllSounds();
-
-	//Destroy window
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(gWindow);
-
-	//Quit SDL subsystems
-	IMG_Quit();
-	SDL_Quit();
 }
