@@ -20,7 +20,6 @@
 
 Game::~Game()
 {
-	@
 }
 
 Game& Game::GetInstance()
