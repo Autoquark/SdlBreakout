@@ -1,4 +1,4 @@
-name: Compile Debug
+name: Compile Release
 on: [push]
 jobs:
   build:
@@ -17,4 +17,4 @@ jobs:
 
     - name: Run MSBuild
       working-directory: SdlBreakout
-      run: msbuild SdlBreakout.sln -property:Configuration=Debug -property:Platform=x64
+      run: msbuild SdlBreakout.sln -property:Configuration=Release -property:Platform=x64
