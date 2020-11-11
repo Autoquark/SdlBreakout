@@ -3,26 +3,13 @@
 
 #include <SDL.h>
 
+#include "Vector2.h"
+
 Input::Input()
 {
 	keysDown = SDL_GetKeyboardState(&arraySize);
 	keysPressed = new bool[arraySize];
 	keysReleased = new bool[arraySize];
-}
-
-bool Input::KeyPressed(SDL_Scancode key) const
-{
-	return keysPressed[key];
-}
-
-bool Input::KeyReleased(SDL_Scancode key) const
-{
-	return keysReleased[key];
-}
-
-bool Input::KeyIsDown(SDL_Scancode key) const
-{
-	return keysDown[key];
 }
 
 void Input::KeyEvent(SDL_KeyboardEvent event)
@@ -37,6 +24,12 @@ void Input::KeyEvent(SDL_KeyboardEvent event)
 	}
 }
 
+void Input::MouseEvent(SDL_MouseMotionEvent event)
+{
+	mouseMovement.x += event.xrel;
+	mouseMovement.y += event.yrel;
+}
+
 void Input::EndUpdate()
 {
 	for (int i = 0; i < arraySize; i++)
@@ -44,4 +37,6 @@ void Input::EndUpdate()
 		keysPressed[i] = false;
 		keysReleased[i] = false;
 	}
+
+	mouseMovement = Vector2F();
 }

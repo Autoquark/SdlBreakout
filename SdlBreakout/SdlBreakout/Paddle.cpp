@@ -31,7 +31,7 @@ Paddle::~Paddle()
 
 void Paddle::Update(float timeElapsed)
 {
-	Vector2F movement = Vector2F(0, 0);
+	auto movement = Vector2F(std::clamp(Game::GetInput().GetMouseMovement().x, -moveSpeed * timeElapsed, moveSpeed * timeElapsed), 0);
 	if (Game::GetInput().KeyIsDown(SDL_SCANCODE_LEFT))
 	{
 		movement = Vector2F(-moveSpeed * timeElapsed, 0);

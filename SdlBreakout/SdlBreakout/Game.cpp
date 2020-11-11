@@ -57,6 +57,11 @@ void Game::Start()
 	Sounds::LoadSounds();
 	Fonts::LoadFonts();
 
+	if (SDL_SetRelativeMouseMode(SDL_bool::SDL_TRUE) != 0)
+	{
+		throw new std::exception();
+	}
+
 	int x,y;
 	for (y = 120; y < 340; y += (int)Textures::GetTexture("block")->GetSize().y)
 	{
@@ -110,10 +115,16 @@ void Game::Start()
 			{
 				input.KeyEvent(e.key);
 			}
+			else if (e.type == SDL_MOUSEMOTION)
+			{
+				input.MouseEvent(e.motion);
+			}
 		}
 
+		auto escapeHandled = false;
 		if (!currentMenu && input.KeyPressed(SDL_SCANCODE_ESCAPE))
 		{
+			escapeHandled = true;
 			currentMenu = new Menu();
 			currentMenu->Show(std::vector{ "Resume"s, "Quit"s });
 		}
@@ -124,7 +135,7 @@ void Game::Start()
 		if (currentMenu)
 		{
 			auto value = currentMenu->Update();
-			if (value == 0)
+			if (value == 0 || (!escapeHandled && input.KeyPressed(SDL_SCANCODE_ESCAPE)))
 			{
 				delete currentMenu;
 				currentMenu = nullptr;
