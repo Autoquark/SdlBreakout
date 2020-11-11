@@ -5,7 +5,8 @@
 class Block : public GameObject
 {
 public:
-	Block(std::string textureKey);
+	Block(std::string textureKey, Shape& collisionBounds);
+	Block(std::string textureKey) : Block(textureKey, *new AxisAlignedRectF{ 0, 0, 40, 20 }) {}
 	~Block();
 
 	void OnBallHit(Ball& ball);

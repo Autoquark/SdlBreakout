@@ -25,6 +25,12 @@
     <Filter Include="Header Files\BallStatus">
       <UniqueIdentifier>{78d81dff-1953-4fac-9e52-124af59f80fb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Assets">
+      <UniqueIdentifier>{251fa118-41c5-4c6a-ae08-838fca3f569b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Assets">
+      <UniqueIdentifier>{269a885f-0506-49fc-9a83-d04d51414ee3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -37,12 +43,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Conversion.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Textures.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sounds.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Debug.cpp">
@@ -81,6 +81,15 @@
     <ClCompile Include="Input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Textures.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Sounds.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Fonts.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -93,12 +102,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Conversion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Textures.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sounds.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Debug.h">
@@ -136,6 +139,15 @@
     </ClInclude>
     <ClInclude Include="Input.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sounds.h">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Textures.h">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Fonts.h">
+      <Filter>Header Files\Assets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

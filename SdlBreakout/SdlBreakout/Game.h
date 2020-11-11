@@ -35,6 +35,7 @@ public:
 		return blocks;
 	}
 
+	// Gets the current game time in seconds. This excludes time spent paused.
 	float GetTime()
 	{
 		return time;

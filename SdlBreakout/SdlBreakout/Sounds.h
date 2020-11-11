@@ -15,7 +15,7 @@ public:
 	{
 		return sounds[key];
 	}
-	static bool LoadSounds();
+	static void LoadSounds();
 	static void FreeAllSounds();
 
 private:

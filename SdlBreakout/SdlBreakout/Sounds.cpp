@@ -1,25 +1,21 @@
 #include "stdafx.h"
 #include "Sounds.h"
 
-bool Sounds::LoadSounds()
+void Sounds::LoadSounds()
 {
-	auto success = true;
-
 	sounds["bounce"] = Mix_LoadWAV("Sounds\\bounce.wav");
 	if (sounds["bounce"] == NULL)
 	{
 		printf("Failed to load sound!\n");
-		success = false;
+		throw new std::exception();
 	}
 
 	sounds["bounce_invulnerable"] = Mix_LoadWAV("Sounds\\dullTwang.wav");
 	if (sounds["bounce_invulnerable"] == NULL)
 	{
 		printf("Failed to load sound!\n");
-		success = false;
+		throw new std::exception();
 	}
-
-	return success;
 }
 
 void Sounds::FreeAllSounds()

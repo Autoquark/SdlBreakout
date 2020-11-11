@@ -154,6 +154,7 @@
     <ClCompile Include="Bounds.cpp" />
     <ClCompile Include="Conversion.cpp" />
     <ClCompile Include="Debug.cpp" />
+    <ClCompile Include="Fonts.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Input.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="Bounds.h" />
     <ClInclude Include="Conversion.h" />
     <ClInclude Include="Debug.h" />
+    <ClInclude Include="Fonts.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Input.h" />

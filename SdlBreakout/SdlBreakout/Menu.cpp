@@ -5,6 +5,7 @@
 #include <SDL_ttf.h>
 
 #include "Game.h"
+#include "Fonts.h"
 
 int Menu::Update()
 {
@@ -33,16 +34,14 @@ int Menu::Update()
 	int y = 100;
 	for (int i = 0; i < options.size(); i++)
 	{
-		auto option = (options)[i];
-		auto font = TTF_OpenFont("Fonts/MB-Demonic_Tale.ttf", 24);
-		auto error = TTF_GetError();
+		auto option = options[i];
 		auto color = i == selectedIndex ? SDL_Color{ 255, 0, 0 } : SDL_Color{ 255, 255, 255 };
-		auto surfaceMessage = TTF_RenderText_Solid(font, option.c_str(), color);
+		auto surfaceMessage = TTF_RenderText_Shaded(Fonts::menuFont, option.c_str(), color, SDL_Color());
 		auto renderer = Game::GetInstance().renderer;
 		auto message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
 
 		int width, height;
-		TTF_SizeText(font, option.c_str(), &width, &height);
+		TTF_SizeText(Fonts::menuFont, option.c_str(), &width, &height);
 
 		auto rect = SDL_Rect{ (Game::SCREEN_WIDTH - width) / 2, y, width, height };
 		SDL_RenderCopy(renderer, message, NULL, &rect);

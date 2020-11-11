@@ -7,7 +7,7 @@
 #include "Textures.h"
 #include "Sounds.h"
 
-Block::Block(const std::string textureKey) : GameObject(new AxisAlignedRectF{ 0, 0, 40, 20 }), textureKey(textureKey)
+Block::Block(const std::string textureKey, Shape& collisionBounds) : GameObject(&collisionBounds), textureKey(textureKey)
 {
 	SetHealth(1);
 }

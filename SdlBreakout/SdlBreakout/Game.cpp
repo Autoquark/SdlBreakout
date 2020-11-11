@@ -19,6 +19,7 @@
 #include "Bounds.h"
 #include "Textures.h"
 #include "Sounds.h"
+#include "Fonts.h"
 
 Game::~Game()
 {
@@ -53,12 +54,8 @@ void Game::Start()
 	init();
 
 	Textures::LoadTextures();
-
-	if (!Sounds::LoadSounds())
-	{
-		printf("Failed to load sounds!\n");
-		throw new std::exception();
-	}
+	Sounds::LoadSounds();
+	Fonts::LoadFonts();
 
 	int x,y;
 	for (y = 120; y < 340; y += (int)Textures::GetTexture("block")->GetSize().y)
@@ -131,6 +128,8 @@ void Game::Start()
 			{
 				delete currentMenu;
 				currentMenu = nullptr;
+				// Ignore any time passed while the menu was open
+				lastUpdateSdlTime = SDL_GetTicks();
 			}
 			else if (value == 1)
 			{
