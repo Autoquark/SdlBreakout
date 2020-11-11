@@ -49,8 +49,6 @@ void Ball::Update(float timeElapsed)
 		}
 	}
 
-	Debug::PrintChanges("effectiveSpeed: ", std::to_string(effectiveSpeed));
-
 	velocity.SetMagnitude(effectiveSpeed);
 	auto remainingVelocity = velocity * timeElapsed;
 
@@ -87,7 +85,7 @@ void Ball::Update(float timeElapsed)
 			block->OnBallHit(*this);
 		}
 
-		auto collision = *contacts[index];
+		auto& collision = *contacts[index];
 
 		// If we hit the paddle
 		auto normal = collision.normal;
