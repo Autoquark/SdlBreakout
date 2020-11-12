@@ -10,9 +10,8 @@ class Block;
 class BallStatusEffect
 {
 public:
-	BallStatusEffect()
-	{
-	}
+	BallStatusEffect() {}
+	virtual ~BallStatusEffect() = default;
 
 	virtual void ApplyToBall(Ball* ball) = 0;
 
