@@ -8,6 +8,11 @@
 class GameObject
 {
 public:
+	virtual ~GameObject()
+	{
+		delete collisionBounds;
+	}
+
 	const Texture* getSprite();
 	void setSprite(Texture* value);
 
@@ -16,10 +21,6 @@ public:
 	Shape* const collisionBounds;
 
 	GameObject(Shape* collisionBounds = NULL) : collisionBounds(collisionBounds) {}
-	~GameObject()
-	{
-		delete collisionBounds;
-	}
 
 protected:
 	const Texture* sprite = NULL;

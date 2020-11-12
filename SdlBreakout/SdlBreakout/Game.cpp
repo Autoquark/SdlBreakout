@@ -56,11 +56,9 @@ void Game::Start()
 
 	level = std::make_unique<Level>();
 
-	bool quit = false;
-
 	auto lastUpdateSdlTime = SDL_GetTicks();
 
-	while (!quit)
+	while (true)
 	{
 		SDL_Event e;
 
@@ -70,7 +68,6 @@ void Game::Start()
 			//User requests quit
 			if (e.type == SDL_QUIT)
 			{
-				quit = true;
 				break;
 			}
 			if (e.type == SDL_KEYUP || e.type == SDL_KEYDOWN)

@@ -36,12 +36,14 @@ namespace optionalUtilities
 		return predicate(left.value(), right.value()) ? right.value() : left.value();
 	}
 
+	// Returns whether the given optional contains a value. Overloaded template to allow uniform handling of std::optional and pointers
 	template<typename T>
 	bool HasValue(std::optional<T> optional)
 	{
 		return optional.has_value();
 	}
 
+	// Returns whether the given pointer is non-null. Overloaded template to allow uniform handling of std::optional and pointers
 	template<typename T>
 	bool HasValue(T* pointer)
 	{

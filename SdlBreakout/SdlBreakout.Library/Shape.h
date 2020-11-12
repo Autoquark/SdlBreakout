@@ -14,6 +14,8 @@ class CompoundShape;
 class Shape
 {
 public:
+	virtual ~Shape() = default;
+
 	enum class InternalityFilter
 	{
 		Both,

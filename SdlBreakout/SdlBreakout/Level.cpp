@@ -6,12 +6,13 @@
 
 void Level::Destroy(GameObject* gameObject)
 {
-	blocks.erase(std::find(blocks.begin(), blocks.end(), gameObject));
+	blocks.erase(std::remove(blocks.begin(), blocks.end(), gameObject), blocks.end());
+	balls.erase(std::remove(balls.begin(), balls.end(), gameObject), balls.end());
 	gameObjects.erase(std::find(gameObjects.begin(), gameObjects.end(), gameObject));
 	delete gameObject;
 }
 
-Level::Level()
+Level::Level() : bounds(AxisAlignedRectF(2.0f, 2.0f, Game::GetInstance().SCREEN_WIDTH - 4.0f, Game::GetInstance().SCREEN_HEIGHT - 4.0f))
 {
 	int x, y;
 	for (y = 120; y < 340; y += (int)Textures::GetTexture("block")->GetSize().y)
@@ -38,15 +39,12 @@ Level::Level()
 	gameObjects.push_back(paddle);
 	gameObjects.back()->collisionBounds->Translate(320, 440);
 
-	ball = new Ball();
-	gameObjects.push_back(ball);
+	balls.push_back(new Ball());
+	gameObjects.push_back(balls.back());
 	gameObjects.back()->collisionBounds->Translate(320, 400);
-
-	bounds = new Bounds();
-	gameObjects.push_back(bounds);
 }
 
-void Level::Update(float timeElapsed)
+Level::UpdateResult Level::Update(float timeElapsed)
 {
 	for (auto gameObject : gameObjects)
 	{
@@ -61,4 +59,11 @@ void Level::Update(float timeElapsed)
 			gameObject->Update(timeElapsed);
 		}
 	}
+
+	if (balls.empty())
+	{
+		return UpdateResult::Defeat;
+	}
+
+	return UpdateResult::Continue;
 }

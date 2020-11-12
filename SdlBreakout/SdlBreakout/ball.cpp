@@ -55,7 +55,7 @@ void Ball::Update(float timeElapsed)
 	while (true)
 	{
 		auto paddle = level->paddle;
-		auto screenEdgeCollision = collisionBounds->CastAgainst(*level->bounds->collisionBounds, remainingVelocity, Shape::InternalityFilter::Internal);
+		auto screenEdgeCollision = collisionBounds->CastAgainst(level->bounds, remainingVelocity, Shape::InternalityFilter::Internal);
 		auto paddleCollision = collisionBounds->CastAgainst(*paddle->collisionBounds, remainingVelocity, Shape::InternalityFilter::External);
 
 		std::vector<std::optional<Contact>> contacts = {
@@ -87,11 +87,11 @@ void Ball::Update(float timeElapsed)
 
 		auto& collision = *contacts[index];
 
-		
 		auto normal = collision.normal;
-		if (index == 0 && std::abs(collision.point.y - Game::SCREEN_HEIGHT) < 1)
+		if (index == 0 && std::abs(collision.point.y - level->bounds.Bottom()) < 1)
 		{
-
+			level->Destroy(this);
+			return;
 		}
 		// If we hit the paddle
 		else if (index == 1)

@@ -13,11 +13,22 @@ public:
 	Level(const Level& level) = delete;
 	Level(int x) = delete;
 
-	void Update(float timeElapsed);
+	enum class UpdateResult
+	{
+		Continue,
+		Defeat
+	};
+
+	UpdateResult Update(float timeElapsed);
 
 	const std::vector<Block*>& GetBlocks() const
 	{
 		return blocks;
+	}
+
+	const std::vector<Ball*>& GetBalls() const
+	{
+		return balls;
 	}
 
 	/// <summary>
@@ -27,14 +38,15 @@ public:
 	/// <param name="gameObject"></param>
 	void Destroy(GameObject* gameObject);
 
+	AxisAlignedRectF bounds;
+
 	// Special game objects
-	Bounds* bounds = NULL;
 	Paddle* paddle = NULL;
-	Ball* ball = NULL;
 
 private:
 
 	std::vector<GameObject*> gameObjects;
 	std::vector<Block*> blocks;
+	std::vector<Ball*> balls;
 };
 

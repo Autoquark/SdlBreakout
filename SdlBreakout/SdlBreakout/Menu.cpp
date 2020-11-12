@@ -19,7 +19,7 @@ int Menu::Update()
 		selectedIndex--;
 		if (selectedIndex == -1)
 		{
-			selectedIndex = options.size() - 1;
+			selectedIndex = (int)options.size() - 1;
 		}
 	}
 	if (Game::GetInput().KeyPressed(SDL_SCANCODE_DOWN))
@@ -32,7 +32,7 @@ int Menu::Update()
 	}
 
 	int y = 100;
-	for (int i = 0; i < options.size(); i++)
+	for (unsigned int i = 0; i < options.size(); i++)
 	{
 		auto option = options[i];
 		auto color = i == selectedIndex ? SDL_Color{ 255, 0, 0 } : SDL_Color{ 255, 255, 255 };
