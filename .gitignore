@@ -63,6 +63,7 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+[Ww]in32/
 
 # Nuget Packages
 /SdlBreakout/packages/
