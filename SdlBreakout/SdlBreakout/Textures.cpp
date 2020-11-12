@@ -8,7 +8,7 @@
 
 void Textures::LoadTextures()
 {
-	for (auto file : std::filesystem::directory_iterator("Images"))
+	for (auto& file : std::filesystem::directory_iterator("Images"))
 	{
 		if (file.is_directory())
 		{

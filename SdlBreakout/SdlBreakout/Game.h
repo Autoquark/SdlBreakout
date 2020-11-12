@@ -10,6 +10,7 @@
 #include "Block.h"
 #include "Bounds.h"
 #include "Menu.h"
+#include "Level.h"
 
 class Game
 {
@@ -30,9 +31,9 @@ public:
 		return GetInstance().input;
 	}
 
-	const std::vector<Block*>& GetBlocks() const
+	static Level* GetLevel()
 	{
-		return blocks;
+		return GetInstance().level.get();
 	}
 
 	// Gets the current game time in seconds. This excludes time spent paused.
@@ -41,20 +42,8 @@ public:
 		return time;
 	}
 
-	/// <summary>
-	/// Destroys the given game object. After calling this method, pointers to the object are no longer valid.
-	/// GameObjects should not be deleted except via this method
-	/// </summary>
-	/// <param name="gameObject"></param>
-	void Destroy(GameObject* gameObject);
-
 	// The window renderer
 	SDL_Renderer* renderer = NULL;
-
-	// Special game objects
-	Bounds* bounds = NULL;
-	Paddle* paddle = NULL;
-	Ball* ball = NULL;
 
 	bool drawCollisionShapes = false;
 
@@ -62,13 +51,10 @@ public:
 
 private:
 
-	Game() = default;
+	Game();
 	~Game();
 
 	Menu* currentMenu = nullptr;
-
-	std::vector<GameObject*> gameObjects;
-	std::vector<Block*> blocks;
 
 	//The window we'll be rendering to
 	SDL_Window* gWindow = NULL;
@@ -78,6 +64,7 @@ private:
 	SDL_Texture* gTexture = NULL;
 
 	Input input;
+	std::unique_ptr<Level> level;
 
 	float time = 0;
 

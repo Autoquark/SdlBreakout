@@ -40,7 +40,7 @@ void Block::SetHealth(int value)
 	health = value;
 	if (health == 0)
 	{
-		Game::GetInstance().Destroy(this);
+		Game::GetLevel()->Destroy(this);
 		return;
 	}
 	sprite = Textures::GetBlockTextures(textureKey)[health - 1];

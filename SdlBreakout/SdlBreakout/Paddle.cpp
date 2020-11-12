@@ -41,21 +41,21 @@ void Paddle::Update(float timeElapsed)
 		movement = Vector2F(moveSpeed * timeElapsed, 0);
 	}
 
-	auto& game = Game::GetInstance();
+	auto level = Game::GetLevel();
 
 	// Check if we're moving into the ball
-	auto& ball = *Game::GetInstance().ball;
+	auto& ball = *level->ball;
 	auto ballContact = collisionBounds->CastAgainst(*ball.collisionBounds, movement, Shape::InternalityFilter::External);
 
 	if (ballContact.has_value())
 	{
 		// Push the ball as far as possible without passing the level bounds
 		auto ballMovement = movement.WithMagnitude(movement.Magnitude() - ballContact->distance);
-		ball.collisionBounds->MoveToContact(*game.bounds->collisionBounds, ballMovement);
+		ball.collisionBounds->MoveToContact(*level->bounds->collisionBounds, ballMovement);
 	}
 
 	auto bestContact = collisionBounds->CastAgainst(*ball.collisionBounds, movement, Shape::InternalityFilter::External);
-	bestContact = Shape::ClosestContact(bestContact, collisionBounds->CastAgainst(*game.bounds->collisionBounds, movement, Shape::InternalityFilter::Internal));
+	bestContact = Shape::ClosestContact(bestContact, collisionBounds->CastAgainst(*level->bounds->collisionBounds, movement, Shape::InternalityFilter::Internal));
 	// Move as far as possible without penetrating the ball or level bounds
 	collisionBounds->MoveToContact(bestContact, movement);
 

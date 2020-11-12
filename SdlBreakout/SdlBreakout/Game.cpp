@@ -21,6 +21,10 @@
 #include "Sounds.h"
 #include "Fonts.h"
 
+Game::Game()
+{
+}
+
 Game::~Game()
 {
 	//Free loaded image
@@ -42,13 +46,6 @@ Game& Game::GetInstance()
 	return game;
 }
 
-void Game::Destroy(GameObject * gameObject)
-{
-	blocks.erase(std::find(blocks.begin(), blocks.end(), gameObject));
-	gameObjects.erase(std::find(gameObjects.begin(), gameObjects.end(), gameObject));
-	delete gameObject;
-}
-
 void Game::Start()
 {
 	init();
@@ -57,42 +54,7 @@ void Game::Start()
 	Sounds::LoadSounds();
 	Fonts::LoadFonts();
 
-	if (SDL_SetRelativeMouseMode(SDL_bool::SDL_TRUE) != 0)
-	{
-		throw new std::exception();
-	}
-
-	int x,y;
-	for (y = 120; y < 340; y += (int)Textures::GetTexture("block")->GetSize().y)
-	{
-		for (x = 240; x < 480; x += (int)Textures::GetTexture("block")->GetSize().x)
-		{
-			blocks.push_back(BlockMaker::MakeNormal(3));
-			blocks.back()->collisionBounds->Translate((float)x, (float)y);
-		}
-	}
-
-	for (x = 240; x < 480; x += (int)Textures::GetTexture("block")->GetSize().x)
-	{
-		blocks.push_back(BlockMaker::MakeInvulnerable());
-		blocks.back()->collisionBounds->Translate((float)x, (float)y);
-	}
-
-	for (auto block : blocks)
-	{
-		gameObjects.push_back(block);
-	}
-
-	paddle = new Paddle();
-	gameObjects.push_back(paddle);
-	gameObjects.back()->collisionBounds->Translate(320, 440);
-
-	ball = new Ball();
-	gameObjects.push_back(ball);
-	gameObjects.back()->collisionBounds->Translate(320, 400);
-
-	bounds = new Bounds();
-	gameObjects.push_back(bounds);
+	level = std::make_unique<Level>();
 
 	bool quit = false;
 
@@ -155,19 +117,7 @@ void Game::Start()
 			float elapsed = (float)std::min((sdlTime - lastUpdateSdlTime) / 1000.0, 1.0 / TARGET_FPS);
 			time += elapsed;
 
-			for (auto gameObject : gameObjects)
-			{
-				gameObject->Update(elapsed);
-			}
-
-			// Debug tool: Speed up when space held
-			if (input.KeyIsDown(SDL_SCANCODE_SPACE))
-			{
-				for (auto gameObject : gameObjects)
-				{
-					gameObject->Update(elapsed);
-				}
-			}
+			level->Update(elapsed);
 
 			lastUpdateSdlTime = sdlTime;
 		}
@@ -225,6 +175,11 @@ void Game::init()
 
 	//Initialize SDL_mixer
 	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1)
+	{
+		throw new std::exception();
+	}
+
+	if (SDL_SetRelativeMouseMode(SDL_bool::SDL_TRUE) != 0)
 	{
 		throw new std::exception();
 	}

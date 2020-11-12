@@ -25,7 +25,7 @@ Ball::~Ball()
 
 void Ball::Update(float timeElapsed)
 {
-	auto& game = Game::GetInstance();
+	auto level = Game::GetLevel();
 	auto effectiveSpeed = speed;
 
 	// Only the single largest speed buff and single largest speed debuff apply
@@ -54,8 +54,8 @@ void Ball::Update(float timeElapsed)
 
 	while (true)
 	{
-		auto paddle = game.paddle;
-		auto screenEdgeCollision = collisionBounds->CastAgainst(*game.bounds->collisionBounds, remainingVelocity, Shape::InternalityFilter::Internal);
+		auto paddle = level->paddle;
+		auto screenEdgeCollision = collisionBounds->CastAgainst(*level->bounds->collisionBounds, remainingVelocity, Shape::InternalityFilter::Internal);
 		auto paddleCollision = collisionBounds->CastAgainst(*paddle->collisionBounds, remainingVelocity, Shape::InternalityFilter::External);
 
 		std::vector<std::optional<Contact>> contacts = {
@@ -63,7 +63,7 @@ void Ball::Update(float timeElapsed)
 			paddleCollision
 		};
 
-		for (auto block : game.GetBlocks())
+		for (auto block : level->GetBlocks())
 		{
 			contacts.push_back(collisionBounds->CastAgainst(*block->collisionBounds, remainingVelocity, Shape::InternalityFilter::External));
 		}
@@ -77,7 +77,7 @@ void Ball::Update(float timeElapsed)
 
 		if (index > 1)
 		{
-			auto block = game.GetBlocks()[index - 2];
+			auto block = level->GetBlocks()[index - 2];
 			for (auto& status : statusEffects)
 			{
 				status->OnHitBlock(*block);
@@ -87,11 +87,16 @@ void Ball::Update(float timeElapsed)
 
 		auto& collision = *contacts[index];
 
-		// If we hit the paddle
+		
 		auto normal = collision.normal;
-		if (index == 1)
+		if (index == 0 && std::abs(collision.point.y - Game::SCREEN_HEIGHT) < 1)
 		{
-			auto centreSegment = game.paddle->centreSegment;
+
+		}
+		// If we hit the paddle
+		else if (index == 1)
+		{
+			auto centreSegment = level->paddle->centreSegment;
 			auto contact = collisionBounds->CastAgainst(*centreSegment, remainingVelocity, Shape::InternalityFilter::External);
 			if (contact.has_value() && contact.value().distance <= collision.distance)
 			{
