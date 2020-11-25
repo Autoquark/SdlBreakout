@@ -1,3 +1,5 @@
+#pragma once
+#include "stdafx.h"
 #include "GameObject.h"
 #include "Ball.h"
 
@@ -5,8 +7,11 @@
 class Block : public GameObject
 {
 public:
+	const int BLOCK_WIDTH = 40;
+	const int BLOCK_HEIGHT = 40;
+
 	Block(std::string textureKey, Shape& collisionBounds);
-	Block(std::string textureKey) : Block(textureKey, *new AxisAlignedRectF{ 0, 0, 40, 20 }) {}
+	Block(std::string textureKey) : Block(textureKey, *new AxisAlignedRectF{ 0, 0, (float)BLOCK_WIDTH, (float)BLOCK_HEIGHT }) {}
 	~Block();
 
 	void OnBallHit(Ball& ball);

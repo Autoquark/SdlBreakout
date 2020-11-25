@@ -1,8 +1,30 @@
 #include "stdafx.h"
-#include "Level.h"
 
+#include <fstream>
+#include <nlohmann/json.hpp>
+
+#include "Level.h"
 #include "BlockMaker.h"
 #include "Game.h"
+#include "SerializableLevel.h"
+
+Level Level::Load(std::filesystem::path path)
+{
+	std::ifstream file(path);
+	std::string str;
+	std::string file_contents;
+	while (std::getline(file, str))
+	{
+		file_contents += str;
+		file_contents.push_back('\n');
+	}
+
+	nlohmann::json js = nlohmann::json::parse(file_contents);
+	auto serializableLevel = js.get<SerializableLevel>();
+
+	return Level();
+}
+
 
 void Level::Destroy(GameObject* gameObject)
 {

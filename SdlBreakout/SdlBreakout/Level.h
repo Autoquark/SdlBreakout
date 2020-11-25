@@ -8,10 +8,11 @@
 class Level
 {
 public:
+	static Level Load(std::filesystem::path path);
 
 	Level();
 	Level(const Level& level) = delete;
-	Level(int x) = delete;
+	Level(const Level&& level) = delete;
 
 	enum class UpdateResult
 	{
