@@ -35,7 +35,19 @@ std::optional<Contact> CircleF::CastAgainstThis(const CircleF& other, const Vect
 		bestContact = ClosestContact(bestContact, CircleF(centre, radius - other.radius).CastAgainstThis(Point(other.centre), movement, InternalityFilter::External));
 	}
 
-	return bestContact;
+	if (!bestContact.has_value())
+	{
+		return std::nullopt;
+	}
+
+	auto contact = *bestContact;
+
+	return Contact(contact.normal,
+		contact.point - contact.normal.WithMagnitude(other.radius),
+		contact.stationarySide,
+		contact.movingSide,
+		contact.distance,
+		contact.point);
 }
 
 std::optional<Contact> CircleF::CastAgainstThis(const Point& other, const Vector2F& movement, const InternalityFilter internalityFilter) const

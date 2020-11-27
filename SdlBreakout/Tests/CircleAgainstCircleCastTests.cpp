@@ -40,6 +40,8 @@ namespace Tests
 				Assert::AreEqual(expected.stationarySide, actual.stationarySide);
 				Assert::AreEqual(expected.distance, actual.distance);
 				AreEqual(expected.normal, actual.normal, Constants::FloatEqualityTolerance);
+
+				Assert::AreEqual(testCase.movingCircle.radius, Vector2F::DistanceBetween(actual.centroid, actual.point));
 			}
 		}
 
@@ -53,7 +55,7 @@ namespace Tests
 			testCase.movement = Vector2F(3, 0);
 			testCase.internalityFilter = Shape::InternalityFilter::External;
 
-			testCase.expectedResult = Contact(Vector2F(-1, 0), Vector2F(-1, 0), true, true, 1, Vector2F(-1, 0));
+			testCase.expectedResult = Contact(Vector2F(-1, 0), Vector2F(0, 0), true, true, 1, Vector2F(-1, 0));
 
 			RunTestCase(testCase);
 		}
