@@ -1,6 +1,8 @@
 #pragma once
 #include "stdafx.h"
 
+#include <unordered_set>
+
 #include "Paddle.h"
 #include "Bounds.h"
 #include "Ball.h"
@@ -56,5 +58,6 @@ private:
 	std::vector<GameObject*> gameObjects;
 	std::vector<Block*> blocks;
 	std::vector<Ball*> balls;
+	std::unordered_set<GameObject*> toRemove;
 };
 

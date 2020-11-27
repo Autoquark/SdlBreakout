@@ -84,10 +84,7 @@ std::unique_ptr<Level> Level::Load(std::filesystem::path path)
 
 void Level::Destroy(GameObject* gameObject)
 {
-	blocks.erase(std::remove(blocks.begin(), blocks.end(), gameObject), blocks.end());
-	balls.erase(std::remove(balls.begin(), balls.end(), gameObject), balls.end());
-	gameObjects.erase(std::find(gameObjects.begin(), gameObjects.end(), gameObject));
-	delete gameObject;
+	toRemove.insert(gameObject);
 }
 
 Level::Level() : bounds(AxisAlignedRectF(2.0f, 2.0f, Game::GetInstance().SCREEN_WIDTH - 4.0f, Game::GetInstance().SCREEN_HEIGHT - 4.0f))
@@ -137,6 +134,15 @@ Level::UpdateResult Level::Update(float timeElapsed)
 			gameObject->Update(timeElapsed);
 		}
 	}
+
+	for (auto gameObject : toRemove)
+	{
+		blocks.erase(std::remove(blocks.begin(), blocks.end(), gameObject), blocks.end());
+		balls.erase(std::remove(balls.begin(), balls.end(), gameObject), balls.end());
+		gameObjects.erase(std::find(gameObjects.begin(), gameObjects.end(), gameObject));
+		delete gameObject;
+	}
+	toRemove.clear();
 
 	if (balls.empty())
 	{
