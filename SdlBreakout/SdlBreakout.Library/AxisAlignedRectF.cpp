@@ -170,7 +170,8 @@ std::optional<Contact> AxisAlignedRectF::CastAgainstThis(const CircleF& other, c
 	auto contact = bestContact.value();
 
 	return Contact(contact.normal,
-		contact.point + movement.WithMagnitude(other.radius),
+		// To find the actual contact point, take the actual centroid and move towards the surface that we hit (i.e. in the direction of -normal) by the radius of the circle
+		contact.point - contact.normal.WithMagnitude(other.radius),
 		contact.stationarySide,
 		true, // TODO: What if the circle encloses the rectangle?
 		contact.distance,

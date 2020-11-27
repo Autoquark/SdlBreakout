@@ -56,5 +56,17 @@ namespace Tests
 
 			RunTestCase(testCase);
 		}
+
+		TEST_METHOD(HitBottomInternalAtAngle)
+		{
+			TestCase testCase;
+			testCase.rect = AxisAlignedRectF(0, 0, 10, 10);
+			testCase.movingCircle = CircleF(5, 2, 1);
+			testCase.movement = Vector2F(-10, -10);
+
+			testCase.expectedResult = Contact(Vector2F(0, 1), Vector2F(4, 0), false, true, std::sqrt(2.0f), Vector2F(4, 1));
+
+			RunTestCase(testCase);
+		}
 	};
 }
