@@ -10,8 +10,26 @@
 class CompoundShape : public Shape
 {
 public:
-	CompoundShape(std::vector<Shape*> shapes) : shapes(shapes)
+	CompoundShape(const std::vector<std::unique_ptr<Shape>>& shapes)
 	{
+		for (auto& shape : shapes)
+		{
+			this->shapes.push_back(std::move(shape->Clone()));
+		}
+	}
+
+	CompoundShape(const CompoundShape& compoundShape)
+	{
+		for (auto& shape : compoundShape.shapes)
+		{
+			shapes.push_back(std::move(shape->Clone()));
+		}
+	}
+
+	std::unique_ptr<Shape> Clone() const override
+	{
+		//TODO: Clone shapes array
+		return std::make_unique<CompoundShape>(*this);
 	}
 
 	[[nodiscard]]
@@ -32,6 +50,6 @@ public:
 	[[nodiscard]]
 	AxisAlignedRectF GetAxisAlignedBoundingBox() const override;
 
-	std::vector<Shape*> shapes;
+	std::vector<std::unique_ptr<Shape>> shapes;
 };
 

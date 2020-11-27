@@ -8,19 +8,22 @@
 class GameObject
 {
 public:
-	virtual ~GameObject()
+	GameObject(const GameObject& gameObject) : collisionBounds(gameObject.collisionBounds->Clone())
 	{
-		delete collisionBounds;
 	}
+	virtual ~GameObject() {}
 
 	const Texture* getSprite();
 	void setSprite(Texture* value);
 
 	virtual void Update(float timeElapsed);
 
-	Shape* const collisionBounds;
+	const std::unique_ptr<Shape> collisionBounds;
 
-	GameObject(Shape* collisionBounds = NULL) : collisionBounds(collisionBounds) {}
+	GameObject(Shape* collisionBounds = NULL) : collisionBounds(collisionBounds->Clone())
+	{
+
+	}
 
 protected:
 	const Texture* sprite = NULL;

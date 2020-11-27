@@ -7,6 +7,11 @@ class Line : public Shape
 public:
 	Line(Vector2F start, Vector2F end) : start(start), end(end) {}
 
+	std::unique_ptr<Shape> Clone() const override
+	{
+		return std::make_unique<Line>(*this);
+	}
+
 	[[nodiscard]]
 	std::optional<Contact> CastAgainst(const Shape& other, const Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both) const override;
 	[[nodiscard]]

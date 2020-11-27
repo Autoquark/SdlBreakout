@@ -10,6 +10,11 @@ public:
 	CircleF(Vector2F centre, float radius) : centre(centre), radius(radius){}
 	CircleF(float x, float y, float radius) : CircleF(Vector2F(x, y), radius){}
 
+	std::unique_ptr<Shape> Clone() const override
+	{
+		return std::make_unique<CircleF>(*this);
+	}
+
 	Vector2F centre;
 	float radius;
 

@@ -54,8 +54,7 @@ void Game::Start()
 	Sounds::LoadSounds();
 	Fonts::LoadFonts();
 
-	level = std::make_unique<Level>();
-	//level = std::make_unique<Level>(Level::Load("../../Data/Levels/1.json"));
+	level = Level::Load("../../Data/Levels/1.json");
 
 	auto lastUpdateSdlTime = SDL_GetTicks();
 

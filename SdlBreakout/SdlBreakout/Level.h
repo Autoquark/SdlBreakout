@@ -4,11 +4,12 @@
 #include "Paddle.h"
 #include "Bounds.h"
 #include "Ball.h"
+#include "Block.h"
 
 class Level
 {
 public:
-	static Level Load(std::filesystem::path path);
+	static std::unique_ptr<Level> Load(std::filesystem::path path);
 
 	Level();
 	Level(const Level& level) = delete;
@@ -30,6 +31,12 @@ public:
 	const std::vector<Ball*>& GetBalls() const
 	{
 		return balls;
+	}
+
+	void AddBlock(Block* block)
+	{
+		blocks.push_back(block);
+		gameObjects.push_back(block);
 	}
 
 	/// <summary>

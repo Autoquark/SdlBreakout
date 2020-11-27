@@ -21,6 +21,11 @@ public:
 
 	Vector2F position;
 
+	std::unique_ptr<Shape> Clone() const override
+	{
+		return std::make_unique<Point>(*this);
+	}
+
 	[[nodiscard]]
 	virtual std::optional<Contact> CastAgainst(const Shape& other, const Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both) const override;
 	[[nodiscard]]

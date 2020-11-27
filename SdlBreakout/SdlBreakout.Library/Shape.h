@@ -2,6 +2,7 @@
 
 #include <optional>
 #include <vector>
+#include <memory>
 #include "Contact.h"
 #include "OptionalUtilities.h"
 
@@ -15,6 +16,8 @@ class Shape
 {
 public:
 	virtual ~Shape() = default;
+
+	virtual std::unique_ptr<Shape> Clone() const = 0;
 
 	enum class InternalityFilter
 	{

@@ -8,7 +8,7 @@
 #include "Game.h"
 #include "SerializableLevel.h"
 
-Level Level::Load(std::filesystem::path path)
+std::unique_ptr<Level> Level::Load(std::filesystem::path path)
 {
 	std::ifstream file(path);
 	std::string str;
@@ -22,7 +22,41 @@ Level Level::Load(std::filesystem::path path)
 	nlohmann::json js = nlohmann::json::parse(file_contents);
 	auto serializableLevel = js.get<SerializableLevel>();
 
-	return Level();
+	auto level = std::make_unique<Level>();
+
+	static std::map<char, Block> legend = {
+		{'#', *BlockMaker::MakeInvulnerable()}
+	};
+
+	float y = Game::SCREEN_HEIGHT;
+	for (const auto& row : serializableLevel.grid)
+	{
+		float x = 0;
+		for (const auto& character : row)
+		{
+			if (character == '.')
+			{
+				continue;
+			}
+
+			Block* block = NULL;
+			if (isdigit(character))
+			{
+				block = BlockMaker::MakeNormal(character - '0');
+			}
+			else
+			{
+				block = new Block(legend.at(character));
+			}
+
+			block->collisionBounds->Translate(x, y);
+			level->AddBlock(block);
+			x += Block::BLOCK_WIDTH;
+		}
+		y -= Block::BLOCK_HEIGHT;
+	}
+
+	return level;
 }
 
 
@@ -36,7 +70,7 @@ void Level::Destroy(GameObject* gameObject)
 
 Level::Level() : bounds(AxisAlignedRectF(2.0f, 2.0f, Game::GetInstance().SCREEN_WIDTH - 4.0f, Game::GetInstance().SCREEN_HEIGHT - 4.0f))
 {
-	int x, y;
+	/*int x, y;
 	for (y = 120; y < 340; y += (int)Textures::GetTexture("block")->GetSize().y)
 	{
 		for (x = 240; x < 480; x += (int)Textures::GetTexture("block")->GetSize().x)
@@ -55,7 +89,7 @@ Level::Level() : bounds(AxisAlignedRectF(2.0f, 2.0f, Game::GetInstance().SCREEN_
 	for (auto block : blocks)
 	{
 		gameObjects.push_back(block);
-	}
+	}*/
 
 	paddle = new Paddle();
 	gameObjects.push_back(paddle);

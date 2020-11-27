@@ -10,7 +10,7 @@
 std::optional<Contact> CompoundShape::CastAgainst(const Shape& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
 	std::optional<Contact> bestContact = std::nullopt;
-	for (auto shape : shapes)
+	for (auto& shape : shapes)
 	{
 		bestContact = ClosestContact(bestContact, shape->CastAgainst(other, movement, internalityFilter));
 	}
@@ -23,7 +23,7 @@ std::optional<Contact> CompoundShape::CastAgainstThis(const AxisAlignedRectF& ot
 	assert(internalityFilter == InternalityFilter::External);
 
 	std::optional<Contact> bestContact = std::nullopt;
-	for (auto shape : shapes)
+	for (auto& shape : shapes)
 	{
 		bestContact = ClosestContact(bestContact, shape->CastAgainstThis(other, movement, internalityFilter));
 	}
@@ -36,7 +36,7 @@ std::optional<Contact> CompoundShape::CastAgainstThis(const CircleF& other, cons
 	assert(internalityFilter == InternalityFilter::External);
 
 	std::optional<Contact> bestContact = std::nullopt;
-	for (auto shape : shapes)
+	for (auto& shape : shapes)
 	{
 		bestContact = ClosestContact(bestContact, shape->CastAgainstThis(other, movement, internalityFilter));
 	}
@@ -49,7 +49,7 @@ std::optional<Contact> CompoundShape::CastAgainstThis(const Line& other, const V
 	assert(internalityFilter == InternalityFilter::External);
 
 	std::optional<Contact> bestContact = std::nullopt;
-	for (auto shape : shapes)
+	for (auto& shape : shapes)
 	{
 		bestContact = ClosestContact(bestContact, shape->CastAgainstThis(other, movement, internalityFilter));
 	}
@@ -62,7 +62,7 @@ std::optional<Contact> CompoundShape::CastAgainstThis(const Point& other, const 
 	assert(internalityFilter == InternalityFilter::External);
 
 	std::optional<Contact> bestContact = std::nullopt;
-	for (auto shape : shapes)
+	for (auto& shape : shapes)
 	{
 		bestContact = ClosestContact(bestContact, shape->CastAgainstThis(other, movement, internalityFilter));
 	}
@@ -71,7 +71,7 @@ std::optional<Contact> CompoundShape::CastAgainstThis(const Point& other, const 
 
 void CompoundShape::Translate(Vector2F amount)
 {
-	for (auto shape : shapes)
+	for (auto& shape : shapes)
 	{
 		shape->Translate(amount);
 	}
@@ -86,7 +86,7 @@ void CompoundShape::SetCentre(Vector2F position)
 AxisAlignedRectF CompoundShape::GetAxisAlignedBoundingBox() const
 {
 	auto bounds = shapes[0]->GetAxisAlignedBoundingBox();
-	for (auto shape : shapes)
+	for (auto& shape : shapes)
 	{
 		bounds.Union(shape->GetAxisAlignedBoundingBox());
 	}

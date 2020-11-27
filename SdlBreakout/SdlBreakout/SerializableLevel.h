@@ -3,12 +3,11 @@
 
 #include <nlohmann/json.hpp>
 
-class SerializableLevel
+struct SerializableLevel
 {
-private:
+public:
 	std::vector<std::string> grid;
 
-public:
 	NLOHMANN_DEFINE_TYPE_INTRUSIVE(SerializableLevel, grid)
 };
 

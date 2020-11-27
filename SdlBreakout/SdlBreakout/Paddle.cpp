@@ -10,16 +10,17 @@
 #include <iostream>
 #include <algorithm>
 
+#include "Util.h"
+
 const float Paddle::MAX_VIRTUAL_CURVE = 20;
 
-Paddle::Paddle() : GameObject(new CompoundShape(std::vector<Shape*>
+Paddle::Paddle() : GameObject(new CompoundShape(Util::MakeVector<std::unique_ptr<Shape>>(
+	std::make_unique<CircleF>(0.0f, 16.0f, 16.0f),
+		std::make_unique<AxisAlignedRectF>(0.0f, 0.0f, 96.0f, 32.0f),
+		std::make_unique<CircleF>(96.0f, 16.0f, 16.0f)
+)))
 {
-	new CircleF(0, 16, 16),
-	new AxisAlignedRectF(0, 0, 96, 32),
-	new CircleF(96, 16, 16),
-}))
-{
-	centreSegment = (AxisAlignedRectF*)((CompoundShape*)collisionBounds)->shapes[1];
+	centreSegment = (AxisAlignedRectF*)((CompoundShape*)collisionBounds.get())->shapes[1].get();
 	sprite = Textures::GetTexture("paddle");
 	moveSpeed = 600;
 }
