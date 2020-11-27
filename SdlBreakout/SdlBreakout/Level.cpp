@@ -7,6 +7,7 @@
 #include "BlockMaker.h"
 #include "Game.h"
 #include "SerializableLevel.h"
+#include "BallStatus_Accelerate.h"
 
 std::unique_ptr<Level> Level::Load(std::filesystem::path path)
 {
@@ -24,11 +25,32 @@ std::unique_ptr<Level> Level::Load(std::filesystem::path path)
 
 	auto level = std::make_unique<Level>();
 
-	static std::map<char, Block> legend = {
-		{'#', *BlockMaker::MakeInvulnerable()}
+	// We only need one 'template' instance of each status that blocks can hold a pointer to
+	// so it may as well be static local data in this function
+	static std::map<std::string, const BallStatusEffect*> statusesByName = {
+		{"accelerate", new BallStatus_Accelerate()}
 	};
 
-	float y = Game::SCREEN_HEIGHT;
+	auto invulnerable = Block("invulnerable");
+	invulnerable.invulnerable = true;
+
+	std::map<char, const Block> legend = {
+		{'#', invulnerable}
+	};
+
+	for (const auto& entry : serializableLevel.legend)
+	{
+		auto block = Block(entry.invulnerable ? "invulnerable" : "normal");
+		block.SetHealth(entry.health);
+		if (!entry.effectName.empty())
+		{
+			block.appliesStatus = statusesByName.at(entry.effectName);
+		}
+		
+		legend.insert({ entry.character, block });
+	}
+
+	float y = 0;//Game::SCREEN_HEIGHT;
 	for (const auto& row : serializableLevel.grid)
 	{
 		float x = 0;
@@ -44,7 +66,7 @@ std::unique_ptr<Level> Level::Load(std::filesystem::path path)
 			{
 				block = BlockMaker::MakeNormal(character - '0');
 			}
-			else
+			else 
 			{
 				block = new Block(legend.at(character));
 			}
@@ -53,7 +75,7 @@ std::unique_ptr<Level> Level::Load(std::filesystem::path path)
 			level->AddBlock(block);
 			x += Block::BLOCK_WIDTH;
 		}
-		y -= Block::BLOCK_HEIGHT;
+		y += Block::BLOCK_HEIGHT;
 	}
 
 	return level;

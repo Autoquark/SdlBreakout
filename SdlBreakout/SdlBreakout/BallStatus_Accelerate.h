@@ -21,10 +21,11 @@ public:
 		}
 	}
 
-	void ApplyToBall(Ball* ball) override
+	void ApplyToBall(Ball* ball) const override
 	{
-		removeAt = Game::GetInstance().GetTime() + DURATION;
-		ball->AddStatus(std::make_unique<BallStatus_Accelerate>(*this));
+		auto status = std::make_unique<BallStatus_Accelerate>(*this);
+		status->removeAt = Game::GetInstance().GetTime() + DURATION;
+		ball->AddStatus(std::move(status));
 	}
 
 	const Texture* GetIcon() const override

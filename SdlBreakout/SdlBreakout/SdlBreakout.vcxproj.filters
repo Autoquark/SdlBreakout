@@ -102,6 +102,9 @@
     <ClCompile Include="SerializableLevel.cpp">
       <Filter>Source Files\Data</Filter>
     </ClCompile>
+    <ClCompile Include="LegendEntry.cpp">
+      <Filter>Source Files\Data</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -165,6 +168,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SerializableLevel.h">
+      <Filter>Header Files\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="LegendEntry.h">
       <Filter>Header Files\Data</Filter>
     </ClInclude>
   </ItemGroup>

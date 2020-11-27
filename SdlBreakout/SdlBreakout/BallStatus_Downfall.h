@@ -14,7 +14,7 @@ public:
 		speedMultiplier = SPEED_FACTOR;
 	}
 
-	void ApplyToBall(Ball* ball) override
+	void ApplyToBall(Ball* ball) const override
 	{
 		ball->AddStatus(std::make_unique<BallStatus_Downfall>(*this));
 		ball->SetDirection(Vector2F(0, 1));

@@ -43,7 +43,7 @@ void Block::SetHealth(int value)
 		Game::GetLevel()->Destroy(this);
 		return;
 	}
-	sprite = Textures::GetBlockTextures(textureKey)[health - 1];
+	sprite = Textures::GetBlockTextures(textureKey)[((size_t)health) - 1];
 }
 
 void Block::Update(float timeElapsed)
@@ -57,7 +57,7 @@ void Block::Update(float timeElapsed)
 
 	auto centre = collisionBounds->GetAxisAlignedBoundingBox().Centre();
 	auto statusSprite = appliesStatus->GetIcon();
-	SDL_Rect destinationRect;
+	SDL_Rect destinationRect{};
 	destinationRect.x = (int)centre.x - statusSprite->GetSize().x / 2;
 	destinationRect.y = (int)centre.y - statusSprite->GetSize().y / 2;
 	destinationRect.w = (int)statusSprite->GetSize().x;

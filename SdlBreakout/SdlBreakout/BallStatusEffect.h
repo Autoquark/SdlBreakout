@@ -13,7 +13,7 @@ public:
 	BallStatusEffect() {}
 	virtual ~BallStatusEffect() = default;
 
-	virtual void ApplyToBall(Ball* ball) = 0;
+	virtual void ApplyToBall(Ball* ball) const = 0;
 
 	virtual void OnApplied(Ball* ball)
 	{

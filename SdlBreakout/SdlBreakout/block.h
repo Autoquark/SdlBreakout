@@ -19,9 +19,12 @@ public:
 
 	void Update(float timeElapsed) override;
 
-	const std::string textureKey;
+	std::string textureKey;
 	bool invulnerable = false;
-	BallStatusEffect* appliesStatus;
+
+	// Status effect that this block applies to the ball upon being hit.
+	// Multiple blocks may reference the same BallStatusEffect
+	const BallStatusEffect* appliesStatus = nullptr;
 
 private:
 	int health = 1;
