@@ -6,24 +6,26 @@
 #include "AxisAlignedRectF.h"
 
 #include <vector>
+#include <algorithm>
+#include <iterator>
 
 class CompoundShape : public Shape
 {
 public:
 	explicit CompoundShape(const std::vector<std::unique_ptr<Shape>>& shapes)
 	{
-		for (auto& shape : shapes)
-		{
-			this->shapes.push_back(std::move(shape->Clone()));
-		}
+		std::transform(shapes.cbegin(),
+			shapes.cend(),
+			std::back_inserter(this->shapes),
+			[](auto& shape) { return std::move(shape->Clone()); });
 	}
 
 	CompoundShape(const CompoundShape& compoundShape)
 	{
-		for (auto& shape : compoundShape.shapes)
-		{
-			shapes.push_back(std::move(shape->Clone()));
-		}
+		std::transform(compoundShape.shapes.cbegin(),
+			compoundShape.shapes.cend(),
+			std::back_inserter(this->shapes),
+			[](auto& shape) { return std::move(shape->Clone()); });
 	}
 
 	std::unique_ptr<Shape> Clone() const override
