@@ -47,7 +47,7 @@ std::unique_ptr<Level> Level::Load(std::filesystem::path path)
 			block.appliesStatus = statusesByName.at(entry.effectName);
 		}
 		
-		legend.insert({ entry.character, block });
+		legend.insert({ entry.character[0], block });
 	}
 
 	float y = 0;//Game::SCREEN_HEIGHT;

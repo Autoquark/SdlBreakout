@@ -5,7 +5,7 @@
 
 struct LegendEntry
 {
-	char character;
+	std::string character;
 	int health = 1;
 	std::string effectName;
 	bool invulnerable = false;

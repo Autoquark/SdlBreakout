@@ -11,6 +11,6 @@ public:
 	std::vector<std::string> grid;
 	std::vector<LegendEntry> legend;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE(SerializableLevel, grid)
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(SerializableLevel, grid, legend)
 };
 
