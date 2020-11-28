@@ -10,7 +10,7 @@
 class CompoundShape : public Shape
 {
 public:
-	CompoundShape(const std::vector<std::unique_ptr<Shape>>& shapes)
+	explicit CompoundShape(const std::vector<std::unique_ptr<Shape>>& shapes)
 	{
 		for (auto& shape : shapes)
 		{

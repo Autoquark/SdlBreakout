@@ -65,6 +65,9 @@ bld/
 [Ll]ogs/
 [Ww]in32/
 
+# Cppcheck Build
+/cppcheck-build-dir
+
 # Nuget Packages
 /SdlBreakout/packages/
 

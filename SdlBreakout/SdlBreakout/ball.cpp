@@ -63,10 +63,10 @@ void Ball::Update(float timeElapsed)
 			paddleCollision
 		};
 
-		for (auto block : level->GetBlocks())
-		{
-			contacts.push_back(collisionBounds->CastAgainst(*block->collisionBounds, remainingVelocity, Shape::InternalityFilter::External));
-		}
+		auto& blocks = level->GetBlocks();
+		std::transform(blocks.begin(), blocks.end(),
+			std::back_inserter(contacts),
+			[&](auto const block) { return collisionBounds->CastAgainst(*block->collisionBounds, remainingVelocity, Shape::InternalityFilter::External); });
 
 		auto index = Shape::FindClosestCollisionIndex(contacts);
 		if(index == -1)

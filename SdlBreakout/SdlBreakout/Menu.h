@@ -7,7 +7,7 @@
 class Menu
 {
 public:
-	void Show(const std::vector<std::string> options)
+	void Show(const std::vector<std::string>& options)
 	{
 		if (options.size() == 0)
 		{

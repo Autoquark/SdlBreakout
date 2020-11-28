@@ -1,16 +1,16 @@
 #include "stdafx.h"
 #include "Texture.h"
 
-Texture::Texture(SDL_Texture*& sdlTexture, const Vector2<int>& size) : sdlTexture(sdlTexture), size(size)
+Texture::Texture(SdlTextureUniquePtr& sdlTexture, const Vector2<int>& size) : sdlTexture(std::move(sdlTexture)), size(size)
 {
 }
 
 SDL_Texture* Texture::GetSdlTexture() const
 {
-	return sdlTexture;
+	return sdlTexture.get();
 }
 
-Vector2<int> Texture::GetSize() const
+const Vector2<int>& Texture::GetSize() const
 {
 	return size;
 }

@@ -17,6 +17,8 @@ public:
 	Level(const Level& level) = delete;
 	Level(const Level&& level) = delete;
 
+	Level& operator=(const Level&) = delete;
+
 	enum class UpdateResult
 	{
 		Continue,

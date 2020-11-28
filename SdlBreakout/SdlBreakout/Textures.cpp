@@ -25,13 +25,13 @@ void Textures::FreeAllTextures()
 {
 	for(const auto& [key, value] : textures)
 	{
-		SDL_DestroyTexture(value->GetSdlTexture());
+		
 	}
 
 	textures.clear();
 }
 
-Texture* Textures::LoadTexture(const std::filesystem::path path)
+std::unique_ptr<Texture> Textures::LoadTexture(const std::filesystem::path path)
 {
 	//Load image at specified path
 	SDL_Surface* loadedSurface = IMG_Load(path.string().c_str());
@@ -42,7 +42,7 @@ Texture* Textures::LoadTexture(const std::filesystem::path path)
 	}
 
 	//Create texture from surface pixels
-	SDL_Texture* newTexture = SDL_CreateTextureFromSurface(Game::GetInstance().renderer, loadedSurface);
+	SdlTextureUniquePtr newTexture = SdlTextureUniquePtr(SDL_CreateTextureFromSurface(Game::GetInstance().renderer, loadedSurface));
 
 	SDL_FreeSurface(loadedSurface);
 
@@ -52,17 +52,17 @@ Texture* Textures::LoadTexture(const std::filesystem::path path)
 		throw new std::exception();
 	}
 
-	return new Texture(newTexture, Vector2<int>{ loadedSurface->w, loadedSurface->h });
+	return std::make_unique<Texture>(newTexture, Vector2<int>{ loadedSurface->w, loadedSurface->h });
 }
 
-std::vector<Texture*> Textures::LoadTextureSequence(const std::filesystem::path directory)
+std::vector<std::unique_ptr<Texture>> Textures::LoadTextureSequence(const std::filesystem::path directory)
 {
 	std::vector<std::filesystem::directory_entry> files;
 	std::copy(std::filesystem::directory_iterator(directory), std::filesystem::directory_iterator(), std::back_inserter(files));
 	std::sort(files.begin(), files.end());
 
-	std::vector<Texture*> textures;
-	for(auto file : files)
+	std::vector<std::unique_ptr<Texture>> textures;
+	for(auto& file : files)
 	{
 		if (file.is_directory() || file.path().extension() != ".png")
 		{
@@ -74,5 +74,5 @@ std::vector<Texture*> Textures::LoadTextureSequence(const std::filesystem::path 
 	return textures;
 }
 
-std::map<std::string, Texture*> Textures::textures;
-std::map<std::string, std::vector<Texture*>> Textures::blockTextures;
+std::map<std::string, std::unique_ptr<Texture>> Textures::textures;
+std::map<std::string, std::vector<std::unique_ptr<Texture>>> Textures::blockTextures;

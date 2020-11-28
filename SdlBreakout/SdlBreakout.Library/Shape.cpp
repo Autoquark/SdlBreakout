@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+#include <numeric>
+
 #include "Shape.h"
 
 std::optional<Contact> Shape::MoveToContact(const Shape& other, Vector2F& movement, const InternalityFilter internalityFilter)
@@ -20,12 +22,13 @@ std::optional<Contact> Shape::MoveToContact(const std::optional<Contact>& contac
 
 std::optional<Contact> Shape::MoveToContact(const std::vector<const Shape*>& others, Vector2F& movement, const InternalityFilter internalityFilter)
 {
-	std::optional<Contact> contact = std::nullopt;
-	for (auto shape : others)
-	{
-		contact = ClosestContact(contact, CastAgainst(*shape, movement, internalityFilter));
-	}
-	return MoveToContact(contact, movement);
+	return MoveToContact(
+		std::accumulate(
+			others.begin(),
+			others.end(),
+			std::optional<Contact>(),
+			[&](std::optional<Contact> x, const Shape* y) { return ClosestContact(x, CastAgainst(*y, movement, internalityFilter)); }),
+		movement);
 }
 
 

@@ -26,8 +26,6 @@ std::optional<Contact> Line::CastAgainstThis(const CircleF& other, const Vector2
 	// Reduce the circle to a point, and expand the line in the two perpendicular directions to form a rectangle.
 	// Also check against two circles placed at either end of the line with radius equal to the radius of the original circle.
 	auto circleEndCentre = other.centre + movement;
-	auto linePerpendicular = (end - start).Rotated(90)
-		.Normalised();
 
 	// Create a rectangle that's long in the horizontal axis
 	auto rect = AxisAlignedRectF::FromCentre(Vector2F::LinearInterpolate(start, end, 0.5f), Vector2F::DistanceBetween(start, end), other.radius * 2);
@@ -46,7 +44,7 @@ std::optional<Contact> Line::CastAgainstThis(const CircleF& other, const Vector2
 	{
 		return std::nullopt;
 	}
-	auto contact = *bestContact;
+	auto& contact = *bestContact;
 
 	auto normal = end - start;
 	normal.Rotate(90);

@@ -8,8 +8,8 @@
 Input::Input()
 {
 	keysDown = SDL_GetKeyboardState(&arraySize);
-	keysPressed = new bool[arraySize];
-	keysReleased = new bool[arraySize];
+	keysPressed = std::vector<bool>(arraySize);
+	keysReleased = std::vector<bool>(arraySize);
 }
 
 void Input::KeyEvent(SDL_KeyboardEvent event)

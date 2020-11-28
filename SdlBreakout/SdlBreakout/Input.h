@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 #include <SDL_scancode.h>
+#include <vector>
 
 #include "Vector2.h"
 
@@ -10,6 +11,9 @@ class Input
 {
 public:
 	Input();
+	Input(const Input&) = delete;
+
+	Input& operator= (const Input& source) = delete;
 
 	[[nodiscard]]
 	bool KeyPressed(SDL_Scancode key) const
@@ -45,8 +49,8 @@ private:
 	int arraySize;
 	// Pointer to the internal SDL keyboard state array which records whether keys are currently down
 	const Uint8* keysDown;
-	bool* keysPressed;
-	bool* keysReleased;
-	Vector2F mouseMovement;
+	std::vector<bool> keysPressed;
+	std::vector<bool> keysReleased;
+	Vector2F mouseMovement = Vector2F();
 };
 

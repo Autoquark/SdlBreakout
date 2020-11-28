@@ -11,7 +11,7 @@ class Line;
 class Point : public Shape
 {
 public:
-	Point(const Vector2F& position) : position(position)
+	explicit Point(const Vector2F& position) : position(position)
 	{ }
 
 	operator Vector2F() const

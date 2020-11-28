@@ -1,16 +1,20 @@
 #include <SDL_image.h>
+#include <SDL_render.h>
+#include <memory>
 #include "Vector2.h"
+#include "SDL_Deleter.h"
 
 #pragma once
 class Texture
 {
 public:
-	Texture(SDL_Texture*& sdlTexture, const Vector2<int>& size);
+	Texture(SdlTextureUniquePtr& sdlTexture, const Vector2<int>& size);
+
 	SDL_Texture* GetSdlTexture() const;
-	Vector2<int> GetSize() const;
+	const Vector2<int>& GetSize() const;
 
 private:
-	SDL_Texture* sdlTexture;
+	const SdlTextureUniquePtr sdlTexture;
 	const Vector2<int> size;
 };
 

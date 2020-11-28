@@ -114,7 +114,7 @@ public:
 		for (unsigned int i = 0; i < contacts.size(); i++)
 		{
 			auto nullable = contacts[i];
-			if (!optionalUtilities::HasValue(nullable))
+			if (!nullable.has_value())
 			{
 				continue;
 			}
@@ -138,6 +138,7 @@ public:
 	static std::optional<Contact> FindClosestCollision(const std::vector<std::optional<Contact>>& contacts, const InternalityFilter& internalityFilter = InternalityFilter::Both)
 	{
 		auto index = FindClosestCollisionIndex(contacts, internalityFilter);
+		// cppcheck-suppress containerOutOfBounds
 		return index == -1 ? std::nullopt : contacts[index];
 	}
 };

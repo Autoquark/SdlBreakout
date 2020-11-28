@@ -19,6 +19,12 @@
     <Filter Include="Header Files\Shape">
       <UniqueIdentifier>{82f0a15a-8ebf-46c8-8b13-f662398bd44e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\SDL">
+      <UniqueIdentifier>{67e41436-6589-4f59-a195-b33cdbf5213a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SDL">
+      <UniqueIdentifier>{0cfbcb90-a67b-4559-9422-94e1bb519e4e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -66,6 +72,9 @@
     <ClInclude Include="Util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SDL_Deleter.h">
+      <Filter>Header Files\SDL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -100,6 +109,9 @@
     </ClCompile>
     <ClCompile Include="Util.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SDL_Deleter.cpp">
+      <Filter>Source Files\SDL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
