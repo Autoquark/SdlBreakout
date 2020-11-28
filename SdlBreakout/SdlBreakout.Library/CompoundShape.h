@@ -22,10 +22,10 @@ public:
 
 	CompoundShape(const CompoundShape& compoundShape)
 	{
-		std::transform(compoundShape.shapes.cbegin(),
-			compoundShape.shapes.cend(),
-			std::back_inserter(this->shapes),
-			[](auto& shape) { return std::move(shape->Clone()); });
+		for (auto& shape : compoundShape.shapes)
+		{
+			shapes.push_back(std::move(shape->Clone()));
+		}
 	}
 
 	std::unique_ptr<Shape> Clone() const override
