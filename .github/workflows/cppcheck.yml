@@ -1,0 +1,14 @@
+name: cppcheck
+on: [push]
+
+jobs:
+  build:
+    name: cppcheck
+    runs-on: ubuntu-latest
+    container: facthunder/cppcheck
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+        
+      - name: Run cppcheck
+        run: cppcheck --project=SdlBreakout.cppcheck -q --error-exitcode=1 --enable=all --inline-suppr
