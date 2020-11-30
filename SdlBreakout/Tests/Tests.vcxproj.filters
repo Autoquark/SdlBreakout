@@ -63,7 +63,7 @@
       <Filter>Source Files\Collision</Filter>
     </ClCompile>
     <ClCompile Include="CircleAgainstCircleCastTests.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Collision</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
