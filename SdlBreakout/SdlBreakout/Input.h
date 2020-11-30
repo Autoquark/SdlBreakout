@@ -10,6 +10,15 @@
 class Input
 {
 public:
+	enum class MouseButton
+	{
+		Left = SDL_BUTTON_LEFT,
+		Middle = SDL_BUTTON_MIDDLE,
+		Right = SDL_BUTTON_RIGHT,
+		X1 = SDL_BUTTON_X1,
+		X2 = SDL_BUTTON_X2
+	};
+
 	Input();
 	Input(const Input&) = delete;
 
@@ -33,6 +42,21 @@ public:
 		return keysDown[key];
 	}
 
+	bool MouseButtonPressed(MouseButton button) const
+	{
+		return mousePressed[(int)button];
+	}
+
+	bool MouseButtonReleased(MouseButton button) const
+	{
+		return mouseReleased[(int)button];
+	}
+
+	bool MouseButtonDown(MouseButton button) const
+	{
+		return mouseDown[(int)button];
+	}
+
 	// Returns a vector representing the movement of the mouse since the last frame
 	[[nodiscard]]
 	Vector2F GetMouseMovement() const
@@ -51,6 +75,12 @@ private:
 	const Uint8* keysDown;
 	std::vector<bool> keysPressed;
 	std::vector<bool> keysReleased;
+
+	std::vector<bool> mouseDown;
+	std::vector<bool> mousePressed;
+	std::vector<bool> mouseReleased;
+
 	Vector2F mouseMovement = Vector2F();
+
 };
 

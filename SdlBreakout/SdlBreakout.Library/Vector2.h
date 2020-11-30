@@ -32,6 +32,11 @@ public:
 		return Vector2(0, -1);
 	}
 
+	static Vector2 Down()
+	{
+		return Vector2(0, 1);
+	}
+
 	Vector2() = default;
 
 	Vector2(ElementType x, ElementType y) : x(x), y(y)
