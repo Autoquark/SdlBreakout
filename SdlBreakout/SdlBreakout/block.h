@@ -1,9 +1,11 @@
 #pragma once
 #include "stdafx.h"
 #include "GameObject.h"
-#include "Ball.h"
+#include "AxisAlignedRectF.h"
 
-#pragma once
+class Ball;
+class BallStatusEffect;
+
 class Block : public GameObject
 {
 public:

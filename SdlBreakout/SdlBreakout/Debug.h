@@ -1,10 +1,10 @@
 #pragma once
 #include "stdafx.h"
 
-#include "AxisAlignedRectF.h"
-
 #include <string>
 #include <map>
+
+#include "Vector2.h"
 
 class Debug
 {

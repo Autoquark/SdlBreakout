@@ -1,8 +1,8 @@
 #pragma once
-
 #include "stdafx.h"
 
-#include "AxisAlignedRectF.h"
 #include <SDL.h>
+
+class AxisAlignedRectF;
 
 SDL_FRect ToSdlShape(const AxisAlignedRectF& shape);

@@ -20,6 +20,7 @@
 #include "Textures.h"
 #include "Sounds.h"
 #include "Fonts.h"
+#include "Menu.h"
 
 Game::Game()
 {

@@ -54,7 +54,12 @@ void Input::EndUpdate()
 {
 	for (int i = 0; i < arraySize; i++)
 	{
-		keysPressed[i] = keysReleased[i] = mousePressed[i] = mouseReleased[i] = false;
+		keysPressed[i] = keysReleased[i] = false;
+	}
+
+	for (int i = (int)MouseButton::Min; i < (int)MouseButton::Max; i++)
+	{
+		mousePressed[i] = mouseReleased[i] = false;
 	}
 
 	mouseMovement = Vector2F();

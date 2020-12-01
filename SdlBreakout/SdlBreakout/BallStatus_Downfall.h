@@ -3,8 +3,9 @@
 
 #include <memory>
 
-#include "Game.h"
 #include "BallStatusEffect.h"
+#include "ball.h"
+
 
 class BallStatus_Downfall : public BallStatusEffect
 {

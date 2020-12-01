@@ -1,9 +1,9 @@
 #include "stdafx.h"
+#include "ball.h"
 
 #include <algorithm>
 #include <iostream>
 
-#include "ball.h"
 #include "game.h"
 #include "Vector2.h"
 #include "Textures.h"

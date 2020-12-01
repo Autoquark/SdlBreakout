@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
-#include "AxisAlignedRectF.h"
+
+class AxisAlignedRectF;
 
 class Paddle : public GameObject
 {

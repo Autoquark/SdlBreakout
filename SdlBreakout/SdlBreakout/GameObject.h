@@ -5,8 +5,7 @@
 
 #include "Vector2.h"
 #include "Texture.h"
-#include "AxisAlignedRectF.h"
-
+#include "Shape.h"
 
 class GameObject
 {

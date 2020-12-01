@@ -3,14 +3,10 @@
 #include <vector>
 
 #include "Input.h"
-#include "GameObject.h"
-#include "Texture.h"
 #include "AxisAlignedRectF.h"
-#include "Paddle.h"
-#include "Block.h"
-#include "Bounds.h"
-#include "Menu.h"
 #include "Level.h"
+
+class Menu;
 
 class Game
 {

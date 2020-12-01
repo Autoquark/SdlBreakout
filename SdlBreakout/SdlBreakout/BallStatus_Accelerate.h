@@ -1,8 +1,8 @@
 #pragma once
 #include "stdafx.h"
 
-#include "Ball.h"
 #include "BallStatusEffect.h"
+#include "Ball.h"
 #include "Game.h"
 
 class BallStatus_Accelerate : public BallStatusEffect
