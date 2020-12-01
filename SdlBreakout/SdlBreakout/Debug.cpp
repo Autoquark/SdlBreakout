@@ -1,7 +1,7 @@
 #include "stdafx.h"
+#include "Debug.h"
 
 #include <iostream>
-#include "Debug.h"
 
 void Debug::PrintChanges(const std::string& key, const std::string& value)
 {

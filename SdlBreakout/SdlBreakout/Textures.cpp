@@ -1,9 +1,9 @@
 #include "stdafx.h"
+#include "Textures.h"
 
 #include <filesystem>
 #include <vector>
 
-#include "Textures.h"
 #include "Game.h"
 
 void Textures::LoadTextures()
@@ -23,11 +23,6 @@ void Textures::LoadTextures()
 
 void Textures::FreeAllTextures()
 {
-	for(const auto& [key, value] : textures)
-	{
-		
-	}
-
 	textures.clear();
 }
 

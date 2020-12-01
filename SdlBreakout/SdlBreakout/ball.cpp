@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "ball.h"
+#include "Ball.h"
 
 #include <algorithm>
 #include <iostream>
 
-#include "game.h"
+#include "Game.h"
 #include "Vector2.h"
 #include "Textures.h"
 #include "CircleF.h"

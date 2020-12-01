@@ -1,12 +1,12 @@
 #include "stdafx.h"
+#include "Paddle.h"
 
 #include <iostream>
 #include <algorithm>
 
 #include "Ball.h"
 #include "Debug.h"
-#include "Paddle.h"
-#include "game.h"
+#include "Game.h"
 #include "Textures.h"
 #include "CompoundShape.h"
 #include "CircleF.h"

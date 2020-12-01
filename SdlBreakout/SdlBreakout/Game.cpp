@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Game.h"
 
 #include <algorithm>
 #include <SDL_image.h>
@@ -8,15 +9,7 @@
 #include <string>
 #include <vector>
 
-#include "Input.h"
-#include "Game.h"
-#include "Paddle.h"
-#include "Ball.h"
-#include "BlockMaker.h"
 #include "GameObject.h"
-#include "Texture.h"
-#include "Shape.h"
-#include "Bounds.h"
 #include "Textures.h"
 #include "Sounds.h"
 #include "Fonts.h"

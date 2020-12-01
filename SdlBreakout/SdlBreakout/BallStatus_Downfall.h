@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "BallStatusEffect.h"
-#include "ball.h"
+#include "Ball.h"
 
 
 class BallStatus_Downfall : public BallStatusEffect

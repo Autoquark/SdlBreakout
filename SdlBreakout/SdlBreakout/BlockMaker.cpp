@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "BlockMaker.h"
 
-#include "BallStatus_Downfall.h"
-#include "BallStatus_Accelerate.h"
+#include "Block.h"
 
 Block* BlockMaker::MakeNormal(int health)
 {

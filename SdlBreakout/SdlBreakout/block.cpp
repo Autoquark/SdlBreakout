@@ -1,8 +1,8 @@
 #include "stdafx.h"
+#include "Block.h"
 
 #include <SDL_mixer.h>
 
-#include "block.h"
 #include "Game.h"
 #include "Textures.h"
 #include "Sounds.h"
