@@ -2,11 +2,12 @@
 #include "stdafx.h"
 
 #include <unordered_set>
+#include <filesystem>
 
-#include "Paddle.h"
-#include "Bounds.h"
-#include "Ball.h"
 #include "Block.h"
+
+class Paddle;
+class Ball;
 
 class Level
 {

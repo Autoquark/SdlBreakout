@@ -6,6 +6,7 @@
 #include "Game.h"
 #include "Textures.h"
 #include "Sounds.h"
+#include "BallStatusEffect.h"
 
 Block::Block(const std::string& textureKey, const Shape& collisionBounds) : GameObject(&collisionBounds), textureKey(textureKey)
 {

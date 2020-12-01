@@ -45,16 +45,19 @@ public:
 		return keysDown[key];
 	}
 
+	[[nodiscard]]
 	bool MouseButtonPressed(MouseButton button) const
 	{
 		return mousePressed[(int)button];
 	}
 
+	[[nodiscard]]
 	bool MouseButtonReleased(MouseButton button) const
 	{
 		return mouseReleased[(int)button];
 	}
 
+	[[nodiscard]]
 	bool MouseButtonDown(MouseButton button) const
 	{
 		return mouseDown[(int)button];
