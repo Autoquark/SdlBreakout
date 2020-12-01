@@ -48,18 +48,24 @@ public:
 	[[nodiscard]]
 	bool MouseButtonPressed(MouseButton button) const
 	{
+		assert(MouseButton::Min <= button && button <= MouseButton::Max);
+		// cppcheck-suppress negativeContainerIndex
 		return mousePressed[(int)button];
 	}
 
 	[[nodiscard]]
 	bool MouseButtonReleased(MouseButton button) const
 	{
+		assert(MouseButton::Min <= button && button <= MouseButton::Max);
+		// cppcheck-suppress negativeContainerIndex
 		return mouseReleased[(int)button];
 	}
 
 	[[nodiscard]]
 	bool MouseButtonDown(MouseButton button) const
 	{
+		assert(MouseButton::Min <= button && button <= MouseButton::Max);
+		// cppcheck-suppress negativeContainerIndex
 		return mouseDown[(int)button];
 	}
 
