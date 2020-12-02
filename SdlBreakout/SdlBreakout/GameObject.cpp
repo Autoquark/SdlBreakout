@@ -25,10 +25,10 @@ void GameObject::Update(float timeElapsed)
 
 	// Use the centre of the collision bounds but the size of the sprite, in case the sprite and collision bounds differ
 	SDL_Rect destinationRect{};
-	destinationRect.x = (int)centre.x - sprite->GetSize().x / 2;
-	destinationRect.y = (int)centre.y - sprite->GetSize().y / 2;
-	destinationRect.w = (int)sprite->GetSize().x;
-	destinationRect.h = (int)sprite->GetSize().y;
+	destinationRect.x = (int)centre.x - sprite->size.x / 2;
+	destinationRect.y = (int)centre.y - sprite->size.y / 2;
+	destinationRect.w = sprite->size.x;
+	destinationRect.h = sprite->size.y;
 
 	auto& game = Game::GetInstance();
 	SDL_SetRenderDrawColor(game.renderer, 255, 0, 0, 255);

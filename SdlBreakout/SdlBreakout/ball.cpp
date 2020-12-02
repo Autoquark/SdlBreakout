@@ -33,7 +33,7 @@ void Ball::Update(float timeElapsed)
 
 	while (true)
 	{
-		auto screenEdgeCollision = collisionBounds->CastAgainst(level->bounds, remainingVelocity, Shape::InternalityFilter::Internal);
+		auto screenEdgeCollision = collisionBounds->CastAgainst(Game::levelArea, remainingVelocity, Shape::InternalityFilter::Internal);
 		auto paddleCollision = collisionBounds->CastAgainst(*paddle->collisionBounds, remainingVelocity, Shape::InternalityFilter::External);
 
 		std::vector<std::optional<Contact>> contacts = {
@@ -66,7 +66,7 @@ void Ball::Update(float timeElapsed)
 		}
 
 		auto normal = collision.normal;
-		if (!Game::DISABLE_BALL_LOSS && index == 0 && std::abs(collision.point.y - level->bounds.Bottom()) < 1)
+		if (!Game::DISABLE_BALL_LOSS && index == 0 && std::abs(collision.point.y - Game::levelArea.Bottom()) < 1)
 		{
 			level->Destroy(this);
 			return;

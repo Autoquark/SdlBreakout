@@ -50,10 +50,10 @@ std::unique_ptr<Level> Level::Load(std::filesystem::path path)
 		legend.insert({ entry.character[0], block });
 	}
 
-	float y = 0;//Game::SCREEN_HEIGHT;
+	float y = Game::levelArea.Top();
 	for (const auto& row : serializableLevel.grid)
 	{
-		float x = 0;
+		float x = Game::levelArea.Left();
 		for (const auto& character : row)
 		{
 			if (character == '.')
@@ -74,8 +74,16 @@ std::unique_ptr<Level> Level::Load(std::filesystem::path path)
 			block->collisionBounds->Translate(x, y);
 			level->AddBlock(block);
 			x += Block::BLOCK_WIDTH;
+			if (x > Game::levelArea.Right())
+			{
+				throw new std::exception();
+			}
 		}
 		y += Block::BLOCK_HEIGHT;
+		if (y > Game::levelArea.Bottom())
+		{
+			throw new std::exception();
+		}
 	}
 
 	return level;
@@ -87,21 +95,45 @@ void Level::Destroy(GameObject* gameObject)
 	toRemove.insert(gameObject);
 }
 
-Level::Level() : bounds(AxisAlignedRectF(2.0f, 2.0f, Game::GetInstance().SCREEN_WIDTH - 4.0f, Game::GetInstance().SCREEN_HEIGHT - 4.0f))
+void Level::SpawnBallAndStickToPaddle()
 {
-	paddle = new Paddle();
-	gameObjects.push_back(paddle);
-	gameObjects.back()->collisionBounds->SetCentre(Game::SCREEN_WIDTH / 2, Game::SCREEN_HEIGHT - paddle->centreSegment->size.y / 2);
 	paddle->isSticky = true;
 
 	balls.push_back(new Ball());
 	gameObjects.push_back(balls.back());
-	gameObjects.back()->collisionBounds->Translate(320, 0);
-	gameObjects.back()->collisionBounds->MoveToContact(*paddle->collisionBounds.get(), Vector2F(0, 999), Shape::InternalityFilter::External);
+	gameObjects.back()->collisionBounds->SetCentre(paddle->collisionBounds->GetAxisAlignedBoundingBox().Centre().x, 0);
+	gameObjects.back()->collisionBounds->MoveToContact(*paddle->collisionBounds, Vector2F(0, 999), Shape::InternalityFilter::External);
+}
+
+Level::Level()
+{
+	paddle = new Paddle();
+	gameObjects.push_back(paddle);
+	gameObjects.back()->collisionBounds->SetCentre(Game::SCREEN_WIDTH / 2, Game::SCREEN_HEIGHT - paddle->centreSegment->size.y / 2);
+	
+	SpawnBallAndStickToPaddle();
 }
 
 Level::UpdateResult Level::Update(float timeElapsed)
 {
+	const auto* sprite = Textures::GetTexture("life");
+
+	Vector2 position(0, 0);
+	for (int i = 0; i < lives; i++)
+	{
+		SDL_Rect destinationRect{};
+		destinationRect.x = position.x;
+		destinationRect.y = position.y;
+		destinationRect.w = (int)sprite->size.x;
+		destinationRect.h = (int)sprite->size.y;
+
+		auto& game = Game::GetInstance();
+		SDL_SetRenderDrawColor(game.renderer, 255, 0, 0, 255);
+		SDL_RenderCopy(game.renderer, sprite->GetSdlTexture(), NULL, &destinationRect);
+
+		position.x += (int)(sprite->size.x * 1.5);
+	}
+
 	for (auto gameObject : gameObjects)
 	{
 		gameObject->Update(timeElapsed);
@@ -127,7 +159,13 @@ Level::UpdateResult Level::Update(float timeElapsed)
 
 	if (balls.empty())
 	{
-		return UpdateResult::Defeat;
+		lives--;
+		if (lives == 0)
+		{
+			return UpdateResult::Defeat;
+		}
+
+		SpawnBallAndStickToPaddle();
 	}
 
 	return UpdateResult::Continue;

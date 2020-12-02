@@ -11,10 +11,9 @@ public:
 	Texture(SdlTextureUniquePtr& sdlTexture, const Vector2<int>& size);
 
 	SDL_Texture* GetSdlTexture() const;
-	const Vector2<int>& GetSize() const;
+	const Vector2<int> size;
 
 private:
 	const SdlTextureUniquePtr sdlTexture;
-	const Vector2<int> size;
 };
 

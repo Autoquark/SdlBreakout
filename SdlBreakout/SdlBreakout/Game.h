@@ -18,8 +18,9 @@ public:
 
 	static const int SCREEN_WIDTH = 640;
 	static const int SCREEN_HEIGHT = 480;
-	static const bool DISABLE_BALL_LOSS = true;
-	const AxisAlignedRectF screenRect = AxisAlignedRectF(0.0f, 0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
+	static const bool DISABLE_BALL_LOSS = false;
+	static const AxisAlignedRectF screenRect;
+	static const AxisAlignedRectF levelArea;
 
 	const int TARGET_FPS = 60;
 

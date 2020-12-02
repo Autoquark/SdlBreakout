@@ -9,8 +9,3 @@ SDL_Texture* Texture::GetSdlTexture() const
 {
 	return sdlTexture.get();
 }
-
-const Vector2<int>& Texture::GetSize() const
-{
-	return size;
-}

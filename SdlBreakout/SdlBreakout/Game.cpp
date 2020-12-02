@@ -112,7 +112,11 @@ void Game::Start()
 			float elapsed = (float)std::min((sdlTime - lastUpdateSdlTime) / 1000.0, 1.0 / TARGET_FPS);
 			time += elapsed;
 
-			level->Update(elapsed);
+			auto result = level->Update(elapsed);
+			if (result == Level::UpdateResult::Defeat)
+			{
+				break;
+			}
 
 			lastUpdateSdlTime = sdlTime;
 		}
@@ -206,3 +210,6 @@ SDL_Surface* Game::loadSurface(std::string path)
 
 	return optimizedSurface;
 }
+
+const AxisAlignedRectF Game::screenRect = AxisAlignedRectF(0.0f, 0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
+const AxisAlignedRectF Game::levelArea = AxisAlignedRectF(0.0f, 20.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT - 20.0f);

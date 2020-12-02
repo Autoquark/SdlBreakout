@@ -51,16 +51,17 @@ public:
 	/// <param name="gameObject"></param>
 	void Destroy(GameObject* gameObject);
 
-	AxisAlignedRectF bounds;
-
 	// Special game objects
 	Paddle* paddle = NULL;
 
 private:
 
+	void SpawnBallAndStickToPaddle();
+
 	std::vector<GameObject*> gameObjects;
 	std::vector<Block*> blocks;
 	std::vector<Ball*> balls;
 	std::unordered_set<GameObject*> toRemove;
+	int lives = 3;
 };
 

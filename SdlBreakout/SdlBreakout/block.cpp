@@ -59,10 +59,10 @@ void Block::Update(float timeElapsed)
 	auto centre = collisionBounds->GetAxisAlignedBoundingBox().Centre();
 	auto statusSprite = appliesStatus->GetIcon();
 	SDL_Rect destinationRect{};
-	destinationRect.x = (int)centre.x - statusSprite->GetSize().x / 2;
-	destinationRect.y = (int)centre.y - statusSprite->GetSize().y / 2;
-	destinationRect.w = (int)statusSprite->GetSize().x;
-	destinationRect.h = (int)statusSprite->GetSize().y;
+	destinationRect.x = (int)centre.x - statusSprite->size.x / 2;
+	destinationRect.y = (int)centre.y - statusSprite->size.y / 2;
+	destinationRect.w = (int)statusSprite->size.x;
+	destinationRect.h = (int)statusSprite->size.y;
 
 	auto& game = Game::GetInstance();
 	SDL_SetRenderDrawColor(game.renderer, 255, 0, 0, 255);
