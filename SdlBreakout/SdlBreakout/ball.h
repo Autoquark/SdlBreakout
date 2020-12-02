@@ -8,12 +8,17 @@
 
 #include "GameObject.h"
 #include "BallStatusEffect.h"
+#include "BallStatus_PaddleHeld.h"
+
+class BallStatus_PaddleHeld;
 
 class Ball : public GameObject
 {
 public:
+	const float BASE_SPEED = 190;
+
 	Ball();
-	~Ball();
+	~Ball() = default;
 
 	void Update(float timeElapsed) override;
 	
@@ -24,11 +29,10 @@ public:
 	void SetBaseSpeed(float value)
 	{
 		speed = value;
-		velocity.SetMagnitude(value);
 	}
 	void SetDirection(Vector2F value)
 	{
-		velocity.SetDirection(value);
+		direction = value.Normalised();
 	}
 
 	void AddStatus(std::unique_ptr<BallStatusEffect> status)
@@ -52,8 +56,11 @@ private:
 	std::vector<std::unique_ptr<BallStatusEffect>> statusEffects;
 	std::set<BallStatusEffect*> toRemove;
 	// Target speed of the ball. Stored separately to velocity as the magnitude of the velocity may vary slightly due to rounding error in physics calculations
-	float speed;
-	// Current velocity of the ball
-	Vector2F velocity;
+	float speed = BASE_SPEED;
+	// Current direction of the ball
+	Vector2F direction = Vector2F::Down();
+	BallStatus_PaddleHeld* heldStatus = nullptr;
+
+	float CalculateEffectiveSpeed();
 };
 

@@ -70,7 +70,11 @@ void Game::Start()
 			}
 			else if (e.type == SDL_MOUSEMOTION)
 			{
-				input.MouseEvent(e.motion);
+				input.MouseMotionEvent(e.motion);
+			}
+			else if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP)
+			{
+				input.MouseButtonEvent(e.button);
 			}
 		}
 

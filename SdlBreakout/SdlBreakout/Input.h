@@ -78,7 +78,9 @@ public:
 
 	void KeyEvent(SDL_KeyboardEvent event);
 
-	void MouseEvent(SDL_MouseMotionEvent event);
+	void MouseMotionEvent(SDL_MouseMotionEvent event);
+
+	void MouseButtonEvent(SDL_MouseButtonEvent);
 
 	void EndUpdate();
 private:

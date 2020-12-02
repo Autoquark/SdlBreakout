@@ -92,6 +92,7 @@ Level::Level() : bounds(AxisAlignedRectF(2.0f, 2.0f, Game::GetInstance().SCREEN_
 	paddle = new Paddle();
 	gameObjects.push_back(paddle);
 	gameObjects.back()->collisionBounds->Translate(320, 440);
+	paddle->isSticky = true;
 
 	balls.push_back(new Ball());
 	gameObjects.push_back(balls.back());

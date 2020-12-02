@@ -105,6 +105,9 @@
     <ClCompile Include="LegendEntry.cpp">
       <Filter>Source Files\Data</Filter>
     </ClCompile>
+    <ClCompile Include="BallStatus_PaddleHeld.cpp">
+      <Filter>Source Files\BallStatus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -172,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="LegendEntry.h">
       <Filter>Header Files\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="BallStatus_PaddleHeld.h">
+      <Filter>Header Files\BallStatus</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

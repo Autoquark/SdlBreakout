@@ -216,7 +216,11 @@ public:
 
 	void SetMagnitude(float magnitude)
 	{
-		Normalise();
+		// Attempting to normalise a (0,0) vector triggers an assert but it's ok to SetMagnitude(0) on one
+		if (magnitude != 0)
+		{
+			Normalise();
+		}
 		*this *= magnitude;
 	}
 

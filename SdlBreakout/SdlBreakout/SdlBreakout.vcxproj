@@ -232,6 +232,7 @@
     <ClCompile Include="BallStatusEffect.cpp" />
     <ClCompile Include="BallStatus_Accelerate.cpp" />
     <ClCompile Include="BallStatus_Downfall.cpp" />
+    <ClCompile Include="BallStatus_PaddleHeld.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="BlockMaker.cpp" />
     <ClCompile Include="Bounds.cpp" />
@@ -263,6 +264,7 @@
     <ClInclude Include="BallStatusEffect.h" />
     <ClInclude Include="BallStatus_Accelerate.h" />
     <ClInclude Include="BallStatus_Downfall.h" />
+    <ClInclude Include="BallStatus_PaddleHeld.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="BlockMaker.h" />
     <ClInclude Include="Bounds.h" />

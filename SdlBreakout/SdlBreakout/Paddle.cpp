@@ -17,20 +17,15 @@ const float Paddle::MAX_VIRTUAL_CURVE = 20;
 
 Paddle::Paddle()
 {
-	auto unique = std::make_unique<AxisAlignedRectF>(0.0f, 0.0f, 96.0f, 32.0f);
-	centreSegment = unique.get();
-	collisionBounds = std::make_unique<CompoundShape>(Util::MakeVector<std::unique_ptr<Shape>>(
+	auto compound = std::make_unique<CompoundShape>(Util::MakeVector<std::unique_ptr<Shape>>(
 		std::make_unique<CircleF>(0.0f, 16.0f, 16.0f),
-		unique,
+		std::make_unique<AxisAlignedRectF>(0.0f, 0.0f, 96.0f, 32.0f),
 		std::make_unique<CircleF>(96.0f, 16.0f, 16.0f)
 		));
+	centreSegment = static_cast<AxisAlignedRectF*>(compound->shapes[1].get());
+	collisionBounds = std::move(compound);
 	sprite = Textures::GetTexture("paddle");
 	moveSpeed = 600;
-}
-
-
-Paddle::~Paddle()
-{
 }
 
 void Paddle::Update(float timeElapsed)

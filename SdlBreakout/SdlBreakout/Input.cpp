@@ -28,26 +28,29 @@ void Input::KeyEvent(SDL_KeyboardEvent event)
 	}
 }
 
-void Input::MouseEvent(SDL_MouseMotionEvent event)
+void Input::MouseMotionEvent(SDL_MouseMotionEvent event)
 {
-	if (event.which == SDL_TOUCH_MOUSEID)
+	mouseMovement.x += event.xrel;
+	mouseMovement.y += event.yrel;
+}
+
+void Input::MouseButtonEvent(SDL_MouseButtonEvent event)
+{
+	if (event.button < (int)MouseButton::Min || event.which >(int)MouseButton::Max)
 	{
 		return;
 	}
 
-	mouseMovement.x += event.xrel;
-	mouseMovement.y += event.yrel;
-
 	if (event.type == SDL_MOUSEBUTTONDOWN)
 	{
-		mousePressed[event.which] = true;
+		mousePressed[event.button] = true;
 	}
 	else if (event.type == SDL_MOUSEBUTTONUP)
 	{
-		mouseReleased[event.which] = true;
+		mouseReleased[event.button] = true;
 	}
 
-	mouseDown[event.which] = event.state;
+	mouseDown[event.button] = event.state;
 }
 
 void Input::EndUpdate()

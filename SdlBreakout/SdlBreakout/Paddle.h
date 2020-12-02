@@ -9,11 +9,12 @@ public:
 	static const float MAX_VIRTUAL_CURVE;
 
 	Paddle();
-	~Paddle();
 
 	const AxisAlignedRectF* centreSegment;
 
 	void Update(float timeElapsed) override;
+
+	bool isSticky = false;
 
 private:
 	float moveSpeed;

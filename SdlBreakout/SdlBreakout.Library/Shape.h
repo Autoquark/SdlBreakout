@@ -15,6 +15,7 @@ class CompoundShape;
 class Shape
 {
 public:
+	Shape() = default;
 	virtual ~Shape() = default;
 
 	virtual std::unique_ptr<Shape> Clone() const = 0;
@@ -141,4 +142,7 @@ public:
 		// cppcheck-suppress containerOutOfBounds
 		return index == -1 ? std::nullopt : contacts[index];
 	}
+
+protected:
+	Shape(const Shape&) = default;
 };
