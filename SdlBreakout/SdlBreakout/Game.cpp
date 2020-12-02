@@ -48,7 +48,7 @@ void Game::Start()
 	Sounds::LoadSounds();
 	Fonts::LoadFonts();
 
-	level = Level::Load("../../Data/Levels/1.json");
+	level = Level::Load("../../Data/Levels/rows.json");
 
 	auto lastUpdateSdlTime = SDL_GetTicks();
 
