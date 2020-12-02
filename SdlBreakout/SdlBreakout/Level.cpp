@@ -91,12 +91,13 @@ Level::Level() : bounds(AxisAlignedRectF(2.0f, 2.0f, Game::GetInstance().SCREEN_
 {
 	paddle = new Paddle();
 	gameObjects.push_back(paddle);
-	gameObjects.back()->collisionBounds->Translate(320, 440);
+	gameObjects.back()->collisionBounds->SetCentre(Game::SCREEN_WIDTH / 2, Game::SCREEN_HEIGHT - paddle->centreSegment->size.y / 2);
 	paddle->isSticky = true;
 
 	balls.push_back(new Ball());
 	gameObjects.push_back(balls.back());
-	gameObjects.back()->collisionBounds->Translate(320, 400);
+	gameObjects.back()->collisionBounds->Translate(320, 0);
+	gameObjects.back()->collisionBounds->MoveToContact(*paddle->collisionBounds.get(), Vector2F(0, 999), Shape::InternalityFilter::External);
 }
 
 Level::UpdateResult Level::Update(float timeElapsed)

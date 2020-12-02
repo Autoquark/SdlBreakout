@@ -64,7 +64,7 @@ public:
 	/// <param name="internalityFilter">Specifies whether to check for internal, external or both kinds of contact with the other shape</param>
 	/// <returns>Optional contact representing the contact with the other shape if any occurred. Note that the contact distance will slightly exceed the actual distance moved as a small fudge
 	/// factor is subtracted to account for accuracy limitations</returns>
-	std::optional<Contact> MoveToContact(const Shape& other, Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both);
+	std::optional<Contact> MoveToContact(const Shape& other, const Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both);
 
 	/// <summary>
 	/// Translates this shape's position by the given movement or until it reaches the given contact point
@@ -72,7 +72,7 @@ public:
 	/// <param name="contact">Contact limiting the movement of the shape, or an empty optional for no limitation</param>
 	/// <param name="movement">Movement vector which will be mutated into the actual movement performed by this shape</param>
 	/// <returns>contact is returned</returns>
-	std::optional<Contact> MoveToContact(const std::optional<Contact>& contact, Vector2F& movement);
+	std::optional<Contact> MoveToContact(const std::optional<Contact>& contact, const Vector2F& movement);
 
 	/// <summary>
 	/// Translates this shape's position by the given movement or until it comes into contact with one of the given other shapes
@@ -82,7 +82,7 @@ public:
 	/// <param name="internalityFilter">Specifies whether to check for internal, external or both kinds of contact with the other shapes</param>
 	/// <returns>Optional contact representing the contact with the other shape if any occurred. Note that the contact distance will slightly exceed the actual distance moved as a small fudge
 	/// factor is subtracted to account for accuracy limitations</returns>
-	std::optional<Contact> MoveToContact(const std::vector<const Shape*>& others, Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both);
+	std::optional<Contact> MoveToContact(const std::vector<const Shape*>& others, const Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both);
 
 	virtual void Translate(Vector2F amount) = 0;
 	void Translate(float x, float y)
@@ -119,7 +119,7 @@ public:
 			{
 				continue;
 			}
-			auto contact = *nullable;
+			auto& contact = *nullable;
 			if ((contact.stationarySide && internalityFilter == InternalityFilter::Internal) || (!contact.stationarySide && internalityFilter == InternalityFilter::External))
 			{
 				continue;
