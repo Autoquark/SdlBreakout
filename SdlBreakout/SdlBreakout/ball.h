@@ -15,7 +15,8 @@ class BallStatus_PaddleHeld;
 class Ball : public GameObject
 {
 public:
-	const float BASE_SPEED = 190;
+	const static float BASE_SPEED;
+	const static float SPEED_BOOST_DECAY_FACTOR;
 
 	Ball();
 	~Ball() = default;
@@ -24,15 +25,20 @@ public:
 	
 	float GetSpeed()
 	{
-		return speed;
+		return baseSpeed;
 	}
 	void SetBaseSpeed(float value)
 	{
-		speed = value;
+		baseSpeed = value;
 	}
 	void SetDirection(Vector2F value)
 	{
 		direction = value.Normalised();
+	}
+
+	void ApplySpeedBoost(float amout)
+	{
+		speedBoost += amout;
 	}
 
 	void AddStatus(std::unique_ptr<BallStatusEffect> status)
@@ -56,7 +62,8 @@ private:
 	std::vector<std::unique_ptr<BallStatusEffect>> statusEffects;
 	std::set<BallStatusEffect*> toRemove;
 	// Target speed of the ball. Stored separately to velocity as the magnitude of the velocity may vary slightly due to rounding error in physics calculations
-	float speed = BASE_SPEED;
+	float baseSpeed = BASE_SPEED;
+	float speedBoost = 0;
 	// Current direction of the ball
 	Vector2F direction = Vector2F::Down();
 	BallStatus_PaddleHeld* heldStatus = nullptr;

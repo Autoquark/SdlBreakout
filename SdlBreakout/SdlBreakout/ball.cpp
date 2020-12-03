@@ -109,12 +109,14 @@ void Ball::Update(float timeElapsed)
 	statusEffects.erase(std::remove_if(statusEffects.begin(), statusEffects.end(), [this](auto const& x) { return toRemove.find(x.get()) != toRemove.end(); }), statusEffects.end());
 	toRemove.clear();
 
+	speedBoost *= std::powf(SPEED_BOOST_DECAY_FACTOR, timeElapsed);
+
 	GameObject::Update(timeElapsed);
 }
 
 float Ball::CalculateEffectiveSpeed()
 {
-	auto effectiveSpeed = speed;
+	auto effectiveSpeed = baseSpeed;
 	// Only the single largest speed buff and single largest speed debuff apply
 	auto iterator = std::max_element(statusEffects.begin(), statusEffects.end(), [](auto& x, auto& y) { return y->GetSpeedMultiplier() > x->GetSpeedMultiplier(); });
 	if (iterator != statusEffects.end())
@@ -136,5 +138,8 @@ float Ball::CalculateEffectiveSpeed()
 		}
 	}
 
-	return effectiveSpeed;
+	return effectiveSpeed + speedBoost;
 }
+
+const float Ball::BASE_SPEED = 190;
+const float Ball::SPEED_BOOST_DECAY_FACTOR = 0.5;
