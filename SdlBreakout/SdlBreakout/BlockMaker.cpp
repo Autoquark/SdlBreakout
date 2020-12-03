@@ -3,16 +3,16 @@
 
 #include "Block.h"
 
-Block* BlockMaker::MakeNormal(int health)
+std::unique_ptr<Block> BlockMaker::MakeNormal(int health)
 {
-    auto block = new Block("normal");
+    auto block = std::make_unique<Block>("normal");
     block->SetHealth(health);
     return block;
 }
 
-Block* BlockMaker::MakeInvulnerable()
+std::unique_ptr<Block> BlockMaker::MakeInvulnerable()
 {
-    auto block = new Block("invulnerable");
+    auto block = std::make_unique<Block>("invulnerable");
     block->invulnerable = true;
     return block;
 }

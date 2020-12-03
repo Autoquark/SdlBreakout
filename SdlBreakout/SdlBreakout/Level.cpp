@@ -58,18 +58,18 @@ std::unique_ptr<Level> Level::Load(std::filesystem::path path)
 		{
 			if (character != '.')
 			{
-				Block* block = NULL;
+				std::unique_ptr<Block> block;
 				if (isdigit(character))
 				{
 					block = BlockMaker::MakeNormal(character - '0');
 				}
 				else
 				{
-					block = new Block(legend.at(character));
+					block = std::make_unique<Block>(legend.at(character));
 				}
 
 				block->collisionBounds->Translate(x, y);
-				level->AddBlock(block);
+				level->AddBlock(std::move(block));
 			}
 
 			x += Block::BLOCK_WIDTH;
@@ -99,16 +99,18 @@ void Level::SpawnBallAndStickToPaddle()
 {
 	paddle->isSticky = true;
 
-	balls.push_back(new Ball());
-	gameObjects.push_back(balls.back());
+	auto unique = std::make_unique<Ball>();
+	balls.push_back(unique.get());
+	gameObjects.push_back(std::move(unique));
 	gameObjects.back()->collisionBounds->SetCentre(paddle->collisionBounds->GetAxisAlignedBoundingBox().Centre().x, 0);
 	gameObjects.back()->collisionBounds->MoveToContact(*paddle->collisionBounds, Vector2F(0, 999), Shape::InternalityFilter::External);
 }
 
 Level::Level()
 {
-	paddle = new Paddle();
-	gameObjects.push_back(paddle);
+	auto unique = std::make_unique<Paddle>();
+	paddle = unique.get();
+	gameObjects.push_back(std::move(unique));
 	gameObjects.back()->collisionBounds->SetCentre(Game::SCREEN_WIDTH / 2, Game::SCREEN_HEIGHT - paddle->centreSegment->size.y / 2);
 	
 	SpawnBallAndStickToPaddle();
@@ -134,7 +136,7 @@ Level::UpdateResult Level::Update(float timeElapsed)
 		position.x += (int)(sprite->size.x * 1.5);
 	}
 
-	for (auto gameObject : gameObjects)
+	for (auto& gameObject : gameObjects)
 	{
 		gameObject->Update(timeElapsed);
 	}
@@ -142,7 +144,7 @@ Level::UpdateResult Level::Update(float timeElapsed)
 	// Debug tool: Speed up when space held
 	if (Game::GetInput().KeyIsDown(SDL_SCANCODE_SPACE))
 	{
-		for (auto gameObject : gameObjects)
+		for (auto& gameObject : gameObjects)
 		{
 			gameObject->Update(timeElapsed);
 		}
@@ -152,8 +154,7 @@ Level::UpdateResult Level::Update(float timeElapsed)
 	{
 		blocks.erase(std::remove(blocks.begin(), blocks.end(), gameObject), blocks.end());
 		balls.erase(std::remove(balls.begin(), balls.end(), gameObject), balls.end());
-		gameObjects.erase(std::find(gameObjects.begin(), gameObjects.end(), gameObject));
-		delete gameObject;
+		gameObjects.erase(std::find_if(gameObjects.begin(), gameObjects.end(), [&](auto& ptr) { return ptr.get() == gameObject; }));
 	}
 	toRemove.clear();
 

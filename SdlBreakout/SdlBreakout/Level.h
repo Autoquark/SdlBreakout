@@ -39,10 +39,10 @@ public:
 		return balls;
 	}
 
-	void AddBlock(Block* block)
+	void AddBlock(std::unique_ptr<Block> block)
 	{
-		blocks.push_back(block);
-		gameObjects.push_back(block);
+		blocks.push_back(block.get());
+		gameObjects.push_back(std::move(block));
 	}
 
 	/// <summary>
@@ -58,7 +58,7 @@ private:
 
 	void SpawnBallAndStickToPaddle();
 
-	std::vector<GameObject*> gameObjects;
+	std::vector<std::unique_ptr<GameObject>> gameObjects;
 	std::vector<Block*> blocks;
 	std::vector<Ball*> balls;
 	std::unordered_set<GameObject*> toRemove;

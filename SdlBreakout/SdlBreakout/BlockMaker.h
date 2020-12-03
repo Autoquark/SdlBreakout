@@ -1,12 +1,11 @@
 #pragma once
 #include "stdafx.h"
-
-class Block;
+#include "Block.h"
 
 class BlockMaker
 {
 public:
-	static Block* MakeNormal(int health);
-	static Block* MakeInvulnerable();
+	static std::unique_ptr<Block> MakeNormal(int health);
+	static std::unique_ptr<Block> MakeInvulnerable();
 };
 
