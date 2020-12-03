@@ -45,6 +45,7 @@ public:
 
 	bool drawCollisionShapes = false;
 	int lives = 3;
+	int score = 0;
 
 	void Start();
 

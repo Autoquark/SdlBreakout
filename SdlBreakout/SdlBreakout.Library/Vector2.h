@@ -130,6 +130,12 @@ public:
 		return lhs;
 	}
 
+	template<class T>
+	operator Vector2<T>()
+	{
+		return Vector2<T>((T)x, (T)y);
+	}
+
 	std::string ToString() const
 	{
 		return "(" + std::to_string(x) + "," + std::to_string(y) + ")";
@@ -164,6 +170,11 @@ public:
 	float DotProduct(Vector2 other) const
 	{
 		return x * other.x + y * other.y;
+	}
+
+	Vector2 ElementMultiply(Vector2 other)
+	{
+		return Vector2(x * other.x, y * other.y);
 	}
 
 	float Magnitude() const

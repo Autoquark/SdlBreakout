@@ -57,6 +57,7 @@ public:
 private:
 
 	void SpawnBallAndStickToPaddle();
+	void RenderUi();
 
 	std::vector<std::unique_ptr<GameObject>> gameObjects;
 	std::vector<Block*> blocks;

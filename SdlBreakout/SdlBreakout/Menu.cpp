@@ -6,6 +6,7 @@
 
 #include "Game.h"
 #include "Fonts.h"
+#include "RenderUtils.h"
 
 int Menu::Update()
 {
@@ -34,17 +35,10 @@ int Menu::Update()
 	int y = 100;
 	for (unsigned int i = 0; i < options.size(); i++)
 	{
-		auto option = options[i];
+		auto& option = options[i];
 		auto color = i == selectedIndex ? SDL_Color{ 255, 0, 0 } : SDL_Color{ 255, 255, 255 };
-		auto surfaceMessage = TTF_RenderText_Shaded(Fonts::menuFont, option.c_str(), color, SDL_Color());
-		auto renderer = Game::GetInstance().renderer;
-		auto message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
 
-		int width, height;
-		TTF_SizeText(Fonts::menuFont, option.c_str(), &width, &height);
-
-		auto rect = SDL_Rect{ (Game::SCREEN_WIDTH - width) / 2, y, width, height };
-		SDL_RenderCopy(renderer, message, NULL, &rect);
+		RenderUtils::RenderText(Game::GetInstance().renderer, Vector2<int>(Game::SCREEN_WIDTH / 2, y), Vector2F(0.5, 0), option, Fonts::menuFont, color);
 		y += 100;
 	}
 

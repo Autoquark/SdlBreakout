@@ -63,6 +63,10 @@ void Ball::Update(float timeElapsed)
 				status->OnHitBlock(*block);
 			}
 			block->OnBallHit(*this);
+			if (!block->invulnerable)
+			{
+				Game::GetInstance().score += 10;
+			}
 		}
 
 		auto normal = collision.normal;
