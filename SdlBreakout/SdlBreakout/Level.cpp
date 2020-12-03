@@ -118,10 +118,11 @@ Level::Level()
 
 Level::UpdateResult Level::Update(float timeElapsed)
 {
+	auto& game = Game::GetInstance();
 	const auto* sprite = Textures::GetTexture("life");
 
 	Vector2 position(0, 0);
-	for (int i = 0; i < lives; i++)
+	for (int i = 0; i < game.lives; i++)
 	{
 		SDL_Rect destinationRect{};
 		destinationRect.x = position.x;
@@ -129,7 +130,6 @@ Level::UpdateResult Level::Update(float timeElapsed)
 		destinationRect.w = (int)sprite->size.x;
 		destinationRect.h = (int)sprite->size.y;
 
-		auto& game = Game::GetInstance();
 		SDL_SetRenderDrawColor(game.renderer, 255, 0, 0, 255);
 		SDL_RenderCopy(game.renderer, sprite->GetSdlTexture(), NULL, &destinationRect);
 
@@ -164,8 +164,8 @@ Level::UpdateResult Level::Update(float timeElapsed)
 	}
 	else if (balls.empty())
 	{
-		lives--;
-		if (lives == 0)
+		game.lives--;
+		if (game.lives == 0)
 		{
 			return UpdateResult::Defeat;
 		}

@@ -126,6 +126,7 @@ void Game::Start()
 			}
 			else if (result == Level::UpdateResult::Victory)
 			{
+				lives++;
 				levelIndex++;
 				if (levelIndex == levels.size())
 				{

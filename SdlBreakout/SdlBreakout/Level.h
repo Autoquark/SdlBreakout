@@ -62,6 +62,5 @@ private:
 	std::vector<Block*> blocks;
 	std::vector<Ball*> balls;
 	std::unordered_set<GameObject*> toRemove;
-	int lives = 3;
 };
 

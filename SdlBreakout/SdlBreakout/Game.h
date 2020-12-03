@@ -44,6 +44,7 @@ public:
 	SDL_Renderer* renderer = NULL;
 
 	bool drawCollisionShapes = false;
+	int lives = 3;
 
 	void Start();
 
