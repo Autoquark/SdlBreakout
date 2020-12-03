@@ -35,10 +35,6 @@ public:
 
 		auto sourceRect = SDL_Rect{ 0, 0, surfaceMessage->w, surfaceMessage->h };
 
-		auto descent = TTF_FontDescent(font);
-		auto fontHeight = TTF_FontHeight(font);
-		auto lineSkip = TTF_FontLineSkip(font);
-
 		// The height of the generated surface will be based on the font height which is set to accomodate the tallest character in the font. If preciseHeight is true, we trim the height to
 		// accomodate the tallest character we're actually using
 		if (preciseHeight)
