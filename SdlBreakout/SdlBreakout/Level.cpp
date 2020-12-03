@@ -56,29 +56,29 @@ std::unique_ptr<Level> Level::Load(std::filesystem::path path)
 		float x = Game::levelArea.Left();
 		for (const auto& character : row)
 		{
-			if (character == '.')
+			if (character != '.')
 			{
-				continue;
+				Block* block = NULL;
+				if (isdigit(character))
+				{
+					block = BlockMaker::MakeNormal(character - '0');
+				}
+				else
+				{
+					block = new Block(legend.at(character));
+				}
+
+				block->collisionBounds->Translate(x, y);
+				level->AddBlock(block);
 			}
 
-			Block* block = NULL;
-			if (isdigit(character))
-			{
-				block = BlockMaker::MakeNormal(character - '0');
-			}
-			else 
-			{
-				block = new Block(legend.at(character));
-			}
-
-			block->collisionBounds->Translate(x, y);
-			level->AddBlock(block);
 			x += Block::BLOCK_WIDTH;
 			if (x > Game::levelArea.Right())
 			{
 				throw new std::exception();
 			}
 		}
+
 		y += Block::BLOCK_HEIGHT;
 		if (y > Game::levelArea.Bottom())
 		{
@@ -90,7 +90,7 @@ std::unique_ptr<Level> Level::Load(std::filesystem::path path)
 }
 
 
-void Level::Destroy(GameObject* gameObject)
+void Level::ScheduleDestroy(GameObject* gameObject)
 {
 	toRemove.insert(gameObject);
 }
@@ -157,7 +157,11 @@ Level::UpdateResult Level::Update(float timeElapsed)
 	}
 	toRemove.clear();
 
-	if (balls.empty())
+	if (blocks.empty())
+	{
+		return UpdateResult::Victory;
+	}
+	else if (balls.empty())
 	{
 		lives--;
 		if (lives == 0)

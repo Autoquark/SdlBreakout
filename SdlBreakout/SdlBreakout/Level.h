@@ -23,7 +23,8 @@ public:
 	enum class UpdateResult
 	{
 		Continue,
-		Defeat
+		Defeat,
+		Victory
 	};
 
 	UpdateResult Update(float timeElapsed);
@@ -45,11 +46,10 @@ public:
 	}
 
 	/// <summary>
-	/// Destroys the given game object. After calling this method, pointers to the object are no longer valid.
-	/// GameObjects should not be deleted except via this method
+	/// Schedules the given game object for destruction at the end of the update. GameObjects should not be deleted except via this method
 	/// </summary>
 	/// <param name="gameObject"></param>
-	void Destroy(GameObject* gameObject);
+	void ScheduleDestroy(GameObject* gameObject);
 
 	// Special game objects
 	Paddle* paddle = NULL;

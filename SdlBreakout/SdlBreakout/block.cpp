@@ -39,9 +39,9 @@ void Block::OnBallHit(Ball& ball)
 void Block::SetHealth(int value)
 {
 	health = value;
-	if (health == 0)
+	if (health <= 0)
 	{
-		Game::GetLevel()->Destroy(this);
+		Game::GetLevel()->ScheduleDestroy(this);
 		return;
 	}
 	sprite = Textures::GetBlockTextures(textureKey)[((size_t)health) - 1];

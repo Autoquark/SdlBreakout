@@ -48,7 +48,14 @@ void Game::Start()
 	Sounds::LoadSounds();
 	Fonts::LoadFonts();
 
-	level = Level::Load("../../Data/Levels/rows.json");
+	std::vector<std::string> levels =
+	{
+		"singleBlock.json",
+		"rows.json",
+		"stippled.json"
+	};
+	auto levelIndex = 0;
+	level = Level::Load("../../Data/Levels/" + levels[levelIndex]);
 
 	auto lastUpdateSdlTime = SDL_GetTicks();
 
@@ -116,6 +123,16 @@ void Game::Start()
 			if (result == Level::UpdateResult::Defeat)
 			{
 				break;
+			}
+			else if (result == Level::UpdateResult::Victory)
+			{
+				levelIndex++;
+				if (levelIndex == levels.size())
+				{
+					// Just loop back to the start for now
+					levelIndex = 0;
+				}
+				level = Level::Load("../../Data/Levels/" + levels[levelIndex]);
 			}
 
 			lastUpdateSdlTime = sdlTime;

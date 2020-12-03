@@ -68,7 +68,7 @@ void Ball::Update(float timeElapsed)
 		auto normal = collision.normal;
 		if (!Game::DISABLE_BALL_LOSS && index == 0 && std::abs(collision.point.y - Game::levelArea.Bottom()) < 1)
 		{
-			level->Destroy(this);
+			level->ScheduleDestroy(this);
 			return;
 		}
 		// If we hit the paddle
