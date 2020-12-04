@@ -184,5 +184,6 @@ void Level::RenderUi()
 		position.x += (int)(sprite->size.x * 1.5);
 	}
 
-	RenderUtils::RenderText(game.renderer, Vector2<int>(Game::SCREEN_WIDTH, 0), Vector2F(1, 0), std::to_string(game.score), Fonts::menuFont, SDL_Color{ 255, 255, 255 }, true);
+	auto margin = 2;
+	RenderUtils::RenderText(game.renderer, Vector2<int>(Game::SCREEN_WIDTH - 2, 2), Vector2F(1, 0), std::to_string(game.score), Fonts::scoreFont, SDL_Color{ 255, 255, 255 }, true);
 }

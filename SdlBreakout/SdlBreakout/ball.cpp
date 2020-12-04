@@ -93,7 +93,8 @@ void Ball::Update(float timeElapsed)
 				auto contact = collisionBounds->CastAgainst(*centreSegment, remainingVelocity, Shape::InternalityFilter::External);
 				if (contact.has_value() && contact.value().distance <= collision.distance)
 				{
-					auto curveProportion = (collision.point.x - centreSegment->Centre().x) * 2 / centreSegment->size.x;
+					// We need to negate the value here because in SDL +y is down
+					auto curveProportion = -(collision.point.x - centreSegment->Centre().x) * 2 / centreSegment->size.x;
 					normal.Rotate(curveProportion * Paddle::MAX_VIRTUAL_CURVE);
 				}
 			}

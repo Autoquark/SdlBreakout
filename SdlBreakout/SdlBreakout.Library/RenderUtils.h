@@ -39,10 +39,7 @@ public:
 		// accomodate the tallest character we're actually using
 		if (preciseHeight)
 		{
-			//auto glyph = TTF_RenderGlyph_Shaded(font, '0', SDL_Color{ 255, 255, 255 }, SDL_Color{ 255, 0, 0 });
-
 			auto fontAscent = TTF_FontAscent(font);
-			//auto baselineY = height - fontAscent;
 
 			// This will be the greatest descent below the baseline of any glyph being rendered. We get this as a negative number
 			int miny = 0;

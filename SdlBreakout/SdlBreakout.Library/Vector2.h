@@ -199,7 +199,8 @@ public:
 
 	void Reflect(Vector2 normal)
 	{
-		*this -= 2 * (this->DotProduct(normal)) * normal;
+		auto normalised = normal.Normalised();
+		*this -= 2 * (this->DotProduct(normalised)) * normalised;
 	}
 
 	Vector2 Reflected(Vector2 normal) const
@@ -215,7 +216,7 @@ public:
 		auto inRadians = degreesClockwise * (M_PI / 180);
 
 		x = (ElementType)(std::cos(-inRadians) * x - std::sin(-inRadians) * y);
-		y = (ElementType)(std::sin(-inRadians) * temp - std::cos(-inRadians) * y);
+		y = (ElementType)(std::sin(-inRadians) * temp + std::cos(-inRadians) * y);
 	}
 
 	Vector2 Rotated(float degreesClockwise) const

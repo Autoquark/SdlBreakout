@@ -269,6 +269,8 @@
     <ClCompile Include="PointAgainstRectangleCastTests.cpp" />
     <ClCompile Include="RectangleAgainstRectangleCastTests.cpp" />
     <ClCompile Include="Assert.cpp" />
+    <ClCompile Include="ReflectTests.cpp" />
+    <ClCompile Include="RotateTests.cpp" />
     <ClCompile Include="SignedAngleToDegreesTests.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugASAN|Win32'">Create</PrecompiledHeader>
