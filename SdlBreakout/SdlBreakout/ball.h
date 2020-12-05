@@ -47,14 +47,12 @@ public:
 		{
 			throw new std::exception();
 		}
-		std::cout << "Status added: " << status << std::endl;
 		statusEffects.push_back(std::move(status));
 		statusEffects[statusEffects.size() - 1]->OnApplied(this);
 	}
 
 	void RemoveStatus(BallStatusEffect* status)
 	{
-		std::cout << "Status removed: " << status << std::endl;
 		toRemove.insert(status);
 	}
 

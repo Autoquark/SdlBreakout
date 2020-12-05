@@ -51,6 +51,8 @@ public:
 
 private:
 
+	static const float SCORE_UPDATE_TIME;
+
 	Game();
 	~Game();
 
@@ -67,7 +69,10 @@ private:
 	std::unique_ptr<Level> level;
 
 	float time = 0;
+	float displayScore = 0;
+	float scoreIncreaseRate = 0;
 
 	void init();
+	void RenderUi(float timeElapsed);
 	SDL_Surface* loadSurface(std::string path);
 };

@@ -24,6 +24,7 @@ void Ball::Update(float timeElapsed)
 	if (Game::GetInput().MouseButtonPressed(Input::MouseButton::Left) && heldStatus != nullptr)
 	{
 		RemoveStatus(heldStatus);
+		heldStatus = nullptr;
 		paddle->isSticky = false;
 	}
 

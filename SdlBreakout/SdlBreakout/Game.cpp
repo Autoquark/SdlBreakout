@@ -14,6 +14,7 @@
 #include "Sounds.h"
 #include "Fonts.h"
 #include "Menu.h"
+#include "RenderUtils.h"
 
 Game::Game()
 {
@@ -113,11 +114,12 @@ void Game::Start()
 		}
 		else
 		{
-
 			auto sdlTime = SDL_GetTicks();
 			// If the update loop goes over our time budget (perhaps due to debugging), don't let the elapsed time grow too big
 			float elapsed = (float)std::min((sdlTime - lastUpdateSdlTime) / 1000.0, 1.0 / TARGET_FPS);
 			time += elapsed;
+
+			RenderUi(elapsed);
 
 			auto result = level->Update(elapsed);
 			if (result == Level::UpdateResult::Defeat)
@@ -228,6 +230,39 @@ SDL_Surface* Game::loadSurface(std::string path)
 
 	return optimizedSurface;
 }
+
+void Game::RenderUi(float timeElapsed)
+{
+	const auto* sprite = Textures::GetTexture("life");
+
+	Vector2 position(0, 0);
+	for (int i = 0; i < lives; i++)
+	{
+		SDL_Rect destinationRect{};
+		destinationRect.x = position.x;
+		destinationRect.y = position.y;
+		destinationRect.w = (int)sprite->size.x;
+		destinationRect.h = (int)sprite->size.y;
+
+		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+		SDL_RenderCopy(renderer, sprite->GetSdlTexture(), NULL, &destinationRect);
+
+		position.x += (int)(sprite->size.x * 1.5);
+	}
+
+	auto margin = 2;
+	scoreIncreaseRate = std::max(scoreIncreaseRate, (score - displayScore) / SCORE_UPDATE_TIME);
+	displayScore += scoreIncreaseRate * timeElapsed;
+	if (displayScore >= score)
+	{
+		displayScore = (float)score;
+		scoreIncreaseRate = 0;
+	}
+
+	RenderUtils::RenderText(renderer, Vector2<int>(Game::SCREEN_WIDTH - margin, margin), Vector2F(1, 0), std::to_string((int)displayScore), Fonts::scoreFont, SDL_Color{ 255, 255, 255 }, true);
+}
+
+const float Game::SCORE_UPDATE_TIME = 0.5;
 
 const AxisAlignedRectF Game::screenRect = AxisAlignedRectF(0.0f, 0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
 const AxisAlignedRectF Game::levelArea = AxisAlignedRectF(0.0f, 20.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT - 20.0f);

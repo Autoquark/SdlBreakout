@@ -10,7 +10,6 @@
 #include "Game.h"
 #include "SerializableLevel.h"
 #include "BallStatus_Accelerate.h"
-#include "RenderUtils.h"
 
 std::unique_ptr<Level> Level::Load(std::filesystem::path path)
 {
@@ -122,7 +121,6 @@ Level::Level()
 Level::UpdateResult Level::Update(float timeElapsed)
 {
 	auto& game = Game::GetInstance();
-	RenderUi();
 
 	for (auto& gameObject : gameObjects)
 	{
@@ -164,26 +162,3 @@ Level::UpdateResult Level::Update(float timeElapsed)
 	return UpdateResult::Continue;
 }
 
-void Level::RenderUi()
-{
-	auto& game = Game::GetInstance();
-	const auto* sprite = Textures::GetTexture("life");
-
-	Vector2 position(0, 0);
-	for (int i = 0; i < game.lives; i++)
-	{
-		SDL_Rect destinationRect{};
-		destinationRect.x = position.x;
-		destinationRect.y = position.y;
-		destinationRect.w = (int)sprite->size.x;
-		destinationRect.h = (int)sprite->size.y;
-
-		SDL_SetRenderDrawColor(game.renderer, 255, 0, 0, 255);
-		SDL_RenderCopy(game.renderer, sprite->GetSdlTexture(), NULL, &destinationRect);
-
-		position.x += (int)(sprite->size.x * 1.5);
-	}
-
-	auto margin = 2;
-	RenderUtils::RenderText(game.renderer, Vector2<int>(Game::SCREEN_WIDTH - 2, 2), Vector2F(1, 0), std::to_string(game.score), Fonts::scoreFont, SDL_Color{ 255, 255, 255 }, true);
-}
