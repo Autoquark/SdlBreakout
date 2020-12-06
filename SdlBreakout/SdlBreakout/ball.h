@@ -23,22 +23,14 @@ public:
 
 	void Update(float timeElapsed) override;
 	
-	float GetSpeed()
-	{
-		return baseSpeed;
-	}
-	void SetBaseSpeed(float value)
-	{
-		baseSpeed = value;
-	}
 	void SetDirection(Vector2F value)
 	{
 		direction = value.Normalised();
 	}
 
-	void ApplySpeedBoost(float amout)
+	void ApplySpeedBoost(float amount)
 	{
-		speedBoost += amout;
+		speedBoost += amount;
 	}
 
 	void AddStatus(std::unique_ptr<BallStatusEffect> status)
@@ -57,10 +49,12 @@ public:
 	}
 
 private:
+	const static float TIME_UNTIL_MAX_SPEED;
+	const static float MAX_SPEED_MULTIPLIER;
+
 	std::vector<std::unique_ptr<BallStatusEffect>> statusEffects;
 	std::set<BallStatusEffect*> toRemove;
-	// Target speed of the ball. Stored separately to velocity as the magnitude of the velocity may vary slightly due to rounding error in physics calculations
-	float baseSpeed = BASE_SPEED;
+	float createdTime = -1;
 	float speedBoost = 0;
 	int hitChain = 0;
 	// Current direction of the ball

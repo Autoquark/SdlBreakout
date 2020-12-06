@@ -29,6 +29,11 @@ public:
 
 	UpdateResult Update(float timeElapsed);
 
+	float GetStartTime() const
+	{
+		return levelStartTime;
+	}
+
 	const std::vector<Block*>& GetBlocks() const
 	{
 		return blocks;
@@ -58,6 +63,8 @@ private:
 
 	void SpawnBallAndStickToPaddle();
 
+	// The game time in milliseconds when the level was started
+	float levelStartTime;
 	std::vector<std::unique_ptr<GameObject>> gameObjects;
 	std::vector<Block*> blocks;
 	std::vector<Ball*> balls;

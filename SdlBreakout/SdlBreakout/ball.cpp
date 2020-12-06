@@ -19,6 +19,13 @@ Ball::Ball() : GameObject(new CircleF(0, 0, 8))
 
 void Ball::Update(float timeElapsed)
 {
+	auto& game = Game::GetInstance();
+
+	if (createdTime < 0)
+	{
+		createdTime = Game::GetInstance().GetTime();
+	}
+
 	auto level = Game::GetLevel();
 	auto paddle = level->paddle;
 	if (Game::GetInput().MouseButtonPressed(Input::MouseButton::Left) && heldStatus != nullptr)
@@ -67,7 +74,7 @@ void Ball::Update(float timeElapsed)
 			if (!block->invulnerable)
 			{
 				hitChain++;
-				Game::GetInstance().score += 10 * hitChain;
+				game.score += 10 * hitChain;
 			}
 		}
 
@@ -124,7 +131,8 @@ void Ball::Update(float timeElapsed)
 
 float Ball::CalculateEffectiveSpeed()
 {
-	auto effectiveSpeed = baseSpeed;
+	auto effectiveSpeed = BASE_SPEED * (1 + ((Game::GetInstance().GetTime() - createdTime) * MAX_SPEED_MULTIPLIER / TIME_UNTIL_MAX_SPEED));
+	std::cout << effectiveSpeed << std::endl;
 	// Only the single largest speed buff and single largest speed debuff apply
 	auto iterator = std::max_element(statusEffects.begin(), statusEffects.end(), [](auto& x, auto& y) { return y->GetSpeedMultiplier() > x->GetSpeedMultiplier(); });
 	if (iterator != statusEffects.end())
@@ -151,3 +159,5 @@ float Ball::CalculateEffectiveSpeed()
 
 const float Ball::BASE_SPEED = 190;
 const float Ball::SPEED_BOOST_DECAY_FACTOR = 0.5;
+const float Ball::TIME_UNTIL_MAX_SPEED = 180;
+const float Ball::MAX_SPEED_MULTIPLIER = 2;
