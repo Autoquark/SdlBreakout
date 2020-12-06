@@ -28,7 +28,7 @@ Game::~Game()
 
 	//Destroy window
 	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(gWindow);
+	SDL_DestroyWindow(window);
 
 	//Quit SDL subsystems
 	IMG_Quit();
@@ -87,7 +87,7 @@ void Game::Start()
 		}
 
 		auto escapeHandled = false;
-		if (!currentMenu && input.KeyPressed(SDL_SCANCODE_ESCAPE))
+		if (!currentMenu && (input.KeyPressed(SDL_SCANCODE_ESCAPE) || !(SDL_GetWindowFlags(window) & SDL_WINDOW_INPUT_FOCUS)))
 		{
 			escapeHandled = true;
 			currentMenu = std::make_unique<Menu>();
@@ -155,15 +155,15 @@ void Game::init()
 	}
 
 	//Create window
-	gWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-	if (gWindow == NULL)
+	window = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+	if (window == NULL)
 	{
 		printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
 		throw new std::exception();
 	}
 
 	//Create renderer for window
-	renderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (renderer == NULL)
 	{
 		printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
@@ -189,7 +189,7 @@ void Game::init()
 	}
 
 	//Get window surface
-	gScreenSurface = SDL_GetWindowSurface(gWindow);
+	screenSurface = SDL_GetWindowSurface(window);
 
 	//Initialize SDL_mixer
 	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1)
@@ -217,7 +217,7 @@ SDL_Surface* Game::loadSurface(std::string path)
 	}
 
 	//Convert surface to screen format
-	optimizedSurface = SDL_ConvertSurface(loadedSurface, gScreenSurface->format, 0);
+	optimizedSurface = SDL_ConvertSurface(loadedSurface, screenSurface->format, 0);
 	//Get rid of old loaded surface
 	SDL_FreeSurface(loadedSurface);
 

@@ -59,11 +59,9 @@ private:
 	std::unique_ptr<Menu> currentMenu = nullptr;
 
 	//The window we'll be rendering to
-	SDL_Window* gWindow = NULL;
+	SDL_Window* window = NULL;
 	//The surface contained by the window
-	SDL_Surface* gScreenSurface = NULL;
-	//Current displayed texture
-	SDL_Texture* gTexture = NULL;
+	SDL_Surface* screenSurface = NULL;
 
 	Input input;
 	std::unique_ptr<Level> level;
