@@ -64,7 +64,7 @@ private:
 	void SpawnBallAndStickToPaddle();
 
 	// The game time in milliseconds when the level was started
-	float levelStartTime;
+	float levelStartTime = -1;
 	std::vector<std::unique_ptr<GameObject>> gameObjects;
 	std::vector<Block*> blocks;
 	std::vector<Ball*> balls;

@@ -120,7 +120,7 @@ Level::Level()
 
 Level::UpdateResult Level::Update(float timeElapsed)
 {
-	if (levelStartTime == 0)
+	if (levelStartTime < 0)
 	{
 		levelStartTime = Game::GetInstance().GetTime();
 	}
