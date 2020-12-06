@@ -90,7 +90,7 @@ void Game::Start()
 		if (!currentMenu && input.KeyPressed(SDL_SCANCODE_ESCAPE))
 		{
 			escapeHandled = true;
-			currentMenu = new Menu();
+			currentMenu = std::make_unique<Menu>();
 			currentMenu->Show(std::vector{ "Resume"s, "Quit"s });
 		}
 
@@ -102,7 +102,6 @@ void Game::Start()
 			auto value = currentMenu->Update();
 			if (value == 0 || (!escapeHandled && input.KeyPressed(SDL_SCANCODE_ESCAPE)))
 			{
-				delete currentMenu;
 				currentMenu = nullptr;
 				// Ignore any time passed while the menu was open
 				lastUpdateSdlTime = SDL_GetTicks();

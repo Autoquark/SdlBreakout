@@ -4,6 +4,7 @@
 #include <SDL_ttf.h>
 
 #include "Vector2.h"
+#include "SDL_Deleter.h"
 
 class RenderUtils
 {
@@ -30,8 +31,8 @@ public:
 		const SDL_Color& color = SDL_Color{ 255, 255, 255 },
 		bool preciseHeight = false)
 	{
-		auto surfaceMessage = TTF_RenderText_Shaded(font, text.c_str(), color, SDL_Color());
-		auto message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+		auto surfaceMessage = SurfaceUniquePtr(TTF_RenderText_Shaded(font, text.c_str(), color, SDL_Color()));
+		auto message = SdlTextureUniquePtr(SDL_CreateTextureFromSurface(renderer, surfaceMessage.get()));
 
 		auto sourceRect = SDL_Rect{ 0, 0, surfaceMessage->w, surfaceMessage->h };
 
@@ -65,7 +66,7 @@ public:
 		auto topLeftPosition = position - (Vector2<int>)anchorPoint.ElementMultiply(Vector2F((float)sourceRect.w, (float)sourceRect.h));
 		auto destinationRect = SDL_Rect{ topLeftPosition.x, topLeftPosition.y, sourceRect.w, sourceRect.h };
 		
-		SDL_RenderCopy(renderer, message, &sourceRect, &destinationRect);
+		SDL_RenderCopy(renderer, message.get(), &sourceRect, &destinationRect);
 	}
 };
 

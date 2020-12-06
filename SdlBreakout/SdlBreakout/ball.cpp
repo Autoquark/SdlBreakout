@@ -66,7 +66,8 @@ void Ball::Update(float timeElapsed)
 			block->OnBallHit(*this);
 			if (!block->invulnerable)
 			{
-				Game::GetInstance().score += 10;
+				hitChain++;
+				Game::GetInstance().score += 10 * hitChain;
 			}
 		}
 
@@ -79,6 +80,7 @@ void Ball::Update(float timeElapsed)
 		// If we hit the paddle
 		else if (index == 1)
 		{
+			hitChain = 0;
 			if (paddle->isSticky)
 			{
 				collisionBounds->MoveToContact(collision, remainingVelocity);

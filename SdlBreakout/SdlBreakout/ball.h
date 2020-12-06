@@ -62,6 +62,7 @@ private:
 	// Target speed of the ball. Stored separately to velocity as the magnitude of the velocity may vary slightly due to rounding error in physics calculations
 	float baseSpeed = BASE_SPEED;
 	float speedBoost = 0;
+	int hitChain = 0;
 	// Current direction of the ball
 	Vector2F direction = Vector2F::Down();
 	BallStatus_PaddleHeld* heldStatus = nullptr;

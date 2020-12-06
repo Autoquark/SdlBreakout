@@ -56,7 +56,7 @@ private:
 	Game();
 	~Game();
 
-	Menu* currentMenu = nullptr;
+	std::unique_ptr<Menu> currentMenu = nullptr;
 
 	//The window we'll be rendering to
 	SDL_Window* gWindow = NULL;
