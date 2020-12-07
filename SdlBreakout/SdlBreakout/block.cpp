@@ -2,13 +2,17 @@
 #include "Block.h"
 
 #include <SDL_mixer.h>
+#include <random>
 
 #include "Game.h"
 #include "Textures.h"
 #include "Sounds.h"
 #include "BallStatusEffect.h"
+#include "PowerupDrop.h"
+#include "Powerup.h"
+#include "Powerup_Split.h"
 
-Block::Block(const std::string& textureKey, const Shape& collisionBounds) : GameObject(&collisionBounds), textureKey(textureKey)
+Block::Block(const std::string& textureKey, const Shape& collisionBounds) : GameObject(collisionBounds), textureKey(textureKey)
 {
 	SetHealth(1);
 }
@@ -41,7 +45,14 @@ void Block::SetHealth(int value)
 	health = value;
 	if (health <= 0)
 	{
-		Game::GetLevel()->ScheduleDestroy(this);
+		auto& game = Game::GetInstance();
+		auto* level = Game::GetLevel();
+		level->ScheduleDestroy(this);
+		if (std::uniform_real_distribution<double>(0, 1)(game.random) <= POWERUP_DROP_CHANCE)
+		{
+			level->AddGameObject(std::make_unique<PowerupDrop>(std::make_unique<Powerup_Split>()))
+				->collisionBounds->SetCentre(collisionBounds->GetAxisAlignedBoundingBox().Centre());
+		}
 		return;
 	}
 	sprite = Textures::GetBlockTextures(textureKey)[((size_t)health) - 1];
@@ -68,3 +79,5 @@ void Block::Update(float timeElapsed)
 	SDL_SetRenderDrawColor(game.renderer, 255, 0, 0, 255);
 	SDL_RenderCopy(game.renderer, statusSprite->GetSdlTexture(), NULL, &destinationRect);
 }
+
+const float Block::POWERUP_DROP_CHANCE = 0.05f;

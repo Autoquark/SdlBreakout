@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "Powerup.h"
 
 class AxisAlignedRectF;
 
@@ -12,11 +13,16 @@ public:
 
 	const AxisAlignedRectF* centreSegment;
 
+	void SetPowerup(std::unique_ptr<Powerup> powerup)
+	{
+		this->powerup = std::move(powerup);
+	}
 	void Update(float timeElapsed) override;
 
 	bool isSticky = false;
 
 private:
 	float moveSpeed;
+	std::unique_ptr<Powerup> powerup;
 };
 

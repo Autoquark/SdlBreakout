@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
+#include <time.h>
 
 #include "GameObject.h"
 #include "Textures.h"
@@ -16,7 +17,7 @@
 #include "Menu.h"
 #include "RenderUtils.h"
 
-Game::Game()
+Game::Game() : random((int)std::time(0))
 {
 }
 

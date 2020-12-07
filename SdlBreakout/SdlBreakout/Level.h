@@ -50,6 +50,12 @@ public:
 		gameObjects.push_back(std::move(block));
 	}
 
+	GameObject* AddGameObject(std::unique_ptr<GameObject> gameObject)
+	{
+		gameObjects.push_back(std::move(gameObject));
+		return gameObjects.back().get();
+	}
+
 	/// <summary>
 	/// Schedules the given game object for destruction at the end of the update. GameObjects should not be deleted except via this method
 	/// </summary>

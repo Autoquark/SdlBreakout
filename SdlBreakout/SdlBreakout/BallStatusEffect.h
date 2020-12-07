@@ -35,7 +35,7 @@ public:
 
 	virtual const Texture* GetIcon() const
 	{
-		return Textures::GetTexture("missingStatus.png");
+		return Textures::GetTexture("missingStatus");
 	}
 
 protected:

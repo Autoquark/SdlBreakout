@@ -13,9 +13,9 @@ class GameObject
 
 public:
 	GameObject() = default;
-	explicit GameObject(const Shape* collisionBounds) : collisionBounds(collisionBounds->Clone()) { }
+	explicit GameObject(const Shape& collisionBounds) : collisionBounds(collisionBounds.Clone()) { }
 	GameObject(const GameObject& gameObject) : collisionBounds(gameObject.collisionBounds->Clone()), sprite(gameObject.sprite) { }
-	virtual ~GameObject() {}
+	virtual ~GameObject() = default;
 
 	GameObject& operator= (const GameObject& source)
 	{

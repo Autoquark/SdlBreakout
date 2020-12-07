@@ -246,6 +246,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Paddle.cpp" />
+    <ClCompile Include="Powerup.cpp" />
+    <ClCompile Include="PowerupDrop.cpp" />
+    <ClCompile Include="Powerup_Split.cpp" />
     <ClCompile Include="SerializableLevel.cpp" />
     <ClCompile Include="Sounds.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -276,6 +279,9 @@
     <ClInclude Include="Level.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Paddle.h" />
+    <ClInclude Include="Powerup.h" />
+    <ClInclude Include="PowerupDrop.h" />
+    <ClInclude Include="Powerup_Split.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SerializableLevel.h" />
     <ClInclude Include="Sounds.h" />

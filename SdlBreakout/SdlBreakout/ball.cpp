@@ -11,7 +11,7 @@
 #include "Debug.h"
 #include "BallStatus_PaddleHeld.h"
 
-Ball::Ball() : GameObject(new CircleF(0, 0, 8))
+Ball::Ball() : GameObject(CircleF(0, 0, 8))
 {
 	sprite = Textures::GetTexture("ball"s);
 }
@@ -157,7 +157,11 @@ float Ball::CalculateEffectiveSpeed()
 	return effectiveSpeed + speedBoost;
 }
 
+// Initial speed in pixels per second
 const float Ball::BASE_SPEED = 190;
+// The proportion of the speed boost value that will remain after one second of decay
 const float Ball::SPEED_BOOST_DECAY_FACTOR = 0.5;
+// The time needed for extra speed to reach MAX_SPEED_MULTIPLIER
 const float Ball::TIME_UNTIL_MAX_SPEED = 180;
+// The maximum additional speed that the ball can attain, as a multiple of BASE_SPEED
 const float Ball::MAX_SPEED_MULTIPLIER = 2;

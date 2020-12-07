@@ -29,6 +29,8 @@ public:
 	const BallStatusEffect* appliesStatus = nullptr;
 
 private:
+	static const float POWERUP_DROP_CHANCE;
+
 	int health = 1;
 };
 

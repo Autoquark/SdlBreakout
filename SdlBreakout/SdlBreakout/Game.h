@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL.h>
 #include <vector>
+#include <random>
 
 #include "Input.h"
 #include "AxisAlignedRectF.h"
@@ -46,6 +47,7 @@ public:
 	bool drawCollisionShapes = false;
 	int lives = 3;
 	int score = 0;
+	std::default_random_engine random;
 
 	void Start();
 
