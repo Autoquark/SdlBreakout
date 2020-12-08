@@ -238,14 +238,7 @@ void Game::RenderUi(float timeElapsed)
 	Vector2 position(0, 0);
 	for (int i = 0; i < lives; i++)
 	{
-		SDL_Rect destinationRect{};
-		destinationRect.x = position.x;
-		destinationRect.y = position.y;
-		destinationRect.w = (int)sprite->size.x;
-		destinationRect.h = (int)sprite->size.y;
-
-		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-		SDL_RenderCopy(renderer, sprite->GetSdlTexture(), NULL, &destinationRect);
+		RenderUtils::RenderTexture(renderer, position, Vector2F(), *sprite);
 
 		position.x += (int)(sprite->size.x * 1.5);
 	}

@@ -2,6 +2,7 @@
 #include "CircleF.h"
 #include "Point.h"
 #include "AxisAlignedRectF.h"
+#include "Line.h"
 
 std::optional<Contact> CircleF::CastAgainst(const Shape& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
@@ -40,7 +41,7 @@ std::optional<Contact> CircleF::CastAgainstThis(const CircleF& other, const Vect
 		return std::nullopt;
 	}
 
-	auto contact = *bestContact;
+	auto &contact = *bestContact;
 
 	return Contact(contact.normal,
 		contact.point - contact.normal.WithMagnitude(other.radius),
@@ -90,7 +91,12 @@ std::optional<Contact> CircleF::CastAgainstThis(const Point& other, const Vector
 
 std::optional<Contact> CircleF::CastAgainstThis(const Line& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
-	throw new std::exception();
+	auto contactOptional = other.CastAgainstThis(*this, -movement, internalityFilter);
+	if (!contactOptional)
+	{
+		return std::nullopt;
+	}
+	return InvertContact(contactOptional.value(), movement);
 }
 
 AxisAlignedRectF CircleF::GetAxisAlignedBoundingBox() const

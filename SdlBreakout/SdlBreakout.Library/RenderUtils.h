@@ -5,11 +5,30 @@
 
 #include "Vector2.h"
 #include "SDL_Deleter.h"
+#include "Texture.h"
 
 class RenderUtils
 {
 public:
 	RenderUtils() = delete;
+
+	static void RenderTexture(SDL_Renderer* renderer,
+		Vector2<int> position,
+		Vector2F anchorPoint,
+		const Texture& texture,
+		const SDL_Color& color = SDL_Color{ 255, 255, 255 })
+	{
+		auto topLeftPosition = position - (Vector2<int>)anchorPoint.ElementMultiply((Vector2<float>)texture.size);
+
+		SDL_Rect destinationRect{};
+		destinationRect.x = topLeftPosition.x;
+		destinationRect.y = topLeftPosition.y;
+		destinationRect.w = (int)texture.size.x;
+		destinationRect.h = (int)texture.size.y;
+
+		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+		SDL_RenderCopy(renderer, texture.GetSdlTexture(), NULL, &destinationRect);
+	}
 
 	/// <summary>
 	/// Renders a string to the given renderer

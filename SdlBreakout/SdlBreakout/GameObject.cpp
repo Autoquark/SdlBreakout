@@ -3,6 +3,7 @@
 
 #include "Game.h"
 #include "Conversion.h"
+#include "RenderUtils.h"
 
 const Texture* GameObject::getSprite()
 {
@@ -22,18 +23,9 @@ void GameObject::Update(float timeElapsed)
 	}
 
 	auto centre = collisionBounds->GetAxisAlignedBoundingBox().Centre();
-
-	// Use the centre of the collision bounds but the size of the sprite, in case the sprite and collision bounds differ
-	SDL_Rect destinationRect{};
-	destinationRect.x = (int)centre.x - sprite->size.x / 2;
-	destinationRect.y = (int)centre.y - sprite->size.y / 2;
-	destinationRect.w = sprite->size.x;
-	destinationRect.h = sprite->size.y;
+	RenderUtils::RenderTexture(Game::GetInstance().renderer, centre, Vector2F(0.5, 0.5), *sprite);
 
 	auto& game = Game::GetInstance();
-	SDL_SetRenderDrawColor(game.renderer, 255, 0, 0, 255);
-	SDL_RenderCopy(game.renderer, sprite->GetSdlTexture(), NULL, &destinationRect);
-
 	if (game.drawCollisionShapes)
 	{
 		auto bounds = collisionBounds->GetAxisAlignedBoundingBox();

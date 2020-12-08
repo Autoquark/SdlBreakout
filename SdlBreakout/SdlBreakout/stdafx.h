@@ -14,5 +14,5 @@
 #include <corecrt_math_defines.h>
 
 
-
+#define NOGDI
 // reference additional headers your program requires here

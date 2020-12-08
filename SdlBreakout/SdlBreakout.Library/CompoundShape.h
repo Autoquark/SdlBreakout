@@ -30,7 +30,6 @@ public:
 
 	std::unique_ptr<Shape> Clone() const override
 	{
-		//TODO: Clone shapes array
 		return std::make_unique<CompoundShape>(*this);
 	}
 

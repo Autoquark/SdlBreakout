@@ -11,7 +11,7 @@ public:
 
 	Paddle();
 
-	const AxisAlignedRectF* centreSegment;
+	//const AxisAlignedRectF* centreSegment;
 
 	void SetPowerup(std::unique_ptr<Powerup> powerup)
 	{

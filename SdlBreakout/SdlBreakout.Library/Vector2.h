@@ -131,7 +131,7 @@ public:
 	}
 
 	template<class T>
-	operator Vector2<T>()
+	operator Vector2<T>() const
 	{
 		return Vector2<T>((T)x, (T)y);
 	}

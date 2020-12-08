@@ -99,14 +99,17 @@ void Ball::Update(float timeElapsed)
 			}
 			else
 			{
-				auto centreSegment = level->paddle->centreSegment;
+				/*auto centreSegment = level->paddle->centreSegment;
 				auto contact = collisionBounds->CastAgainst(*centreSegment, remainingVelocity, Shape::InternalityFilter::External);
 				if (contact.has_value() && contact.value().distance <= collision.distance)
 				{
+					auto angle = -remainingVelocity.SignedAngleToDegrees(Vector2F::Up());
 					// We need to negate the value here because in SDL +y is down
-					auto curveProportion = -(collision.point.x - centreSegment->Centre().x) * 2 / centreSegment->size.x;
+					//auto curveProportion = -(collision.point.x - centreSegment->Centre().x) * 2 / centreSegment->size.x;
+					//auto curveProportion = std::abs(collision.point.x - centreSegment->Centre().x) * 2 / centreSegment->size.x;
+
 					normal.Rotate(curveProportion * Paddle::MAX_VIRTUAL_CURVE);
-				}
+				}*/
 			}
 		}
 
@@ -132,7 +135,7 @@ void Ball::Update(float timeElapsed)
 float Ball::CalculateEffectiveSpeed()
 {
 	auto effectiveSpeed = BASE_SPEED * (1 + ((Game::GetInstance().GetTime() - createdTime) * MAX_SPEED_MULTIPLIER / TIME_UNTIL_MAX_SPEED));
-	std::cout << effectiveSpeed << std::endl;
+	
 	// Only the single largest speed buff and single largest speed debuff apply
 	auto iterator = std::max_element(statusEffects.begin(), statusEffects.end(), [](auto& x, auto& y) { return y->GetSpeedMultiplier() > x->GetSpeedMultiplier(); });
 	if (iterator != statusEffects.end())

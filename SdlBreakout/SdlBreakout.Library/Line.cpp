@@ -7,7 +7,7 @@
 
 std::optional<Contact> Line::CastAgainst(const Shape& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
-	throw new std::exception();
+	return other.CastAgainstThis(*this, movement, internalityFilter);
 }
 
 std::optional<Contact> Line::CastAgainstThis(const AxisAlignedRectF& other, const Vector2F& movement, const InternalityFilter internalityFilter) const

@@ -10,6 +10,7 @@
 #include "Textures.h"
 #include "CompoundShape.h"
 #include "CircleF.h"
+#include "Polygon.h"
 
 #include "Util.h"
 
@@ -17,14 +18,18 @@ const float Paddle::MAX_VIRTUAL_CURVE = 20;
 
 Paddle::Paddle()
 {
-	auto compound = std::make_unique<CompoundShape>(Util::MakeVector<std::unique_ptr<Shape>>(
+	/*auto compound = std::make_unique<CompoundShape>(Util::MakeVector<std::unique_ptr<Shape>>(
 		std::make_unique<CircleF>(0.0f, 16.0f, 16.0f),
 		std::make_unique<AxisAlignedRectF>(0.0f, 0.0f, 96.0f, 32.0f),
 		std::make_unique<CircleF>(96.0f, 16.0f, 16.0f)
 		));
-	centreSegment = static_cast<AxisAlignedRectF*>(compound->shapes[1].get());
-	collisionBounds = std::move(compound);
-	sprite = Textures::GetTexture("paddle");
+	centreSegment = static_cast<AxisAlignedRectF*>(compound->shapes[1].get());*/
+	//collisionBounds = std::move(compound);
+	std::vector<Vector2F> vertices = {
+		Vector2F(29, 0), Vector2F(98, 0), Vector2F(127, 31), Vector2F(0, 31)
+	};
+	collisionBounds = std::make_unique<Polygon>(vertices);
+	sprite = Textures::GetTexture("paddleTrapezium");
 	moveSpeed = 600;
 }
 
@@ -63,4 +68,9 @@ void Paddle::Update(float timeElapsed)
 	collisionBounds->MoveToContact(bestContact, movement);
 
 	GameObject::Update(timeElapsed);
+
+	if (powerup != nullptr)
+	{
+
+	}
 }

@@ -113,7 +113,7 @@ Level::Level()
 	auto unique = std::make_unique<Paddle>();
 	paddle = unique.get();
 	gameObjects.push_back(std::move(unique));
-	gameObjects.back()->collisionBounds->SetCentre(Game::SCREEN_WIDTH / 2, Game::SCREEN_HEIGHT - paddle->centreSegment->size.y / 2);
+	gameObjects.back()->collisionBounds->SetCentre(Game::SCREEN_WIDTH / 2, Game::SCREEN_HEIGHT - paddle->collisionBounds->GetAxisAlignedBoundingBox().size.y / 2);
 	
 	SpawnBallAndStickToPaddle();
 }

@@ -11,6 +11,7 @@
 #include "PowerupDrop.h"
 #include "Powerup.h"
 #include "Powerup_Split.h"
+#include "RenderUtils.h"
 
 Block::Block(const std::string& textureKey, const Shape& collisionBounds) : GameObject(collisionBounds), textureKey(textureKey)
 {
@@ -69,15 +70,7 @@ void Block::Update(float timeElapsed)
 
 	auto centre = collisionBounds->GetAxisAlignedBoundingBox().Centre();
 	auto statusSprite = appliesStatus->GetIcon();
-	SDL_Rect destinationRect{};
-	destinationRect.x = (int)centre.x - statusSprite->size.x / 2;
-	destinationRect.y = (int)centre.y - statusSprite->size.y / 2;
-	destinationRect.w = (int)statusSprite->size.x;
-	destinationRect.h = (int)statusSprite->size.y;
-
-	auto& game = Game::GetInstance();
-	SDL_SetRenderDrawColor(game.renderer, 255, 0, 0, 255);
-	SDL_RenderCopy(game.renderer, statusSprite->GetSdlTexture(), NULL, &destinationRect);
+	RenderUtils::RenderTexture(Game::GetInstance().renderer, centre, Vector2F(0.5, 0.5), *statusSprite);
 }
 
 const float Block::POWERUP_DROP_CHANCE = 0.05f;

@@ -258,6 +258,7 @@
     <ClInclude Include="OptionalUtilities.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="AxisAlignedRectF.h" />
+    <ClInclude Include="Polygon.h" />
     <ClInclude Include="RenderUtils.h" />
     <ClInclude Include="SDL_Deleter.h" />
     <ClInclude Include="Shape.h" />
@@ -275,6 +276,7 @@
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="Point.cpp" />
+    <ClCompile Include="Polygon.cpp" />
     <ClCompile Include="RenderUtils.cpp" />
     <ClCompile Include="SDL_Deleter.cpp" />
     <ClCompile Include="Shape.cpp" />
