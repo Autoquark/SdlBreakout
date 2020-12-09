@@ -20,6 +20,7 @@ public:
 	static const int SCREEN_WIDTH = 640;
 	static const int SCREEN_HEIGHT = 480;
 	static const bool DISABLE_BALL_LOSS = false;
+	static const bool PAUSE_ON_FOCUS_LOSS = false;
 	static const AxisAlignedRectF screenRect;
 	static const AxisAlignedRectF levelArea;
 

@@ -88,7 +88,9 @@ void Game::Start()
 		}
 
 		auto escapeHandled = false;
-		if (!currentMenu && (input.KeyPressed(SDL_SCANCODE_ESCAPE) || !(SDL_GetWindowFlags(window) & SDL_WINDOW_INPUT_FOCUS)))
+		if (!currentMenu
+			&& (input.KeyPressed(SDL_SCANCODE_ESCAPE)
+				|| (!(SDL_GetWindowFlags(window) & SDL_WINDOW_INPUT_FOCUS) && PAUSE_ON_FOCUS_LOSS)))
 		{
 			escapeHandled = true;
 			currentMenu = std::make_unique<Menu>();
