@@ -6,6 +6,7 @@
 #include "Line.h"
 #include "Point.h"
 #include "CircleF.h"
+#include "Shape.h"
 
 Line AxisAlignedRectF::TopEdge() const
 {
@@ -197,7 +198,14 @@ std::optional<Contact> AxisAlignedRectF::CastAgainstThis(const Point& other, con
 
 std::optional<Contact> AxisAlignedRectF::CastAgainstThis(const Line& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
-	throw new std::exception();
+	std::optional<Contact> bestContact = std::nullopt;
+	Line sides[] = { TopEdge(), RightEdge(), BottomEdge(), LeftEdge() };
+	for (auto &side : sides)
+	{
+		bestContact = ClosestContact(bestContact, side.CastAgainstThis(other, movement, internalityFilter));
+	}
+
+	return bestContact;
 }
 
 void AxisAlignedRectF::Translate(Vector2F amount)

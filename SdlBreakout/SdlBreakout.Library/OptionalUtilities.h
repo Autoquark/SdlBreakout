@@ -1,6 +1,7 @@
 #pragma once
 
 #include <optional>
+#include <functional>
 
 namespace optionalUtilities
 {
@@ -34,6 +35,12 @@ namespace optionalUtilities
 			return left;
 		}
 		return predicate(left.value(), right.value()) ? right.value() : left.value();
+	}
+
+	template<typename TIn, typename TOut>
+	std::optional<TOut> Apply(std::optional<TIn> optional, std::function<TOut(TIn)> function)
+	{
+		return optional.has_value() ? std::optional<TOut>(function(*optional)) : std::nullopt;
 	}
 
 	// Returns whether the given optional contains a value. Overloaded template to allow uniform handling of std::optional and pointers

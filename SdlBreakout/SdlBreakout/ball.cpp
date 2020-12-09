@@ -38,85 +38,90 @@ void Ball::Update(float timeElapsed)
 	auto effectiveSpeed = CalculateEffectiveSpeed();
 
 	auto remainingVelocity = direction * effectiveSpeed * timeElapsed;
-
-	while (true)
+	if (remainingVelocity.Magnitude() > 0)
 	{
-		auto screenEdgeCollision = collisionBounds->CastAgainst(Game::levelArea, remainingVelocity, Shape::InternalityFilter::Internal);
-		auto paddleCollision = collisionBounds->CastAgainst(*paddle->collisionBounds, remainingVelocity, Shape::InternalityFilter::External);
-
-		std::vector<std::optional<Contact>> contacts = {
-			screenEdgeCollision,
-			paddleCollision
-		};
-
-		auto& blocks = level->GetBlocks();
-		std::transform(blocks.begin(), blocks.end(),
-			std::back_inserter(contacts),
-			[&](auto const block) { return collisionBounds->CastAgainst(*block->collisionBounds, remainingVelocity, Shape::InternalityFilter::External); });
-
-		auto index = Shape::FindClosestCollisionIndex(contacts);
-		if(index == -1)
+		while (true)
 		{
-			collisionBounds->Translate(remainingVelocity);
-			break;
-		}
+			auto castVector = remainingVelocity.WithMagnitude(remainingVelocity.Magnitude() + Contact::MIN_SEPARATION_DISTANCE);
 
-		auto& collision = *contacts[index];
+			auto screenEdgeCollision = collisionBounds->CastAgainst(Game::levelArea, castVector, Shape::InternalityFilter::Internal);
+			auto paddleCollision = collisionBounds->CastAgainst(*paddle->collisionBounds, castVector, Shape::InternalityFilter::External);
 
-		if (index > 1)
-		{
-			auto block = level->GetBlocks()[index - 2];
-			for (auto& status : statusEffects)
+			std::vector<std::optional<Contact>> contacts = {
+				screenEdgeCollision,
+				paddleCollision
+			};
+
+			auto& blocks = level->GetBlocks();
+			std::transform(blocks.begin(), blocks.end(),
+				std::back_inserter(contacts),
+				[&](auto const block) { return collisionBounds->CastAgainst(*block->collisionBounds, castVector, Shape::InternalityFilter::External); });
+
+			auto index = Shape::FindClosestCollisionIndex(contacts);
+			if (index == -1)
 			{
-				status->OnHitBlock(*block);
-			}
-			block->OnBallHit(*this);
-			if (!block->invulnerable)
-			{
-				hitChain++;
-				game.score += 10 * hitChain;
-			}
-		}
-
-		auto normal = collision.normal;
-		if (!Game::DISABLE_BALL_LOSS && index == 0 && std::abs(collision.point.y - Game::levelArea.Bottom()) < 1)
-		{
-			level->ScheduleDestroy(this);
-			return;
-		}
-		// If we hit the paddle
-		else if (index == 1)
-		{
-			hitChain = 0;
-			if (paddle->isSticky)
-			{
-				collisionBounds->MoveToContact(collision, remainingVelocity);
-
-				auto unique = std::make_unique<BallStatus_PaddleHeld>();
-				heldStatus = unique.get();
-				AddStatus(std::move(unique));
+				collisionBounds->Translate(remainingVelocity);
 				break;
 			}
-			else
+
+			auto& collision = *contacts[index];
+
+			if (index > 1)
 			{
-				/*auto centreSegment = level->paddle->centreSegment;
-				auto contact = collisionBounds->CastAgainst(*centreSegment, remainingVelocity, Shape::InternalityFilter::External);
-				if (contact.has_value() && contact.value().distance <= collision.distance)
+				auto block = level->GetBlocks()[index - 2];
+				for (auto& status : statusEffects)
 				{
-					auto angle = -remainingVelocity.SignedAngleToDegrees(Vector2F::Up());
-					// We need to negate the value here because in SDL +y is down
-					//auto curveProportion = -(collision.point.x - centreSegment->Centre().x) * 2 / centreSegment->size.x;
-					//auto curveProportion = std::abs(collision.point.x - centreSegment->Centre().x) * 2 / centreSegment->size.x;
-
-					normal.Rotate(curveProportion * Paddle::MAX_VIRTUAL_CURVE);
-				}*/
+					status->OnHitBlock(*block);
+				}
+				block->OnBallHit(*this);
+				if (!block->invulnerable)
+				{
+					hitChain++;
+					game.score += 10 * hitChain;
+				}
 			}
-		}
 
-		remainingVelocity *= 1 - (collision.distance / remainingVelocity.Magnitude());
-		collisionBounds->SetCentre(collision.centroid);
-		remainingVelocity.Reflect(normal);
-		direction.Reflect(normal);
+			auto normal = collision.normal;
+			if (!Game::DISABLE_BALL_LOSS && index == 0 && std::abs(collision.point.y - Game::levelArea.Bottom()) < 1)
+			{
+				level->ScheduleDestroy(this);
+				return;
+			}
+			// If we hit the paddle
+			else if (index == 1)
+			{
+				hitChain = 0;
+				if (paddle->isSticky)
+				{
+					collisionBounds->MoveToContact(collision);
+
+					auto unique = std::make_unique<BallStatus_PaddleHeld>();
+					heldStatus = unique.get();
+					AddStatus(std::move(unique));
+					break;
+				}
+				else
+				{
+					auto x = 2;
+					/*auto centreSegment = level->paddle->centreSegment;
+					auto contact = collisionBounds->CastAgainst(*centreSegment, remainingVelocity, Shape::InternalityFilter::External);
+					if (contact.has_value() && contact.value().distance <= collision.distance)
+					{
+						auto angle = -remainingVelocity.SignedAngleToDegrees(Vector2F::Up());
+						// We need to negate the value here because in SDL +y is down
+						//auto curveProportion = -(collision.point.x - centreSegment->Centre().x) * 2 / centreSegment->size.x;
+						//auto curveProportion = std::abs(collision.point.x - centreSegment->Centre().x) * 2 / centreSegment->size.x;
+
+						normal.Rotate(curveProportion * Paddle::MAX_VIRTUAL_CURVE);
+					}*/
+				}
+			}
+
+			auto actualDistance = collisionBounds->MoveToContact(collision).Magnitude();
+			remainingVelocity *= 1 - (actualDistance / remainingVelocity.Magnitude());
+			remainingVelocity.Reflect(normal);
+			direction.Reflect(normal);
+		}
 	}
 
 	for(auto& status : statusEffects)

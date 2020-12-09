@@ -50,6 +50,8 @@ public:
 	[[nodiscard]]
 	virtual AxisAlignedRectF GetAxisAlignedBoundingBox() const = 0;
 
+	virtual Vector2F GetCentre() const;
+
 	virtual void SetCentre(Vector2F position) = 0;
 	void SetCentre(float x, float y)
 	{
@@ -60,17 +62,24 @@ public:
 	/// Translates this shape's position by the given movement or until it comes into contact with the given other shape
 	/// </summary>
 	/// <param name="other">The shape to move into contact with</param>
-	/// <param name="movement">Movement vector which will be mutated into the actual movement performed by this shape</param>
+	/// <param name="movement">Movement vector</param>
 	/// <param name="internalityFilter">Specifies whether to check for internal, external or both kinds of contact with the other shape</param>
 	/// <returns>Optional contact representing the contact with the other shape if any occurred. Note that the contact distance will slightly exceed the actual distance moved as a small fudge
 	/// factor is subtracted to account for accuracy limitations</returns>
 	std::optional<Contact> MoveToContact(const Shape& other, const Vector2F& movement, const InternalityFilter internalityFilter = InternalityFilter::Both);
 
 	/// <summary>
+	/// Translates this shape towards the given contact point, leaving a separation of Contact::MIN_SEPARATION_DISTANCE. If the shape is already within that distance, does nothing
+	/// </summary>
+	/// <param name="contact"></param>
+	/// <returns>The movement made by the shape</returns>
+	Vector2F MoveToContact(const Contact& contact);
+
+	/// <summary>
 	/// Translates this shape's position by the given movement or until it reaches the given contact point
 	/// </summary>
 	/// <param name="contact">Contact limiting the movement of the shape, or an empty optional for no limitation</param>
-	/// <param name="movement">Movement vector which will be mutated into the actual movement performed by this shape</param>
+	/// <param name="movement">Movement vector</param>
 	/// <returns>contact is returned</returns>
 	std::optional<Contact> MoveToContact(const std::optional<Contact>& contact, const Vector2F& movement);
 
@@ -78,7 +87,7 @@ public:
 	/// Translates this shape's position by the given movement or until it comes into contact with one of the given other shapes
 	/// </summary>
 	/// <param name="other">The shapes to move into contact with</param>
-	/// <param name="movement">Movement vector which will be mutated into the actual movement performed by this shape</param>
+	/// <param name="movement">Movement vector</param>
 	/// <param name="internalityFilter">Specifies whether to check for internal, external or both kinds of contact with the other shapes</param>
 	/// <returns>Optional contact representing the contact with the other shape if any occurred. Note that the contact distance will slightly exceed the actual distance moved as a small fudge
 	/// factor is subtracted to account for accuracy limitations</returns>
@@ -88,17 +97,6 @@ public:
 	void Translate(float x, float y)
 	{
 		Translate(Vector2F(x, y));
-	}
-
-	// Given a Contact resulting from a collision between an object A making movement M and stationary object B, returns the collision that would result from object B making movement -M.
-	[[nodiscard]]
-	static Contact InvertContact(const Contact& contact, const Vector2F& movement)
-	{
-		return Contact(-contact.normal,
-			contact.point - movement.WithMagnitude(contact.distance),
-			contact.movingSide,
-			contact.stationarySide,
-			contact.distance);
 	}
 
 	[[nodiscard]]

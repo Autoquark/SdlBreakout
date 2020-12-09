@@ -3,6 +3,12 @@
 #include <numeric>
 
 #include "Shape.h"
+#include "AxisAlignedRectF.h"
+
+Vector2F Shape::GetCentre() const
+{
+	return GetAxisAlignedBoundingBox().Centre();
+}
 
 std::optional<Contact> Shape::MoveToContact(const Shape& other, const Vector2F& movement, const InternalityFilter internalityFilter)
 {
@@ -10,14 +16,24 @@ std::optional<Contact> Shape::MoveToContact(const Shape& other, const Vector2F& 
 	return MoveToContact(contact, movement);
 }
 
+Vector2F Shape::MoveToContact(const Contact& contact)
+{
+	auto movement = (contact.centroid - GetCentre());
+	movement = movement.WithMagnitude(std::max(movement.Magnitude() - Contact::MIN_SEPARATION_DISTANCE, 0.0f));
+	Translate(movement);
+	return movement;
+}
+
 std::optional<Contact> Shape::MoveToContact(const std::optional<Contact>& contact, const Vector2F& movement)
 {
-	auto actualMove = movement;
 	if (contact.has_value())
 	{
-		actualMove = movement.WithMagnitude(std::max(contact->distance - Contact::MIN_SEPARATION_DISTANCE, 0.0f));
+		MoveToContact(*contact);
 	}
-	Translate(actualMove);
+	else
+	{
+		Translate(movement);
+	}
 	return contact;
 }
 

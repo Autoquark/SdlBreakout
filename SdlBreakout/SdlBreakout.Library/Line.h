@@ -26,6 +26,19 @@ public:
 	using Shape::Translate;
 	void Translate(Vector2F amount) override;
 	void SetCentre(Vector2F position) override;
+	// Returns a vector representing the displacement from the start to the end of this line
+	Vector2F GetOffset() const
+	{
+		return end - start;
+	}
+	float Length() const
+	{
+		return GetOffset().Magnitude();
+	}
+	Vector2F GetPoint(float proportionalPosition) const
+	{
+		return Vector2F::LinearInterpolate(start, end, proportionalPosition);
+	}
 
 	[[nodiscard]]
 	AxisAlignedRectF GetAxisAlignedBoundingBox() const override;

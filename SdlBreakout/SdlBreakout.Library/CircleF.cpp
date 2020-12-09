@@ -16,7 +16,7 @@ std::optional<Contact> CircleF::CastAgainstThis(const AxisAlignedRectF& other, c
 	{
 		return std::nullopt;
 	}
-	return InvertContact(contactOptional.value(), movement);
+	return contactOptional.value().Invert(movement);
 }
 
 std::optional<Contact> CircleF::CastAgainstThis(const CircleF& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
@@ -96,7 +96,8 @@ std::optional<Contact> CircleF::CastAgainstThis(const Line& other, const Vector2
 	{
 		return std::nullopt;
 	}
-	return InvertContact(contactOptional.value(), movement);
+	//TODO: Should be -movement?
+	return contactOptional.value().Invert(movement);
 }
 
 AxisAlignedRectF CircleF::GetAxisAlignedBoundingBox() const

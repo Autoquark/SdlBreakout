@@ -9,6 +9,19 @@ struct Contact
 public:
 	static const float MIN_SEPARATION_DISTANCE;
 
+	Contact(const Vector2F& normal, const Vector2F& point, const bool stationarySide, const bool movingSide, const float distance, const Vector2F& centroid)
+		: normal(normal), point(point), stationarySide(stationarySide), movingSide(movingSide), distance(distance), centroid(centroid)
+	{
+		// Check for inside on inside collisions which are impossible
+		assert(stationarySide || movingSide);
+	}
+
+	Contact(const Vector2F& normal, const Vector2F& point, const bool stationarySide, const bool movingSide, const float distance)
+		: Contact(normal, point, stationarySide, movingSide, distance, point)
+	{
+	}
+	~Contact();
+
 	// Normal of the collision
 	Vector2F normal;
 	// The point at which the objects touch
@@ -38,17 +51,15 @@ public:
 		return !(lhs == rhs);
 	}
 
-	Contact(const Vector2F& normal, const Vector2F& point, const bool stationarySide, const bool movingSide, const float distance, const Vector2F& centroid)
-		: normal(normal), point(point), stationarySide(stationarySide), movingSide(movingSide), distance(distance), centroid(centroid)
+	// Given a Contact resulting from a collision between an object A making a given movement M and stationary object B, returns the collision with A that would result from object B making movement -M.
+	[[nodiscard]]
+	Contact Invert(const Vector2F& movement) const
 	{
-		// Check for inside on inside collisions which are impossible
-		assert(stationarySide || movingSide);
+		return Contact(-normal,
+			point - movement.WithMagnitude(distance),
+			movingSide,
+			stationarySide,
+			distance);
 	}
-
-	Contact(const Vector2F& normal, const Vector2F& point, const bool stationarySide, const bool movingSide, const float distance)
-		: Contact(normal, point, stationarySide, movingSide, distance, point)
-	{
-	}
-	~Contact();
 };
 

@@ -17,28 +17,20 @@ std::optional<Contact> Line::CastAgainstThis(const AxisAlignedRectF& other, cons
 
 std::optional<Contact> Line::CastAgainstThis(const CircleF& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
-	// Can currently only handle horizontal or vertical lines; Need rotated rectangle type for other cases
-	if (start.x != end.x && start.y != end.y)
-	{
-		throw std::exception();
-	}
-
-	// Reduce the circle to a point, and expand the line in the two perpendicular directions to form a rectangle.
-	// Also check against two circles placed at either end of the line with radius equal to the radius of the original circle.
+	// Reduce the circle to a point, and check against the line moved by the radius of the circle in each of the two perpendicular directions.
+	// Also check against two circles placed at either end of the original line with radius equal to the radius of the original circle.
 	auto circleEndCentre = other.centre + movement;
 
-	// Create a rectangle that's long in the horizontal axis
-	auto rect = AxisAlignedRectF::FromCentre(Vector2F::LinearInterpolate(start, end, 0.5f), Vector2F::DistanceBetween(start, end), other.radius * 2);
-	// If this is a vertical line, rotate the rectangle
-	if (start.x == end.x)
-	{
-		rect.Rotate90();
-	}
+	auto offset = (end - start).Rotated(90).WithMagnitude(other.radius);
+	auto line1 = Line(start + offset, end + offset);
+	auto line2 = Line(start - offset, end - offset);
 
-	auto circleCentre = Point(other.centre);
-	std::optional<Contact> bestContact = rect.CastAgainstThis(circleCentre, movement);
-	bestContact = ClosestContact(bestContact, CircleF(start, other.radius).CastAgainstThis(circleCentre, movement));
-	bestContact = ClosestContact(bestContact, CircleF(end, other.radius).CastAgainstThis(circleCentre, movement));
+	auto point = Point(other.centre);
+
+	std::optional<Contact> bestContact = line1.CastAgainstThis(point, movement);
+	bestContact = ClosestContact(bestContact, line2.CastAgainstThis(point, movement));
+	bestContact = ClosestContact(bestContact, CircleF(start, other.radius).CastAgainstThis(point, movement));
+	bestContact = ClosestContact(bestContact, CircleF(end, other.radius).CastAgainstThis(point, movement));
 
 	if (!bestContact.has_value())
 	{
@@ -50,13 +42,24 @@ std::optional<Contact> Line::CastAgainstThis(const CircleF& other, const Vector2
 	normal.Rotate(90);
 	auto dotProduct = normal.DotProduct(circleEndCentre - other.centre);
 
-	return Contact(contact.normal, contact.point + other.radius * movement.Normalised(), dotProduct < 0, true /*TODO: Case where circle envelops line*/,  contact.distance, contact.point);
+	return Contact(contact.normal,
+		// To find the actual contact point, take the actual centroid and move towards the surface that we hit (i.e. in the direction of -normal) by the radius of the circle
+		contact.point - contact.normal.WithMagnitude(other.radius),
+		dotProduct < 0,
+		true /*TODO: Case where circle envelops line*/,
+		contact.distance, contact.point);
 }
 
 std::optional<Contact> Line::CastAgainstThis(const Point& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
 	auto pointTrajectory = GeneralFormLine(other, other + movement);
 	auto line = GeneralFormLine(start, end);
+
+	// For a zero movement vector, return false. Avoids issues with zero vectors
+	if (movement == Vector2F())
+	{
+		return std::nullopt;
+	}
 
 	auto denominator = line.xCoefficient * pointTrajectory.yCoefficient - pointTrajectory.xCoefficient * line.yCoefficient;
 
@@ -119,6 +122,22 @@ std::optional<Contact> Line::CastAgainstThis(const Point& other, const Vector2F&
 	return Contact(-normal, contactPoint, stationarySide, true, Vector2F::DistanceBetween(contactPoint, other));
 }
 
+std::optional<Contact> Line::CastAgainstThis(const Line& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
+{
+	// When two lines collide, at least one endpoint of one line will be at the collision point.
+	auto bestContact = CastAgainstThis(Point(other.start), movement, internalityFilter);
+	bestContact = ClosestContact(bestContact, CastAgainstThis(Point(other.end), movement, internalityFilter));
+	bestContact = ClosestContact(bestContact, optionalUtilities::Apply<Contact, Contact>(other.CastAgainstThis(Point(start), -movement, internalityFilter), [&](auto x)
+	{
+		return x.Invert(-movement);
+	}));
+	bestContact = ClosestContact(bestContact, optionalUtilities::Apply<Contact, Contact>(other.CastAgainstThis(Point(end), -movement, internalityFilter), [&](auto x)
+	{
+		return x.Invert(-movement);
+	}));
+	return bestContact;
+}
+
 void Line::Translate(Vector2F amount)
 {
 	start += amount;
@@ -137,9 +156,4 @@ AxisAlignedRectF Line::GetAxisAlignedBoundingBox() const
 	auto minX = std::min(start.x, end.x);
 	auto minY = std::min(start.y, end.y);
 	return AxisAlignedRectF(minX, minY, std::max(start.x, end.x) - minX, std::max(start.y, end.y) - minY);
-}
-
-std::optional<Contact> Line::CastAgainstThis(const Line& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
-{
-	throw new std::exception();
 }
