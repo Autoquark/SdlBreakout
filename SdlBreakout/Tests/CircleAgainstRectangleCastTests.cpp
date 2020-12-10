@@ -24,22 +24,26 @@ namespace Tests
 
 		void RunTestCase(const TestCase& testCase)
 		{
-			auto hit = testCase.movingCircle.CastAgainst(testCase.rect, testCase.movement, testCase.internalityFilter);
+			for (auto swapShapes : { false, true })
+			{
+				const auto& hit = swapShapes ? testCase.rect.CastAgainst(testCase.movingCircle, -testCase.movement, testCase.internalityFilter)
+					: testCase.movingCircle.CastAgainst(testCase.rect, testCase.movement, testCase.internalityFilter);
 
-			if (!testCase.expectedResult.has_value())
-			{
-				Assert::IsFalse(hit.has_value());
-			}
-			else
-			{
-				Assert::IsTrue(hit.has_value());
-				auto& expected = testCase.expectedResult.value();
-				auto& actual = hit.value();
-				Assert::AreEqual(expected.point, actual.point);
-				Assert::AreEqual(expected.centroid, actual.centroid);
-				Assert::AreEqual(expected.stationarySide, actual.stationarySide);
-				Assert::AreEqual(expected.distance, actual.distance);
-				AreEqual(expected.normal, actual.normal, Constants::FloatEqualityTolerance);
+				if (!testCase.expectedResult.has_value())
+				{
+					Assert::IsFalse(hit.has_value());
+				}
+				else
+				{
+					Assert::IsTrue(hit.has_value());
+					auto& expected = swapShapes ? testCase.expectedResult->Invert(testCase.movement, testCase.rect.GetCentre()) : testCase.expectedResult.value();
+					auto& actual = hit.value();
+					Assert::AreEqual(expected.point, actual.point);
+					Assert::AreEqual(expected.centroid, actual.centroid);
+					Assert::AreEqual(expected.stationarySide, actual.stationarySide);
+					Assert::AreEqual(expected.distance, actual.distance);
+					AreEqual(expected.normal, actual.normal, Constants::FloatEqualityTolerance);
+				}
 			}
 		}
 

@@ -29,8 +29,7 @@ namespace Tests
 				for (auto swapLineEnds : { false, true })
 				{
 					auto& line = swapLineEnds ? Line(testCase.line.end, testCase.line.start) : testCase.line;
-					auto& movement = swapShapes ? -testCase.motion : testCase.motion;
-					auto& hit = swapShapes ? line.CastAgainst(testCase.circle, movement) : testCase.circle.CastAgainst(line, movement);
+					const auto& hit = swapShapes ? line.CastAgainst(testCase.circle, -testCase.motion) : testCase.circle.CastAgainst(line, testCase.motion);
 
 					if (!testCase.expectedResult.has_value())
 					{
@@ -39,7 +38,7 @@ namespace Tests
 					else
 					{
 						Assert::IsTrue(hit.has_value());
-						auto& expected = swapShapes ? testCase.expectedResult.value().Invert(movement) : testCase.expectedResult.value();
+						auto& expected = swapShapes ? testCase.expectedResult.value().Invert(testCase.motion, testCase.line.GetCentre()) : testCase.expectedResult.value();
 						auto& actual = hit.value();
 						AreEqual(expected.point, actual.point, Constants::FloatEqualityTolerance);
 						AreEqual(expected.centroid, actual.centroid, Constants::FloatEqualityTolerance);

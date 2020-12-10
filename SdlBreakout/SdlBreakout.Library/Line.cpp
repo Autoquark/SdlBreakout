@@ -126,15 +126,32 @@ std::optional<Contact> Line::CastAgainstThis(const Line& other, const Vector2F& 
 {
 	// When two lines collide, at least one endpoint of one line will be at the collision point.
 	auto bestContact = CastAgainstThis(Point(other.start), movement, internalityFilter);
-	bestContact = ClosestContact(bestContact, CastAgainstThis(Point(other.end), movement, internalityFilter));
-	bestContact = ClosestContact(bestContact, optionalUtilities::Apply<Contact, Contact>(other.CastAgainstThis(Point(start), -movement, internalityFilter), [&](auto x)
+	if (bestContact.has_value())
 	{
-		return x.Invert(-movement);
-	}));
+		bestContact->centroid = bestContact->point + other.GetOffset() * 0.5;
+	}
+
+	auto contact = CastAgainstThis(Point(other.end), movement, internalityFilter);
+	if (contact.has_value())
+	{
+		contact->centroid = contact->point - other.GetOffset() * 0.5;
+	}
+	bestContact = ClosestContact(bestContact, contact);
+
+	contact = other.CastAgainstThis(Point(start), -movement, internalityFilter);
+	if(contact.has_value())
+	{
+		contact = contact->Invert(-movement, GetCentre());
+		// TODO
+	};
+	bestContact = ClosestContact(bestContact, contact);
+
 	bestContact = ClosestContact(bestContact, optionalUtilities::Apply<Contact, Contact>(other.CastAgainstThis(Point(end), -movement, internalityFilter), [&](auto x)
 	{
-		return x.Invert(-movement);
+		return x.Invert(-movement, GetCentre());
 	}));
+
+	//TODO: Centroid
 	return bestContact;
 }
 

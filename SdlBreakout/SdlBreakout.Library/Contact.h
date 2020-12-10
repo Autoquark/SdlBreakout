@@ -51,15 +51,22 @@ public:
 		return !(lhs == rhs);
 	}
 
-	// Given a Contact resulting from a collision between an object A making a given movement M and stationary object B, returns the collision with A that would result from object B making movement -M.
+	
 	[[nodiscard]]
-	Contact Invert(const Vector2F& movement) const
+	/// <summary>
+	/// Given a Contact resulting from a collision between an object A making a given direction M and stationary object B, returns the collision with A that would result from object B making direction -M.
+	/// </summary>
+	/// <param name="direction">Vector of any length representing the direction of movement A, the moving object in the original collision</param>
+	/// <param name="centroid">The initial centre position of object B, the stationary object in the original collision</param>
+	/// <returns></returns>
+	Contact Invert(const Vector2F& direction, const Vector2F& centre) const
 	{
 		return Contact(-normal,
-			point - movement.WithMagnitude(distance),
+			point - direction.WithMagnitude(distance),
 			movingSide,
 			stationarySide,
-			distance);
+			distance,
+			centre - direction.WithMagnitude(distance));
 	}
 };
 

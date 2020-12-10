@@ -15,6 +15,7 @@ std::optional<Contact> Polygon::CastAgainst(const Shape& other, const Vector2F& 
     {
         bestContact = ClosestContact(bestContact, side.CastAgainst(other, movement, internalityFilter));
     }
+    //TODO: Centroid
     return bestContact;
 }
 

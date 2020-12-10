@@ -58,7 +58,6 @@ namespace Tests
 
 						std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 
-						//auto hit = Collision::PointLineCast(pointStart, pointEnd, lineStart, lineEnd);
 						auto hit = Point(pointStart).CastAgainst(Line(lineStart, lineEnd), pointEnd - pointStart);
 						std::wstring message = L" Test failed. Expected "s + (testCase.expectedResult.has_value() ? L""s : L"no "s) + L"collision between line from "s
 							+ converter.from_bytes(pointStart.ToString()) + L" to "s + converter.from_bytes(pointEnd.ToString())
