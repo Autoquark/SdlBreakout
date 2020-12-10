@@ -100,7 +100,7 @@ public:
 	}
 
 	[[nodiscard]]
-	static std::optional<Contact> ClosestContact(std::optional<Contact> first, std::optional<Contact> second)
+	static std::optional<Contact> ClosestContact(const std::optional<Contact>& first, const std::optional<Contact>& second)
 	{
 		return optionalUtilities::MinValue(first, second, [](auto x, auto y) { return y.distance > x.distance; });
 	}

@@ -8,7 +8,7 @@ namespace optionalUtilities
 	// If neither of left or right have a value, returns std::nullopt. If one has a value, returns that value. If both have a value, returns the minimum as defined by the predicate.
 	// Predicate: a function (T a, T b) -> bool which returns true if b is greater than a.
 	template<typename T, typename Pred>
-	std::optional<T>& MinValue(std::optional<T>& left, std::optional<T>& right, const Pred& predicate)
+	std::optional<T> MinValue(const std::optional<T>& left, const std::optional<T>& right, const Pred& predicate)
 	{
 		if (!left.has_value())
 		{
