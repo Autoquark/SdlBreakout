@@ -102,7 +102,14 @@ public:
 	[[nodiscard]]
 	static std::optional<Contact> ClosestContact(const std::optional<Contact>& first, const std::optional<Contact>& second)
 	{
-		return optionalUtilities::MinValue(first, second, [](auto x, auto y) { return y.distance > x.distance; });
+		std::optional<Contact> out;
+		ClosestContact(first, second, out);
+		return out;
+	}
+
+	static bool ClosestContact(const std::optional<Contact>& first, const std::optional<Contact>& second, std::optional<Contact>& out)
+	{
+		return optionalUtilities::MinValue(first, second, [](auto x, auto y) { return y.distance > x.distance; }, out);
 	}
 
 	// Returns the index in the given vector of the Contact with the lowest distance that matches the given filter, or an empty optional if the input contains no such contacts
