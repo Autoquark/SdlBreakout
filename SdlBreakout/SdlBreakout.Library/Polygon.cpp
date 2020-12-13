@@ -11,11 +11,20 @@ std::unique_ptr<Shape> Polygon::Clone() const
 std::optional<Contact> Polygon::CastAgainst(const Shape& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
     std::optional<Contact> bestContact = std::nullopt;
+    const Line* bestSide = nullptr;
     for (auto& side : sides)
     {
-        bestContact = ClosestContact(bestContact, side.CastAgainst(other, movement, internalityFilter));
+        if (ClosestContact(bestContact, side.CastAgainst(other, movement, internalityFilter), bestContact))
+        {
+            bestSide = &side;
+        }
     }
-    //TODO: Centroid
+
+    if (bestSide != nullptr)
+    {
+        bestContact->centroid += GetCentre() - bestSide->GetCentre();
+    }
+
     return bestContact;
 }
 

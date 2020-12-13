@@ -45,28 +45,32 @@ void Paddle::Update(float timeElapsed)
 		movement = Vector2F(moveSpeed * timeElapsed, 0);
 	}
 
-	auto level = Game::GetLevel();
-
-	// Push balls as far as possible without passing the level bounds
-	// Also keep track of the smallest contact distance to any of the (moved) balls
-	std::optional<Contact> closestContact;
-	for (auto ball : level->GetBalls())
+	if (movement.Magnitude() > 0)
 	{
-		auto ballContact = collisionBounds->CastAgainst(*ball->collisionBounds, movement, Shape::InternalityFilter::External);
+		auto castVector = movement.WithMagnitude(movement.Magnitude() + Contact::MIN_SEPARATION_DISTANCE);
 
-		if (ballContact.has_value())
+		auto level = Game::GetLevel();
+
+		// Push balls as far as possible without passing the level bounds
+		// Also keep track of the smallest contact distance to any of the (moved) balls
+		std::optional<Contact> closestContact;
+		for (auto ball : level->GetBalls())
 		{
-			auto ballMovement = movement.WithMagnitude(movement.Magnitude() - ballContact->distance);
-			ball->collisionBounds->MoveToContact(Game::levelArea, ballMovement);
-			closestContact = Shape::ClosestContact(closestContact,
-				collisionBounds->CastAgainst(*ball->collisionBounds, movement, Shape::InternalityFilter::External));
+			auto ballContact = collisionBounds->CastAgainst(*ball->collisionBounds, castVector, Shape::InternalityFilter::External);
+			// TODO: Using cast vector now
+			if (ballContact.has_value())
+			{
+				auto ballMovement = movement.WithMagnitude(castVector.Magnitude() - ballContact->distance);
+				ball->collisionBounds->MoveToContact(Game::levelArea, ballMovement);
+				closestContact = Shape::ClosestContact(closestContact,
+					collisionBounds->CastAgainst(*ball->collisionBounds, castVector, Shape::InternalityFilter::External));
+			}
 		}
+
+		auto bestContact = Shape::ClosestContact(closestContact, collisionBounds->CastAgainst(Game::levelArea, castVector, Shape::InternalityFilter::Internal));
+		// Move as far as possible without penetrating the ball or level bounds
+		collisionBounds->MoveToContact(bestContact, movement);
 	}
-
-	auto bestContact = Shape::ClosestContact(closestContact, collisionBounds->CastAgainst(Game::levelArea, movement, Shape::InternalityFilter::Internal));
-	// Move as far as possible without penetrating the ball or level bounds
-	collisionBounds->MoveToContact(bestContact, movement);
-
 	GameObject::Update(timeElapsed);
 
 	if (powerup != nullptr)

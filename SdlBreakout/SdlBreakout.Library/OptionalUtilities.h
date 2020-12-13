@@ -20,13 +20,13 @@ namespace optionalUtilities
 	bool MinValue(const std::optional<T>& left, const std::optional<T>& right, const Pred& predicate, std::optional<T>& out)
 	{
 		bool result;
-		if (!left.has_value())
-		{
-			result = false;
-		}
-		else if (!right.has_value())
+		if (!right.has_value())
 		{
 			result = true;
+		}
+		else if (!left.has_value())
+		{
+			result = false;
 		}
 		else
 		{
@@ -34,7 +34,9 @@ namespace optionalUtilities
 		}
 
 		out = result ? left : right;
-		return result;
+		// Awkwardly, standard comparison functions(a, b) return true if a < b, but we are returning true if we picked the second argument (i.e. a > b)
+		// Awkwardly, standard comparison functions(a, b) return true if a < b, but we are returning true if we picked the second argument (i.e. a > b)
+		return !result;
 	}
 
 	// If neither of left or right have a value, returns std::nullopt. If one has a value, returns that value. If both have a value, returns the maximum as defined by the predicate.
