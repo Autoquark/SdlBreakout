@@ -168,7 +168,7 @@ std::optional<Contact> AxisAlignedRectF::CastAgainstThis(const CircleF& other, c
 		return std::nullopt;
 	}
 
-	auto contact = bestContact.value();
+	auto& contact = bestContact.value();
 
 	return Contact(contact.normal,
 		// To find the actual contact point, take the actual centroid and move towards the surface that we hit (i.e. in the direction of -normal) by the radius of the circle

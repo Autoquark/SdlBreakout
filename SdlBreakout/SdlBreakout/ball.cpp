@@ -10,6 +10,7 @@
 #include "CircleF.h"
 #include "Debug.h"
 #include "BallStatus_PaddleHeld.h"
+#include "CompoundShape.h"
 
 Ball::Ball() : GameObject(CircleF(0, 0, 8))
 {
@@ -65,6 +66,7 @@ void Ball::Update(float timeElapsed)
 			}
 
 			auto& collision = *contacts[index];
+			std::optional<Vector2F> overrideDirection;
 
 			if (index > 1)
 			{
@@ -80,9 +82,7 @@ void Ball::Update(float timeElapsed)
 					game.score += 10 * hitChain;
 				}
 			}
-
-			auto normal = collision.normal;
-			if (!Game::DISABLE_BALL_LOSS && index == 0 && std::abs(collision.point.y - Game::levelArea.Bottom()) < 1)
+			else if (!Game::DISABLE_BALL_LOSS && index == 0 && std::abs(collision.point.y - Game::levelArea.Bottom()) < 1)
 			{
 				level->ScheduleDestroy(this);
 				return;
@@ -102,25 +102,38 @@ void Ball::Update(float timeElapsed)
 				}
 				else
 				{
-					auto x = 2;
-					/*auto centreSegment = level->paddle->centreSegment;
-					auto contact = collisionBounds->CastAgainst(*centreSegment, remainingVelocity, Shape::InternalityFilter::External);
+					auto centreSegment = static_cast<CompoundShape*>(level->paddle->collisionBounds.get())->shapes[1].get();
+					auto contact = collisionBounds->CastAgainst(*centreSegment, castVector, Shape::InternalityFilter::External);
 					if (contact.has_value() && contact.value().distance <= collision.distance)
 					{
-						auto angle = -remainingVelocity.SignedAngleToDegrees(Vector2F::Up());
+						//auto angle = -remainingVelocity.SignedAngleToDegrees(Vector2F::Up());
 						// We need to negate the value here because in SDL +y is down
-						//auto curveProportion = -(collision.point.x - centreSegment->Centre().x) * 2 / centreSegment->size.x;
-						//auto curveProportion = std::abs(collision.point.x - centreSegment->Centre().x) * 2 / centreSegment->size.x;
+						auto curveProportion = -(collision.point.x - centreSegment->GetCentre().x) * 2 / centreSegment->GetAxisAlignedBoundingBox().size.x;
+						overrideDirection = Vector2F::Up().Rotated(curveProportion * Paddle::MAX_VIRTUAL_CURVE);
+						std::cout << "Hit centre segment" << std::endl;
 
-						normal.Rotate(curveProportion * Paddle::MAX_VIRTUAL_CURVE);
-					}*/
+						//normal.Rotate(curveProportion * Paddle::MAX_VIRTUAL_CURVE);
+					}
+					else
+					{
+						std::cout << "nope" << std::endl;
+					}
 				}
 			}
 
 			auto actualDistance = collisionBounds->MoveToContact(collision).Magnitude();
 			remainingVelocity *= 1 - (actualDistance / remainingVelocity.Magnitude());
-			remainingVelocity.Reflect(normal);
-			direction.Reflect(normal);
+
+			if (overrideDirection.has_value())
+			{
+				remainingVelocity.SetDirection(*overrideDirection);
+				direction.SetDirection(*overrideDirection);
+			}
+			else
+			{
+				remainingVelocity.Reflect(collision.normal);
+				direction.Reflect(collision.normal);
+			}
 		}
 	}
 

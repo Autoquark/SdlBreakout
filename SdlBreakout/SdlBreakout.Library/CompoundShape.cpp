@@ -10,10 +10,20 @@
 std::optional<Contact> CompoundShape::CastAgainst(const Shape& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
 	std::optional<Contact> bestContact = std::nullopt;
+	const Shape* closestShape = nullptr;
 	for (auto& shape : shapes)
 	{
-		bestContact = ClosestContact(bestContact, shape->CastAgainst(other, movement, internalityFilter));
+		if (ClosestContact(bestContact, shape->CastAgainst(other, movement, internalityFilter), bestContact))
+		{
+			closestShape = shape.get();
+		}
 	}
+
+	if (closestShape != nullptr)
+	{
+		bestContact->centroid += GetCentre() - closestShape->GetCentre();
+	}
+
 	return bestContact;
 }
 

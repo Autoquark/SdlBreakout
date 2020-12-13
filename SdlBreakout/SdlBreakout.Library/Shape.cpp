@@ -1,8 +1,9 @@
 #include "stdafx.h"
+#include "Shape.h"
 
+#include <iostream>
 #include <numeric>
 
-#include "Shape.h"
 #include "AxisAlignedRectF.h"
 
 Vector2F Shape::GetCentre() const
