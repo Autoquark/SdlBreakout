@@ -74,7 +74,7 @@ namespace Tests
 							auto &actual = hit.value();
 							AreEqual(expected.point, actual.point, Constants::FloatEqualityTolerance, message.c_str());
 							AreEqual(expected.centroid, actual.centroid, Constants::FloatEqualityTolerance, message.c_str());
-							Assert::AreEqual((swapLineEnds ^ swapPointEnds ^ swapPointAndLine) ? !expected.stationarySide : expected.stationarySide, actual.stationarySide, message.c_str());
+							Assert::AreEqual(swapLineEnds != swapPointEnds != swapPointAndLine != expected.stationarySide, actual.stationarySide, message.c_str());
 
 							// Don't check the normal if the line & point are swapped as it's not trivially calculable from the normal in the original case
 							if (!swapPointAndLine)

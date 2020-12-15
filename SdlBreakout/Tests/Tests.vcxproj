@@ -271,6 +271,7 @@
     <ClCompile Include="CircleAgainstCircleCastTests.cpp" />
     <ClCompile Include="CircleAgainstLineCastTests.cpp" />
     <ClCompile Include="CircleAgainstRectangleCastTests.cpp" />
+    <ClCompile Include="LineAgainstLineCastTests.cpp" />
     <ClCompile Include="PointAgainstCircleCastTests.cpp" />
     <ClCompile Include="PointAgainstRectangleCastTests.cpp" />
     <ClCompile Include="RectangleAgainstRectangleCastTests.cpp" />

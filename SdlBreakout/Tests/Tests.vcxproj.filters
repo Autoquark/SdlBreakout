@@ -71,5 +71,8 @@
     <ClCompile Include="ReflectTests.cpp">
       <Filter>Source Files\Vector2</Filter>
     </ClCompile>
+    <ClCompile Include="LineAgainstLineCastTests.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

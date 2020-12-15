@@ -24,7 +24,6 @@ namespace Tests
 
 		void RunTestCase(const TestCase& testCase)
 		{
-			//auto hit = Collision::PointCircleCast(testCase.pointStart, testCase.pointEnd, testCase.circle, testCase.internalityFilter);
 			auto hit = Point(testCase.pointStart).CastAgainst(testCase.circle, testCase.pointEnd - testCase.pointStart, testCase.internalityFilter);
 			if (!testCase.expectedResult.has_value())
 			{

@@ -102,22 +102,19 @@ void Ball::Update(float timeElapsed)
 				}
 				else
 				{
-					auto centreSegment = static_cast<CompoundShape*>(level->paddle->collisionBounds.get())->shapes[1].get();
+					/*auto centreSegment = static_cast<CompoundShape*>(level->paddle->collisionBounds.get())->shapes[1].get();
 					auto contact = collisionBounds->CastAgainst(*centreSegment, castVector, Shape::InternalityFilter::External);
 					if (contact.has_value() && contact.value().distance <= collision.distance)
 					{
-						//auto angle = -remainingVelocity.SignedAngleToDegrees(Vector2F::Up());
 						// We need to negate the value here because in SDL +y is down
 						auto curveProportion = -(collision.point.x - centreSegment->GetCentre().x) * 2 / centreSegment->GetAxisAlignedBoundingBox().size.x;
 						overrideDirection = Vector2F::Up().Rotated(curveProportion * Paddle::MAX_VIRTUAL_CURVE);
 						std::cout << "Hit centre segment" << std::endl;
-
-						//normal.Rotate(curveProportion * Paddle::MAX_VIRTUAL_CURVE);
 					}
 					else
 					{
 						std::cout << "nope" << std::endl;
-					}
+					}*/
 				}
 			}
 

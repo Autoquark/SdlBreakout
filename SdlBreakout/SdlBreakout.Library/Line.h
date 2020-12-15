@@ -40,6 +40,15 @@ public:
 		return Vector2F::LinearInterpolate(start, end, proportionalPosition);
 	}
 
+	// Gets a value indicating which side of this line the given point lies on. A positive value indicates that the point is to the right, a negative value to the left and zero that the point lies
+	// on the line (if the line were extended to infinity)
+	float SidednessValue(Vector2F point) const
+	{
+		auto offset = GetOffset();
+		// Negate the result so that positive corresponds to a true Contact::movingSide / Contact::stationarySide value
+		return -((point.x - start.x) * offset.y - (point.y - start.y) * offset.x);
+	}
+
 	[[nodiscard]]
 	AxisAlignedRectF GetAxisAlignedBoundingBox() const override;
 
