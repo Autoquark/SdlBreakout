@@ -273,7 +273,6 @@
     <ClCompile Include="CircleF.cpp" />
     <ClCompile Include="CompoundShape.cpp" />
     <ClCompile Include="Contact.cpp" />
-    <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Polygon.cpp" />

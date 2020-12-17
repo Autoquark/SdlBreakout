@@ -16,6 +16,9 @@
     <libraries>
         <library>microsoft_unittest</library>
     </libraries>
+    <suppressions>
+        <suppression>useStlAlgorithm</suppression>
+    </suppressions>
     <safe-checks>
         <class-public/>
     </safe-checks>
