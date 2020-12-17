@@ -149,6 +149,12 @@ Level::UpdateResult Level::Update(float timeElapsed)
 	}
 	toRemove.clear();
 
+	for (auto& gameObject : gameObjectsToAdd)
+	{
+		gameObjects.push_back(std::move(gameObject));
+	}
+	gameObjectsToAdd.clear();
+
 	if (blocks.empty())
 	{
 		return UpdateResult::Victory;

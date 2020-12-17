@@ -52,8 +52,8 @@ public:
 
 	GameObject* AddGameObject(std::unique_ptr<GameObject> gameObject)
 	{
-		gameObjects.push_back(std::move(gameObject));
-		return gameObjects.back().get();
+		gameObjectsToAdd.push_back(std::move(gameObject));
+		return gameObjectsToAdd.back().get();
 	}
 
 	/// <summary>
@@ -72,6 +72,7 @@ private:
 	// The game time in milliseconds when the level was started
 	float levelStartTime = -1;
 	std::vector<std::unique_ptr<GameObject>> gameObjects;
+	std::vector<std::unique_ptr<GameObject>> gameObjectsToAdd;
 	std::vector<Block*> blocks;
 	std::vector<Ball*> balls;
 	std::unordered_set<GameObject*> toRemove;

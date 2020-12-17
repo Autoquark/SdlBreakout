@@ -29,7 +29,7 @@ void Textures::FreeAllTextures()
 std::unique_ptr<Texture> Textures::LoadTexture(const std::filesystem::path path)
 {
 	//Load image at specified path
-	SDL_Surface* loadedSurface = IMG_Load(path.string().c_str());
+	SurfaceUniquePtr loadedSurface = SurfaceUniquePtr(IMG_Load(path.string().c_str()));
 	if (loadedSurface == NULL)
 	{
 		printf("Unable to load image %s! SDL_image Error: %s\n", path.string().c_str(), IMG_GetError());
@@ -37,9 +37,7 @@ std::unique_ptr<Texture> Textures::LoadTexture(const std::filesystem::path path)
 	}
 
 	//Create texture from surface pixels
-	SdlTextureUniquePtr newTexture = SdlTextureUniquePtr(SDL_CreateTextureFromSurface(Game::GetInstance().renderer, loadedSurface));
-
-	SDL_FreeSurface(loadedSurface);
+	SdlTextureUniquePtr newTexture = SdlTextureUniquePtr(SDL_CreateTextureFromSurface(Game::GetInstance().renderer, loadedSurface.get()));
 
 	if (newTexture == NULL)
 	{
