@@ -12,7 +12,7 @@ std::optional<Contact> Line::CastAgainst(const Shape& other, const Vector2F& mov
 
 std::optional<Contact> Line::CastAgainstThis(const AxisAlignedRectF& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
-	return optionalUtilities::Apply<Contact, Contact>(other.CastAgainstThis(*this, -movement, internalityFilter), [&](auto x)
+	return optionalUtilities::Apply<Contact>(other.CastAgainstThis(*this, -movement, internalityFilter), [&](auto x)
 	{
 		return x.Invert(-movement, other.Centre());
 	});
@@ -132,12 +132,12 @@ std::optional<Contact> Line::CastAgainstThis(const Line& other, const Vector2F& 
 
 	bestContact = ClosestContact(bestContact, CastAgainstThis(Point(other.end), movement, internalityFilter));
 
-	bestContact = ClosestContact(bestContact, optionalUtilities::Apply<Contact, Contact>(other.CastAgainstThis(Point(start), -movement, internalityFilter), [&](auto x)
+	bestContact = ClosestContact(bestContact, optionalUtilities::Apply<Contact>(other.CastAgainstThis(Point(start), -movement, internalityFilter), [&](auto x)
 	{
 		return x.Invert(-movement, GetCentre());
 	}));
 
-	bestContact = ClosestContact(bestContact, optionalUtilities::Apply<Contact, Contact>(other.CastAgainstThis(Point(end), -movement, internalityFilter), [&](auto x)
+	bestContact = ClosestContact(bestContact, optionalUtilities::Apply<Contact>(other.CastAgainstThis(Point(end), -movement, internalityFilter), [&](auto x)
 	{
 		return x.Invert(-movement, GetCentre());
 	}));

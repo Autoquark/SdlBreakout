@@ -61,6 +61,12 @@ namespace optionalUtilities
 		return optional.has_value() ? std::optional<TOut>(function(*optional)) : std::nullopt;
 	}
 
+	template<typename T>
+	std::optional<T> Apply(std::optional<T> optional, std::function<T(T)> function)
+	{
+		return Apply<T, T>(optional, function);
+	}
+
 	// Returns whether the given optional contains a value. Overloaded template to allow uniform handling of std::optional and pointers
 	template<typename T>
 	bool HasValue(std::optional<T> optional)
