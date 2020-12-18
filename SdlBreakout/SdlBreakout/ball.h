@@ -23,6 +23,10 @@ public:
 
 	void Update(float timeElapsed) override;
 	
+	Vector2F GetDirection()
+	{
+		return direction;
+	}
 	void SetDirection(Vector2F value)
 	{
 		direction = value.Normalised();

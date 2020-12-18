@@ -11,7 +11,7 @@ public:
 
 	virtual const Texture* GetIcon() const
 	{
-		return Textures::GetTexture("missingStatus");
+		return Textures::GetTexture("missingPowerup");
 	}
 
 	virtual void Activate() = 0;

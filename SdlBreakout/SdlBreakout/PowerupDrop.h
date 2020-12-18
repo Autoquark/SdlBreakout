@@ -10,7 +10,7 @@
 class PowerupDrop : public GameObject
 {
 public:
-	explicit PowerupDrop(std::unique_ptr<Powerup> powerup) : GameObject(AxisAlignedRectF(0, 0, 16, 16)), powerup(std::move(powerup))
+	explicit PowerupDrop(std::unique_ptr<Powerup> powerup) : GameObject(AxisAlignedRectF(0, 0, 32, 32)), powerup(std::move(powerup))
 	{
 		sprite = this->powerup->GetIcon();
 	}

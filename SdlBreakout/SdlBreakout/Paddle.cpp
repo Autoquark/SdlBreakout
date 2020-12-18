@@ -11,7 +11,7 @@
 #include "CompoundShape.h"
 #include "CircleF.h"
 #include "Polygon.h"
-
+#include "RenderUtils.h"
 #include "Util.h"
 
 const float Paddle::MAX_VIRTUAL_CURVE = 20;
@@ -41,12 +41,13 @@ Paddle::Paddle()
 
 void Paddle::Update(float timeElapsed)
 {
-	auto movement = Vector2F(std::clamp(Game::GetInput().GetMouseMovement().x, -moveSpeed * timeElapsed, moveSpeed * timeElapsed), 0);
-	if (Game::GetInput().KeyIsDown(SDL_SCANCODE_LEFT))
+	auto& input = Game::GetInput();
+	auto movement = Vector2F(std::clamp(input.GetMouseMovement().x, -moveSpeed * timeElapsed, moveSpeed * timeElapsed), 0);
+	if (input.KeyIsDown(SDL_SCANCODE_LEFT))
 	{
 		movement = Vector2F(-moveSpeed * timeElapsed, 0);
 	}
-	else if (Game::GetInput().KeyIsDown(SDL_SCANCODE_RIGHT))
+	else if (input.KeyIsDown(SDL_SCANCODE_RIGHT))
 	{
 		movement = Vector2F(moveSpeed * timeElapsed, 0);
 	}
@@ -80,6 +81,12 @@ void Paddle::Update(float timeElapsed)
 
 	if (powerup != nullptr)
 	{
+		RenderUtils::RenderTexture(Game::GetInstance().renderer, collisionBounds->GetCentre(), Vector2F(0.5, 0.5), *powerup->GetIcon());
 
+		if (input.KeyPressed(SDL_Scancode::SDL_SCANCODE_SPACE))
+		{
+			powerup->Activate();
+			powerup = nullptr;
+		}
 	}
 }

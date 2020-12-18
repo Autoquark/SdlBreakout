@@ -17,6 +17,7 @@ public:
 	Level();
 	Level(const Level& level) = delete;
 	Level(const Level&& level) = delete;
+	~Level();
 
 	Level& operator=(const Level&) = delete;
 
@@ -43,6 +44,8 @@ public:
 	{
 		return balls;
 	}
+
+	Ball* AddBall();
 
 	void AddBlock(std::unique_ptr<Block> block)
 	{
@@ -75,6 +78,7 @@ private:
 	std::vector<std::unique_ptr<GameObject>> gameObjectsToAdd;
 	std::vector<Block*> blocks;
 	std::vector<Ball*> balls;
+	std::vector<std::unique_ptr<Ball>> ballsToAdd;
 	std::unordered_set<GameObject*> toRemove;
 };
 

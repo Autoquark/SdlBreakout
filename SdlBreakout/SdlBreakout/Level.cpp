@@ -101,11 +101,9 @@ void Level::SpawnBallAndStickToPaddle()
 {
 	paddle->isSticky = true;
 
-	auto unique = std::make_unique<Ball>();
-	balls.push_back(unique.get());
-	gameObjects.push_back(std::move(unique));
-	gameObjects.back()->collisionBounds->SetCentre(paddle->collisionBounds->GetAxisAlignedBoundingBox().Centre().x, 0);
-	gameObjects.back()->collisionBounds->MoveToContact(*paddle->collisionBounds, Vector2F(0, 999), Shape::InternalityFilter::External);
+	auto ball = AddBall();
+	ball->collisionBounds->SetCentre(paddle->collisionBounds->GetAxisAlignedBoundingBox().Centre().x, 0);
+	ball->collisionBounds->MoveToContact(*paddle->collisionBounds, Vector2F(0, 999), Shape::InternalityFilter::External);
 }
 
 Level::Level()
@@ -117,6 +115,8 @@ Level::Level()
 	
 	SpawnBallAndStickToPaddle();
 }
+
+Level::~Level() = default;
 
 Level::UpdateResult Level::Update(float timeElapsed)
 {
@@ -132,15 +132,6 @@ Level::UpdateResult Level::Update(float timeElapsed)
 		gameObject->Update(timeElapsed);
 	}
 
-	// Debug tool: Speed up when space held
-	if (Game::GetInput().KeyIsDown(SDL_SCANCODE_SPACE))
-	{
-		for (auto& gameObject : gameObjects)
-		{
-			gameObject->Update(timeElapsed);
-		}
-	}
-
 	for (auto gameObject : toRemove)
 	{
 		blocks.erase(std::remove(blocks.begin(), blocks.end(), gameObject), blocks.end());
@@ -148,6 +139,13 @@ Level::UpdateResult Level::Update(float timeElapsed)
 		gameObjects.erase(std::find_if(gameObjects.begin(), gameObjects.end(), [&](auto& ptr) { return ptr.get() == gameObject; }));
 	}
 	toRemove.clear();
+
+	for (auto& ball : ballsToAdd)
+	{
+		balls.push_back(ball.get());
+		gameObjects.push_back(std::move(ball));
+	}
+	ballsToAdd.clear();
 
 	for (auto& gameObject : gameObjectsToAdd)
 	{
@@ -171,5 +169,12 @@ Level::UpdateResult Level::Update(float timeElapsed)
 	}
 
 	return UpdateResult::Continue;
+}
+
+Ball* Level::AddBall()
+{
+	auto unique = std::make_unique<Ball>();
+	ballsToAdd.push_back(std::move(unique));
+	return ballsToAdd.back().get();
 }
 
