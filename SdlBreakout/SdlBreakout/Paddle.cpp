@@ -18,7 +18,7 @@ const float Paddle::MAX_VIRTUAL_CURVE = 20;
 
 Paddle::Paddle()
 {
-	/*// Rectangle with rounded ends
+	// Rectangle with rounded ends
 	auto compound = std::make_unique<CompoundShape>(Util::MakeVector<std::unique_ptr<Shape>>(
 		std::make_unique<CircleF>(0.0f, 16.0f, 16.0f),
 		std::make_unique<AxisAlignedRectF>(0.0f, 0.0f, 96.0f, 32.0f),
@@ -26,17 +26,17 @@ Paddle::Paddle()
 		));
 	//centreSegment = static_cast<AxisAlignedRectF*>(compound->shapes[1].get());
 	collisionBounds = std::move(compound);
-	sprite = Textures::GetTexture("paddle");*/
+	sprite = Textures::GetTexture("paddle");
 
-	std::vector<Vector2F> vertices = {
+	/*std::vector<Vector2F> vertices = {
 		//Vector2F(29, 0), Vector2F(98, 0), Vector2F(127, 31), Vector2F(0, 31)
 		//Vector2F(58, 0), Vector2F(69, 0), Vector2F(127, 29), Vector2F(127, 31), Vector2F(0, 31), Vector2F(0, 29)
 		Vector2F(0, 31), Vector2F(18, 13), Vector2F(36, 4), Vector2F(54, 0), Vector2F(73, 0), Vector2F(91, 4), Vector2F(109, 13), Vector2F(127, 31)
 	};
 	collisionBounds = std::make_unique<Polygon>(vertices);
-	sprite = Textures::GetTexture("paddleApproxCurve");
+	sprite = Textures::GetTexture("paddleApproxCurve");*/
 
-	moveSpeed = 600;
+	moveSpeed = 650;
 }
 
 void Paddle::Update(float timeElapsed)
