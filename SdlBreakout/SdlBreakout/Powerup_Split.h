@@ -4,7 +4,7 @@
 
 class Powerup_Split : public Powerup
 {
-	virtual const Texture* GetIcon() const
+	virtual const Texture* GetIcon() const override
 	{
 		return Textures::GetTexture("powerup_split2");
 	}

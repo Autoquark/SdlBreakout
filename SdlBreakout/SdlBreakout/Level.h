@@ -46,6 +46,7 @@ public:
 	}
 
 	Ball* AddBall();
+	Ball* AddBall(std::unique_ptr<Ball> ball);
 
 	void AddBlock(std::unique_ptr<Block> block)
 	{

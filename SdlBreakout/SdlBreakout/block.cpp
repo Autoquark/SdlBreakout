@@ -73,4 +73,4 @@ void Block::Update(float timeElapsed)
 	RenderUtils::RenderTexture(Game::GetInstance().renderer, centre, Vector2F(0.5, 0.5), *statusSprite);
 }
 
-const float Block::POWERUP_DROP_CHANCE = 0.05f;
+const float Block::POWERUP_DROP_CHANCE = 0.04f;

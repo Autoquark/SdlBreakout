@@ -19,6 +19,7 @@ public:
 	const static float SPEED_BOOST_DECAY_FACTOR;
 
 	Ball();
+	Ball(const Ball& ball);
 	~Ball() = default;
 
 	void Update(float timeElapsed) override;

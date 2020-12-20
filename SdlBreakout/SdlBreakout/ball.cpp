@@ -17,6 +17,18 @@ Ball::Ball() : GameObject(CircleF(0, 0, 8))
 	sprite = Textures::GetTexture("ball"s);
 }
 
+Ball::Ball(const Ball& ball) : GameObject(ball), createdTime(ball.createdTime), speedBoost(ball.speedBoost), hitChain(ball.hitChain), direction(ball.direction)
+{
+	for (auto& status : ball.statusEffects)
+	{
+		status->ApplyToBall(this);
+		if (status.get() == ball.heldStatus)
+		{
+			heldStatus = static_cast<BallStatus_PaddleHeld*>(statusEffects.back().get());
+		}
+	}
+}
+
 
 void Ball::Update(float timeElapsed)
 {
@@ -110,11 +122,6 @@ void Ball::Update(float timeElapsed)
 						// We need to negate the value here because in SDL +y is down
 						auto curveProportion = -(collision.point.x - paddle->collisionBounds->GetCentre().x) * 2 / paddle->collisionBounds->GetAxisAlignedBoundingBox().size.x;
 						overrideDirection = Vector2F::Up().Rotated(curveProportion * Paddle::MAX_VIRTUAL_CURVE);
-						std::cout << "Hit centre segment" << std::endl;
-					}
-					else
-					{
-						std::cout << "nope" << std::endl;
 					}
 				}
 			}

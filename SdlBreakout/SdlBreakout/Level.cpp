@@ -173,8 +173,12 @@ Level::UpdateResult Level::Update(float timeElapsed)
 
 Ball* Level::AddBall()
 {
-	auto unique = std::make_unique<Ball>();
-	ballsToAdd.push_back(std::move(unique));
+	return AddBall(std::make_unique<Ball>());
+}
+
+Ball* Level::AddBall(std::unique_ptr<Ball> ball)
+{
+	ballsToAdd.push_back(std::move(ball));
 	return ballsToAdd.back().get();
 }
 
