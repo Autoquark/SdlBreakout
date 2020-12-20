@@ -29,8 +29,9 @@ public:
 	const BallStatusEffect* appliesStatus = nullptr;
 
 private:
-	static const float POWERUP_DROP_CHANCE;
+	static const float DEFAULT_POWERUP_DROP_CHANCE;
 
 	int health = 1;
+	float powerupDropChance = DEFAULT_POWERUP_DROP_CHANCE;
 };
 

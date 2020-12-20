@@ -49,7 +49,7 @@ void Block::SetHealth(int value)
 		auto& game = Game::GetInstance();
 		auto* level = Game::GetLevel();
 		level->ScheduleDestroy(this);
-		if (std::uniform_real_distribution<double>(0, 1)(game.random) <= POWERUP_DROP_CHANCE)
+		if (std::uniform_real_distribution<double>(0, 1)(game.random) <= powerupDropChance)
 		{
 			level->AddGameObject(std::make_unique<PowerupDrop>(std::make_unique<Powerup_Split>()))
 				->collisionBounds->SetCentre(collisionBounds->GetAxisAlignedBoundingBox().Centre());
@@ -73,4 +73,4 @@ void Block::Update(float timeElapsed)
 	RenderUtils::RenderTexture(Game::GetInstance().renderer, centre, Vector2F(0.5, 0.5), *statusSprite);
 }
 
-const float Block::POWERUP_DROP_CHANCE = 0.04f;
+const float Block::DEFAULT_POWERUP_DROP_CHANCE = 0.04f;
