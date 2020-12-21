@@ -5,9 +5,9 @@
 #include <filesystem>
 
 #include "Block.h"
+#include "PowerupDrop.h"
 
 class Paddle;
-class Ball;
 
 class Level
 {
@@ -37,27 +37,28 @@ public:
 
 	const std::vector<Block*>& GetBlocks() const
 	{
-		return blocks;
+		return GetGameObjects<Block>();
 	}
 
 	const std::vector<Ball*>& GetBalls() const
 	{
-		return balls;
+		return GetGameObjects<Ball>();
 	}
 
-	Ball* AddBall();
-	Ball* AddBall(std::unique_ptr<Ball> ball);
-
-	void AddBlock(std::unique_ptr<Block> block)
+	// Gets all game objects of a tracked type T
+	template<typename T>
+	const std::vector<T*>& GetGameObjects() const
 	{
-		blocks.push_back(block.get());
-		gameObjects.push_back(std::move(block));
+		return std::get<GameObjectsInfo<T>>(gameObjectsInfo).current;
 	}
 
-	GameObject* AddGameObject(std::unique_ptr<GameObject> gameObject)
+	// Adds a game object of a tracked type T to the level
+	template<typename T>
+	T* AddGameObject(std::unique_ptr<T> gameObject)
 	{
-		gameObjectsToAdd.push_back(std::move(gameObject));
-		return gameObjectsToAdd.back().get();
+		auto pointer = gameObject.get();
+		std::get<GameObjectsInfo<T>>(gameObjectsInfo).toAdd.push_back(std::move(gameObject));
+		return pointer;
 	}
 
 	/// <summary>
@@ -71,15 +72,27 @@ public:
 
 private:
 
+	template<typename T>
+	struct GameObjectsInfo
+	{
+		std::vector<T*> current;
+		std::vector<std::unique_ptr<T>> toAdd;
+	};
+
+	template<typename T>
+	void AddPendingGameObjects(GameObjectsInfo<T>&);
+
+	template<typename T>
+	void RemoveDestroyedGameObject(Level::GameObjectsInfo<T>&, GameObject*);
+
 	void SpawnBallAndStickToPaddle();
 
 	// The game time in milliseconds when the level was started
 	float levelStartTime = -1;
 	std::vector<std::unique_ptr<GameObject>> gameObjects;
 	std::vector<std::unique_ptr<GameObject>> gameObjectsToAdd;
-	std::vector<Block*> blocks;
-	std::vector<Ball*> balls;
-	std::vector<std::unique_ptr<Ball>> ballsToAdd;
 	std::unordered_set<GameObject*> toRemove;
+
+	std::tuple<GameObjectsInfo<Ball>, GameObjectsInfo<Block>, GameObjectsInfo<PowerupDrop>> gameObjectsInfo;
 };
 

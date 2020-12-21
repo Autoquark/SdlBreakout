@@ -18,6 +18,8 @@ public:
 
 	virtual void Update(float timeElapsed) override;
 
+	void Collect();
+
 private:
 	static const float ACCELERATION;
 	static const float MAX_SPEED;

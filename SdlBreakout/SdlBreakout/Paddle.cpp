@@ -74,6 +74,17 @@ void Paddle::Update(float timeElapsed)
 		}
 
 		auto bestContact = Shape::ClosestContact(closestContact, collisionBounds->CastAgainst(Game::levelArea, castVector, Shape::InternalityFilter::Internal));
+
+		auto actualMovement = movement.WithMagnitude(bestContact.has_value() ? bestContact->distance : movement.Magnitude());
+		// Cast over our actual movement for powerups
+		for (auto drop : level->GetGameObjects<PowerupDrop>())
+		{
+			if (collisionBounds->CastAgainst(*drop->collisionBounds, actualMovement, Shape::InternalityFilter::External))
+			{
+				drop->Collect();
+			}
+		}
+
 		// Move as far as possible without penetrating the ball or level bounds
 		collisionBounds->MoveToContact(bestContact, movement);
 	}

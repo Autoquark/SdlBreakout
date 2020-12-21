@@ -14,8 +14,7 @@ void PowerupDrop::Update(float timeElapsed)
 	auto movement = Vector2F(0, yVelocity * timeElapsed);
 	if (collisionBounds->CastAgainst(*level->paddle->collisionBounds.get(), movement, Shape::InternalityFilter::External).has_value())
 	{
-		level->paddle->SetPowerup(std::move(powerup));
-		level->ScheduleDestroy(this);
+		Collect();
 	}
 	else if (!Game::levelArea.Overlaps(collisionBounds->GetAxisAlignedBoundingBox()))
 	{
@@ -27,6 +26,13 @@ void PowerupDrop::Update(float timeElapsed)
 	}
 
 	GameObject::Update(timeElapsed);
+}
+
+void PowerupDrop::Collect()
+{
+	auto* level = Game::GetLevel();
+	level->paddle->SetPowerup(std::move(powerup));
+	level->ScheduleDestroy(this);
 }
 
 const float PowerupDrop::ACCELERATION = 50;
