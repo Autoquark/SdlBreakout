@@ -22,7 +22,7 @@ public:
 	}
 	~Contact();
 
-	// Normal of the collision
+	// Normal of the collision; this is a vector pointing out from the surface of the stationary object at the point of contact
 	Vector2F normal;
 	// The point at which the objects touch
 	Vector2F point;

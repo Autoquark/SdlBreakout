@@ -122,6 +122,14 @@ void Ball::Update(float timeElapsed)
 						// We need to negate the value here because in SDL +y is down
 						auto curveProportion = -(collision.point.x - paddle->collisionBounds->GetCentre().x) * 2 / paddle->collisionBounds->GetAxisAlignedBoundingBox().size.x;
 						overrideDirection = Vector2F::Up().Rotated(curveProportion * Paddle::MAX_VIRTUAL_CURVE);
+
+						auto paddleSpeed = paddle->GetSpeedLastUpdate();
+						auto dotProduct = paddleSpeed.DotProduct(contact->normal);
+						if (dotProduct > 0)
+						{
+							overrideDirection = Vector2F::LinearInterpolate(overrideDirection.value(), contact->normal, dotProduct / (dotProduct + effectiveSpeed));
+							speedBoost += dotProduct;
+						}
 					}
 				}
 			}

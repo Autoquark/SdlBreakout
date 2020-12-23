@@ -15,6 +15,10 @@
 #include "Util.h"
 
 const float Paddle::MAX_VIRTUAL_CURVE = 20;
+const float Paddle::BUMP_UP_TIME = 0.1f;
+const float Paddle::BUMP_DOWN_TIME = 0.3f;
+//const float Paddle::BUMP_COOLDOWN = 1.5;
+const float Paddle::BUMP_DISTANCE = 32;
 
 Paddle::Paddle()
 {
@@ -52,6 +56,27 @@ void Paddle::Update(float timeElapsed)
 		movement = Vector2F(moveSpeed * timeElapsed, 0);
 	}
 
+	auto time = Game::GetInstance().GetTime();
+	if (input.MouseButtonDown(Input::MouseButton::Right) && time >= lastBumpTime + BUMP_UP_TIME + BUMP_DOWN_TIME)
+	{
+		bumpStartY = collisionBounds->GetCentre().y;
+		lastBumpTime = time;
+	}
+	
+	if (time < lastBumpTime + BUMP_UP_TIME)
+	{
+		movement.y = -(BUMP_DISTANCE * timeElapsed / BUMP_UP_TIME);
+	}
+	else if (time < lastBumpTime + BUMP_UP_TIME + BUMP_DOWN_TIME)
+	{
+		movement.y = (BUMP_DISTANCE * timeElapsed) / BUMP_DOWN_TIME;
+	}
+	// Reset position to account for any rounding error
+	else if(lastBumpTime >= 0)
+	{
+		collisionBounds->SetCentre(collisionBounds->GetCentre().x, bumpStartY);
+	}
+
 	if (movement.Magnitude() > 0)
 	{
 		auto castVector = movement.WithMagnitude(movement.Magnitude() + Contact::MIN_SEPARATION_DISTANCE);
@@ -87,6 +112,8 @@ void Paddle::Update(float timeElapsed)
 
 		// Move as far as possible without penetrating the ball or level bounds
 		collisionBounds->MoveToContact(bestContact, movement);
+
+		speedLastUpdate = actualMovement / timeElapsed;
 	}
 	GameObject::Update(timeElapsed);
 
