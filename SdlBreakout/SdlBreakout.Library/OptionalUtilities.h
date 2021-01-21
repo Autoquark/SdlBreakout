@@ -35,7 +35,6 @@ namespace optionalUtilities
 
 		out = result ? left : right;
 		// Awkwardly, standard comparison functions(a, b) return true if a < b, but we are returning true if we picked the second argument (i.e. a > b)
-		// Awkwardly, standard comparison functions(a, b) return true if a < b, but we are returning true if we picked the second argument (i.e. a > b)
 		return !result;
 	}
 
