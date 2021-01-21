@@ -52,7 +52,7 @@ void Game::Start()
 
 	std::vector<std::string> levels =
 	{
-		"singleBlock.json",
+		"1.json",
 		"rows.json",
 		"stippled.json"
 	};
