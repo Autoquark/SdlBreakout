@@ -48,6 +48,11 @@ public:
 		return vertices;
 	}
 
+	const std::vector<Line>& GetSides() const
+	{
+		return sides;
+	}
+
 private:
 	std::vector<Line> sides;
 };

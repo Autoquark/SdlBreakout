@@ -74,5 +74,8 @@
     <ClCompile Include="LineAgainstLineCastTests.cpp">
       <Filter>Source Files\Collision</Filter>
     </ClCompile>
+    <ClCompile Include="PointAgainstPolygonCastTests.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -11,6 +11,7 @@ class Line;
 class Point : public Shape
 {
 public:
+	Point(float x, float y) : Point(Vector2F(x, y)) {}
 	explicit Point(const Vector2F& position) : position(position)
 	{ }
 

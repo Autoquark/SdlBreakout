@@ -34,9 +34,9 @@ namespace
     std::optional<Contact> CastAgainstThis(const Polygon& self, const TShape& other, const Vector2F& movement, const Shape::InternalityFilter internalityFilter)
     {
         std::optional<Contact> bestContact = std::nullopt;
-        for (auto& side : self.sides)
+        for (auto& side : self.GetSides())
         {
-            bestContact = ClosestContact(bestContact, side.CastAgainstThis(other, movement, internalityFilter));
+            bestContact = Shape::ClosestContact(bestContact, side.CastAgainstThis(other, movement, internalityFilter));
         }
         return bestContact;
     }
@@ -44,22 +44,22 @@ namespace
 
 std::optional<Contact> Polygon::CastAgainstThis(const AxisAlignedRectF& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
-    return CastAgainstThis(other, movement, internalityFilter);
+    return ::CastAgainstThis<AxisAlignedRectF>(*this, other, movement, internalityFilter);
 }
 
 std::optional<Contact> Polygon::CastAgainstThis(const CircleF& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
-    return CastAgainstThis(other, movement, internalityFilter);
+    return ::CastAgainstThis<CircleF>(*this, other, movement, internalityFilter);
 }
 
 std::optional<Contact> Polygon::CastAgainstThis(const Line& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
-    return CastAgainstThis(other, movement, internalityFilter);
+    return ::CastAgainstThis<Line>(*this, other, movement, internalityFilter);
 }
 
 std::optional<Contact> Polygon::CastAgainstThis(const Point& other, const Vector2F& movement, const InternalityFilter internalityFilter) const
 {
-    return CastAgainstThis(other, movement, internalityFilter);
+    return ::CastAgainstThis<Point>(*this, other, movement, internalityFilter);
 }
 
 AxisAlignedRectF Polygon::GetAxisAlignedBoundingBox() const

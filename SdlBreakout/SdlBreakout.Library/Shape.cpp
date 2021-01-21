@@ -6,6 +6,7 @@
 
 #include "AxisAlignedRectF.h"
 
+// Returns the centre of the shape. The centre of an irregular shape is defined as the centre of its axis aligned bounding box
 Vector2F Shape::GetCentre() const
 {
 	return GetAxisAlignedBoundingBox().Centre();
