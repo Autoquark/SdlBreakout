@@ -40,6 +40,7 @@ namespace Tests
 				Assert::AreEqual(expected.centroid, actual.centroid);
 				Assert::AreEqual(expected.stationarySide, actual.stationarySide);
 				Assert::AreEqual(expected.movingSide, actual.movingSide);
+				Assert::AreEqual(expected.distance, actual.distance);
 				AreEqual(expected.normal, actual.normal, Constants::FloatEqualityTolerance);
 			}
 		}
@@ -57,7 +58,7 @@ namespace Tests
 				expectedPoint,
 				true,
 				true,
-				Vector2F::DistanceBetween(testCase.movingRectangle.Centre(), expectedPoint), //TODO: Centroid, not point
+				1,
 				Vector2F(0.5, 4.5));
 
 			RunTestCase(testCase);
@@ -75,7 +76,7 @@ namespace Tests
 				expectedPoint,
 				false,
 				true,
-				Vector2F::DistanceBetween(testCase.movingRectangle.Centre(), expectedPoint),
+				1,
 				Vector2F(1, 0));
 
 			RunTestCase(testCase);
@@ -93,7 +94,7 @@ namespace Tests
 				expectedPoint,
 				true,
 				true,
-				Vector2F::DistanceBetween(testCase.movingRectangle.Centre(), expectedPoint), //TODO: Centroid, not point
+				1,
 				Vector2F(3.5, 4.5));
 
 			RunTestCase(testCase);
@@ -111,7 +112,7 @@ namespace Tests
 				expectedPoint,
 				false,
 				true,
-				Vector2F::DistanceBetween(testCase.movingRectangle.Centre(), expectedPoint),
+				1,
 				Vector2F(-1, 0));
 
 			RunTestCase(testCase);
