@@ -2,6 +2,7 @@ on:
   push:
     branches:
       - master
+      - release-test
 
 name: Create Release
 
@@ -30,3 +31,6 @@ jobs:
             - Second Change
           draft: false
           prerelease: true
+          
+      - name: Upload the artifacts
+        uses: skx/github-action-publish-binaries@master
