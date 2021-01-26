@@ -51,7 +51,7 @@ jobs:
     - name: Download debug build output
       uses: actions/download-artifact@v2
       with:
-        name: build-debyg
+        name: build-debug
         path: SdlBreakout/x64/Debug
       
     - name: Setup VSTest.console.exe
