@@ -44,6 +44,7 @@ jobs:
         path: SdlBreakout/x64/Debug
 
   test:
+    needs: [build-debug]
     runs-on: windows-latest
 
     steps: 
