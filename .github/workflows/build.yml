@@ -18,3 +18,9 @@ jobs:
     - name: Run MSBuild
       working-directory: SdlBreakout
       run: msbuild SdlBreakout.sln -property:Configuration=Debug -property:Platform=x64
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-debug
+        path: SdlBreakout/x64/Debug
