@@ -105,15 +105,10 @@ jobs:
           draft: false
           prerelease: true
           
-      - upload_artifacts:
-        name: Upload Artifacts
-        needs: [release]
-        runs-on: ubuntu-latest
-        steps:
-          - name: Upload the artifacts
-            uses: skx/github-action-publish-binaries@release-1.3
-            env:
-              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            with:
-              releaseId: ${{ needs.create_release.outputs.id }}
-              args: 'build-release'
+      - name: Upload the artifacts
+        uses: skx/github-action-publish-binaries@release-1.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          releaseId: ${{ needs.create_release.outputs.id }}
+          args: 'build-release'
