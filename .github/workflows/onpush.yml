@@ -94,10 +94,10 @@ jobs:
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-          GITHUB_SHA: ${{ env.GITHUB_SHA }}
+          GITHUB_SHA: ${{ github.sha }}
         with:
           tag_name: tag_${{ env.GITHUB_SHA }}
-          release_name: Release ${{ env.GITHUB_SHA }}
+          release_name: Release ${{ github.sha }}
           body: |
             Changes in this Release
             - First Change
