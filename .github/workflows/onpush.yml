@@ -80,7 +80,7 @@ jobs:
         
   release:
     name: Create Release
-    needs: [Cppcheck, build-debug, build-release, test]
+    needs: [cppcheck, build-debug, build-release, test]
     runs-on: ubuntu-latest
     steps:
       - name: Download release build output
@@ -88,6 +88,11 @@ jobs:
         with:
           name: build-release
           path: SdlBreakout/x64/Release
+          
+      - uses: papeloto/action-zip@v1
+        with:
+          files: SdlBreakout/x64/Release
+          dest: sdlbreakout.zip
         
       - name: Create Release
         id: create_release
@@ -111,4 +116,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           releaseId: ${{ steps.create_release.outputs.id }}
-          args: 'SdlBreakout/x64/Release/*'
+          args: 'sdlbreakout.zip'
