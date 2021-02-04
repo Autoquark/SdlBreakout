@@ -17,7 +17,7 @@ Ball::Ball() : GameObject(CircleF(0, 0, 8))
 	sprite = Textures::GetTexture("ball"s);
 }
 
-Ball::Ball(const Ball& ball) : GameObject(ball), createdTime(ball.createdTime), speedBoost(ball.speedBoost), hitChain(ball.hitChain), direction(ball.direction)
+Ball::Ball(const Ball& ball) : GameObject(ball), firstReleasedTime(ball.firstReleasedTime), speedBoost(ball.speedBoost), hitChain(ball.hitChain), direction(ball.direction)
 {
 	for (auto& status : ball.statusEffects)
 	{
@@ -34,15 +34,14 @@ void Ball::Update(float timeElapsed)
 {
 	auto& game = Game::GetInstance();
 
-	if (createdTime < 0)
-	{
-		createdTime = Game::GetInstance().GetTime();
-	}
-
 	auto level = Game::GetLevel();
 	auto paddle = level->paddle;
 	if (Game::GetInput().MouseButtonPressed(Input::MouseButton::Left) && heldStatus != nullptr)
 	{
+		if (firstReleasedTime < 0)
+		{
+			firstReleasedTime = Game::GetInstance().GetTime();
+		}
 		RemoveStatus(heldStatus);
 		heldStatus = nullptr;
 		paddle->isSticky = false;
@@ -165,7 +164,7 @@ void Ball::Update(float timeElapsed)
 
 float Ball::CalculateEffectiveSpeed()
 {
-	auto effectiveSpeed = BASE_SPEED * (1 + ((Game::GetInstance().GetTime() - createdTime) * MAX_SPEED_MULTIPLIER / TIME_UNTIL_MAX_SPEED));
+	auto effectiveSpeed = BASE_SPEED * (1 + ((Game::GetInstance().GetTime() - firstReleasedTime) * MAX_SPEED_MULTIPLIER / TIME_UNTIL_MAX_SPEED));
 	
 	// Only the single largest speed buff and single largest speed debuff apply
 	auto iterator = std::max_element(statusEffects.begin(), statusEffects.end(), [](auto& x, auto& y) { return y->GetSpeedMultiplier() > x->GetSpeedMultiplier(); });

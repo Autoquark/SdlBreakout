@@ -59,7 +59,7 @@ private:
 
 	std::vector<std::unique_ptr<BallStatusEffect>> statusEffects;
 	std::set<BallStatusEffect*> toRemove;
-	float createdTime = -1;
+	float firstReleasedTime = -1;
 	float speedBoost = 0;
 	int hitChain = 0;
 	// Current direction of the ball
