@@ -1,0 +1,122 @@
+name: On Push
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build-release:
+    runs-on: windows-latest
+
+    steps: 
+    - name: Checkout code
+      uses: actions/checkout@master
+
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v1.0.2
+      
+    - name: Nuget Restore
+      working-directory: SdlBreakout
+      run: nuget restore SdlBreakout.sln -SolutionDirectory .
+
+    - name: Run MSBuild
+      working-directory: SdlBreakout
+      run: msbuild SdlBreakout.sln -property:Configuration=Release -property:Platform=x64
+      
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-release
+        path: SdlBreakout/x64/Release
+
+  build-debug:
+    runs-on: windows-latest
+
+    steps: 
+    - name: Checkout code
+      uses: actions/checkout@master
+
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v1.0.2
+      
+    - name: Nuget Restore
+      working-directory: SdlBreakout
+      run: nuget restore SdlBreakout.sln -SolutionDirectory .
+
+    - name: Run MSBuild
+      working-directory: SdlBreakout
+      run: msbuild SdlBreakout.sln -property:Configuration=Debug -property:Platform=x64
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-debug
+        path: SdlBreakout/x64/Debug
+
+  test:
+    needs: [build-debug]
+    runs-on: windows-latest
+
+    steps: 
+    - name: Download debug build output
+      uses: actions/download-artifact@v2
+      with:
+        name: build-debug
+        path: SdlBreakout/x64/Debug
+      
+    - name: Setup VSTest.console.exe
+      uses: darenm/Setup-VSTest@v1.1.1
+      
+    - name: Run Tests
+      working-directory: SdlBreakout/x64/Debug
+      run: vstest.console Tests.dll
+      
+  cppcheck:
+    name: Cppcheck
+    runs-on: ubuntu-latest
+    container: facthunder/cppcheck
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+        
+      - name: Run cppcheck
+        run: cppcheck --project=SdlBreakout.cppcheck -q --error-exitcode=1 --enable=all --inline-suppr
+        
+  release:
+    name: Create Release
+    needs: [cppcheck, build-debug, build-release, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download release build output
+        uses: actions/download-artifact@v2
+        with:
+          name: build-release
+          path: SdlBreakout/x64/Release
+          
+      - uses: papeloto/action-zip@v1
+        with:
+          files: SdlBreakout/x64/Release
+          dest: sdlbreakout.zip
+        
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+          GITHUB_SHA: ${{ github.sha }}
+        with:
+          tag_name: tag_${{ env.GITHUB_SHA }}
+          release_name: Release ${{ github.sha }}
+          body: |
+            Changes in this Release
+            - First Change
+            - Second Change
+          draft: false
+          prerelease: true
+          
+      - name: Upload the artifacts
+        uses: skx/github-action-publish-binaries@release-0.15
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          releaseId: ${{ steps.create_release.outputs.id }}
+          args: 'sdlbreakout.zip'

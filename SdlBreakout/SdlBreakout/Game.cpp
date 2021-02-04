@@ -57,7 +57,7 @@ void Game::Start()
 		"stippled.json"
 	};
 	auto levelIndex = 0;
-	level = Level::Load("../../Data/Levels/" + levels[levelIndex]);
+	level = Level::Load("Data/Levels/" + levels[levelIndex]);
 
 	auto lastUpdateSdlTime = SDL_GetTicks();
 
@@ -137,7 +137,7 @@ void Game::Start()
 					// Just loop back to the start for now
 					levelIndex = 0;
 				}
-				level = Level::Load("../../Data/Levels/" + levels[levelIndex]);
+				level = Level::Load("Data/Levels/" + levels[levelIndex]);
 			}
 
 			lastUpdateSdlTime = sdlTime;
