@@ -1,5 +1,7 @@
 name: On Push
 on: [push]
+  branches:
+    - master
 jobs:
   build-release:
     runs-on: windows-latest
