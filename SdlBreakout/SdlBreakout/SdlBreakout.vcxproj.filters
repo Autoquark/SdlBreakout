@@ -200,10 +200,123 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Data\Levels\1.json" />
+    <None Include="Data\Levels\blank.json" />
+    <None Include="Data\Levels\rows.json" />
+    <None Include="Data\Levels\singleBlock.json" />
+    <None Include="Data\Levels\stippled.json" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SdlBreakout.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Fonts\MB-Demonic_Tale.ttf" />
+    <Font Include="Fonts\Demoness.otf" />
+    <Font Include="Fonts\Fiolex_Mephisto.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Images\invulnerable\invulnerable1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\normal\block1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\normal\block2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\normal\block3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\normal\block4.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\normal\block5.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\normal\block6.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\normal\block7.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\accelerate.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\ball.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\block.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\bounds.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\downfall.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\life.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\missingPowerup.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\missingStatus.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\paddle.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\paddle_rect.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\paddleApproxCurve.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\paddlePointy.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\paddleShallowTrapezium.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\paddleSquare.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\paddleTrapezium.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\powerup_split2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\squareBall.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Sounds\beat.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Sounds\bounce.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Sounds\dullTwang.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Sounds\high.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Sounds\low.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Sounds\medium.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Sounds\scratch.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Sounds\sources.txt" />
   </ItemGroup>
 </Project>

@@ -131,6 +131,11 @@
     <Link>
       <SubSystem>Console</SubSystem>
     </Link>
+    <CustomBuildStep>
+      <Outputs>
+      </Outputs>
+    </CustomBuildStep>
+    <CustomBuildStep />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -150,6 +155,11 @@
     <Link>
       <SubSystem>Console</SubSystem>
     </Link>
+    <CustomBuildStep>
+      <Outputs>
+      </Outputs>
+    </CustomBuildStep>
+    <CustomBuildStep />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugASAN|x64'">
     <ClCompile>
@@ -169,6 +179,11 @@
     <Link>
       <SubSystem>Console</SubSystem>
     </Link>
+    <CustomBuildStep>
+      <Outputs>
+      </Outputs>
+    </CustomBuildStep>
+    <CustomBuildStep />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -188,6 +203,11 @@
     <Link>
       <SubSystem>Console</SubSystem>
     </Link>
+    <CustomBuildStep>
+      <Outputs>
+      </Outputs>
+    </CustomBuildStep>
+    <CustomBuildStep />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -210,6 +230,11 @@
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Console</SubSystem>
     </Link>
+    <CustomBuildStep>
+      <Outputs>
+      </Outputs>
+    </CustomBuildStep>
+    <CustomBuildStep />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -232,6 +257,11 @@
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Console</SubSystem>
     </Link>
+    <CustomBuildStep>
+      <Outputs>
+      </Outputs>
+    </CustomBuildStep>
+    <CustomBuildStep />
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Ball.cpp" />
@@ -300,10 +330,141 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Data\Levels\1.json">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Data\Levels\blank.json">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Data\Levels\rows.json">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Data\Levels\singleBlock.json">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Data\Levels\stippled.json">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SdlBreakout.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Fonts\Demoness.otf">
+      <DeploymentContent>true</DeploymentContent>
+    </Font>
+    <Font Include="Fonts\Fiolex_Mephisto.ttf">
+      <DeploymentContent>true</DeploymentContent>
+    </Font>
+    <Font Include="Fonts\MB-Demonic_Tale.ttf">
+      <DeploymentContent>true</DeploymentContent>
+    </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Images\accelerate.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\ball.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\block.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\bounds.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\downfall.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\invulnerable\invulnerable1.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\life.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\missingPowerup.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\missingStatus.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\normal\block1.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\normal\block2.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\normal\block3.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\normal\block4.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\normal\block5.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\normal\block6.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\normal\block7.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\paddle.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\paddleApproxCurve.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\paddlePointy.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\paddleShallowTrapezium.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\paddleSquare.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\paddleTrapezium.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\paddle_rect.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\powerup_split2.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Images\squareBall.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Sounds\beat.wav">
+      <DeploymentContent>true</DeploymentContent>
+    </Media>
+    <Media Include="Sounds\bounce.wav">
+      <DeploymentContent>true</DeploymentContent>
+    </Media>
+    <Media Include="Sounds\dullTwang.wav">
+      <DeploymentContent>true</DeploymentContent>
+    </Media>
+    <Media Include="Sounds\high.wav">
+      <DeploymentContent>true</DeploymentContent>
+    </Media>
+    <Media Include="Sounds\low.wav">
+      <DeploymentContent>true</DeploymentContent>
+    </Media>
+    <Media Include="Sounds\medium.wav">
+      <DeploymentContent>true</DeploymentContent>
+    </Media>
+    <Media Include="Sounds\scratch.wav">
+      <DeploymentContent>true</DeploymentContent>
+    </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Sounds\sources.txt">
+      <DeploymentContent>true</DeploymentContent>
+    </Text>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
